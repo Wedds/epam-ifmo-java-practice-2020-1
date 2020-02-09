@@ -15,8 +15,6 @@ public class MainServlet extends HttpServlet {
 
         PrintWriter out = resp.getWriter();
         out.print("<h1>Hello Servlet</h1>");
-
-
     }
 
     @Override
