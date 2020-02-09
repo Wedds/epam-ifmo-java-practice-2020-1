@@ -1,5 +1,7 @@
 /.gradle
 /.idea
 /out
+/build
+/lib
 *.log
 *.class

@@ -1,6 +1,6 @@
 plugins {
-    id 'java'
     id 'checkstyle'
+    id 'war'
 }
 
 version '1.0-SNAPSHOT'
@@ -11,6 +11,12 @@ repositories {
     mavenCentral()
 }
 
+checkstyle {
+    toolVersion = "8.0"
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+    compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
 }
