@@ -1,24 +1,53 @@
 package com.ifmo.epampractice.dao;
-
 import com.ifmo.epampractice.entity.Tests;
+import com.ifmo.epampractice.service.DatabaseService;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface TestsDAO {
+public class TestsDAO extends DatabaseService   {
 
-    //create
-    void add(Tests test) throws SQLException;
+    Connection connection = getConnection();
 
-    //read
-    List<Tests> getAll();
+    public void add(Tests test) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        String query = "INSERT INTO TESTS(title, subject_id, is_random, creator_id) VALUES(?,?,?,?)";
+        try{
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, test.getTitle());
+            preparedStatement.setInt(2, test.getSubject().getId());
+            preparedStatement.setBoolean(3, test.isRandom());
+            preparedStatement.setInt(4, test.getCreator().getId());
 
-    Tests getById(int id);
+            preparedStatement.executeUpdate();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null){
+                preparedStatement.close();
+            }
+            if (connection != null){
+                connection.close();
+            }
+        }
+    }
 
-    //update
-    void update (Tests test);
+    public List<Tests> getAll() {
+        return null;
+    }
 
-    //delete
-    void remove(Tests test);
+    public Tests getById(int id) {
+        return null;
+    }
 
+    public void update(Tests test) {
+
+    }
+
+    public void remove(Tests test) {
+
+    }
 }

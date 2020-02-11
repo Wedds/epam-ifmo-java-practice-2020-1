@@ -2,22 +2,23 @@ package com.ifmo.epampractice.dao;
 
 
 import com.ifmo.epampractice.entity.Groups;
+import com.ifmo.epampractice.service.DatabaseService;
 
 import java.util.List;
 
-public interface GroupsDAO {
+public class GroupsDAO extends DatabaseService  {
 
     //create
-    void add(Groups group);
+    void add(Groups group){}
 
     //read
-    List<Groups> getAll();
+    List<Groups> getAll(){return null;}
 
-    Groups getById(int id);
+    Groups getById(int id){return null;}
 
     //update
-    void update (Groups group);
+    void update (Groups group){}
 
     //delete
-    void remove(Groups group);
+    void remove(Groups group){}
 }
