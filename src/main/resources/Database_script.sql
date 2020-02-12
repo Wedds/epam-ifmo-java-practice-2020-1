@@ -1,6 +1,9 @@
 DROP DATABASE IF EXISTS testing_system_db;
 CREATE DATABASE testing_system_db;
 
+CREATE USER asuka WITH encrypted PASSWORD '12345';
+GRANT all privileges ON DATABASE testing_system_db TO username;
+ALTER USER asuka WITH SUPERUSER;
 \c testing_system_db;
 
 CREATE TYPE "roles" AS ENUM (
