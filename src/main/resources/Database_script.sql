@@ -7,12 +7,12 @@ DO $$
                 , 'CREATE DATABASE testing_system_db');
         END IF;
 
-        IF EXISTS (SELECT FROM pg_user WHERE usename = 'asuka') THEN
-            RAISE NOTICE 'User asuka already exists';
+        IF EXISTS (SELECT FROM pg_user WHERE usename = 'evangelion') THEN
+            RAISE NOTICE 'User evangelion already exists';
         ELSE
-            CREATE USER asuka WITH encrypted PASSWORD '12345';
-            GRANT all privileges ON DATABASE testing_system_db TO asuka;
-            ALTER USER asuka WITH SUPERUSER;
+            CREATE USER evangelion WITH encrypted PASSWORD '12345';
+            GRANT all privileges ON DATABASE testing_system_db TO evangelion;
+            ALTER USER evangelion WITH SUPERUSER;
         END IF;
     END
 $$;
