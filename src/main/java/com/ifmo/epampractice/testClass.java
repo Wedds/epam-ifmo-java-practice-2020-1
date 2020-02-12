@@ -1,7 +1,7 @@
 package com.ifmo.epampractice;
 import com.ifmo.epampractice.dao.TestsDAO;
 import com.ifmo.epampractice.entity.Tests;
-import com.ifmo.epampractice.service.DatabaseService;
+
 import java.sql.SQLException;
 import java.util.List;
 

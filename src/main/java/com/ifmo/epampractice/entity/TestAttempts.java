@@ -9,9 +9,9 @@ public class TestAttempts {
     private int id;
     private Integer score;
     private Date passingDate;
-    private Users user;
+    private int user_id;
+    private int test_id;
     private List<TestAttemptAnswers> testAttemptAnswers;
-    private Tests test;
 
     public TestAttempts() {
     }
@@ -40,12 +40,12 @@ public class TestAttempts {
         this.passingDate = passingDate;
     }
 
-    public Users getUser() {
-        return user;
+    public int getUserId() {
+        return user_id;
     }
 
-    public void setUser(Users user) {
-        this.user = user;
+    public void setUserId(int user) {
+        this.user_id = user_id;
     }
 
     public List<TestAttemptAnswers> getTestAttemptAnswers() {
@@ -56,12 +56,12 @@ public class TestAttempts {
         this.testAttemptAnswers = testAttemptAnswers;
     }
 
-    public Tests getTest() {
-        return test;
+    public int getTestId() {
+        return test_id;
     }
 
-    public void setTest(Tests test) {
-        this.test = test;
+    public void setTestId(int test_id) {
+        this.test_id = test_id;
     }
 
     @Override
@@ -72,14 +72,14 @@ public class TestAttempts {
         return id == that.id &&
                 Objects.equals(score, that.score) &&
                 Objects.equals(passingDate, that.passingDate) &&
-                Objects.equals(user, that.user) &&
+                Objects.equals(user_id, that.user_id) &&
                 Objects.equals(testAttemptAnswers, that.testAttemptAnswers) &&
-                Objects.equals(test, that.test);
+                Objects.equals(test_id, that.test_id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, score, passingDate, user, testAttemptAnswers, test);
+        return Objects.hash(id, score, passingDate, user_id, testAttemptAnswers, test_id);
     }
 
 
@@ -89,9 +89,9 @@ public class TestAttempts {
                 "id=" + id +
                 ", score=" + score +
                 ", passingDate=" + passingDate +
-                ", user=" + user +
+                ", user_id=" + user_id +
                 ", testAttemptAnswers=" + testAttemptAnswers +
-                ", test=" + test +
+                ", test_id=" + test_id +
                 '}';
     }
 }

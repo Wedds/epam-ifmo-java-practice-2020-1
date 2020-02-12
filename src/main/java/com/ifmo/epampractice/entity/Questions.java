@@ -1,5 +1,6 @@
 package com.ifmo.epampractice.entity;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Questions {
@@ -9,8 +10,8 @@ public class Questions {
     private String phrase;
     private String rightAnswer;
     private String structure;
-    private Tests test;
-    private TestAttemptAnswers testAttemptAnswer;
+    private int test_id;
+    private List<TestAttemptAnswers> testAttemptAnswersList;
 
     public Questions() {
     }
@@ -55,20 +56,20 @@ public class Questions {
         this.structure = structure;
     }
 
-    public Tests getTest() {
-        return test;
+    public int getTestId() {
+        return test_id;
     }
 
-    public void setTest(Tests test) {
-        this.test = test;
+    public void setTestId(int test_id) {
+        this.test_id = test_id;
     }
 
-    public TestAttemptAnswers getTestAttemptAnswer() {
-        return testAttemptAnswer;
+    public List<TestAttemptAnswers> getTestAttemptAnswersList() {
+        return testAttemptAnswersList;
     }
 
-    public void setTestAttemptAnswer(TestAttemptAnswers testAttemptAnswer) {
-        this.testAttemptAnswer = testAttemptAnswer;
+    public void setTestAttemptAnswersList(List<TestAttemptAnswers> testAttemptAnswersList) {
+        this.testAttemptAnswersList = testAttemptAnswersList;
     }
 
     @Override
@@ -81,25 +82,25 @@ public class Questions {
                 Objects.equals(phrase, questions.phrase) &&
                 Objects.equals(rightAnswer, questions.rightAnswer) &&
                 Objects.equals(structure, questions.structure) &&
-                Objects.equals(test, questions.test) &&
-                Objects.equals(testAttemptAnswer, questions.testAttemptAnswer);
+                Objects.equals(test_id, questions.test_id) &&
+                Objects.equals(testAttemptAnswersList, questions.testAttemptAnswersList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, question_type, phrase, rightAnswer, structure, test, testAttemptAnswer);
+        return Objects.hash(id, question_type, phrase, rightAnswer, structure, test_id, testAttemptAnswersList);
     }
 
     @Override
     public String toString() {
         return "Questions{" +
                 "id=" + id +
-                ", type='" + question_type + '\'' +
+                ", question_type='" + question_type + '\'' +
                 ", phrase='" + phrase + '\'' +
                 ", rightAnswer='" + rightAnswer + '\'' +
                 ", structure='" + structure + '\'' +
-                ", test=" + test +
-                ", testAttemptAnswer=" + testAttemptAnswer +
+                ", test_id=" + test_id +
+                //", testAttemptAnswersList=" + testAttemptAnswersList +
                 '}';
     }
 }
