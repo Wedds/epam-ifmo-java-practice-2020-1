@@ -12,12 +12,16 @@ public class GroupsDAO extends DatabaseService  {
     void add(Groups group){}
 
     //read
-    List<Groups> getAll(){return null;}
+    List<Groups> getAll(){
+        return null;
+    }
 
-    Groups getById(int id){return null;}
+    Groups getById(int id){
+        return null;
+    }
 
     //update
-    void update (Groups group){}
+    void update(Groups group){}
 
     //delete
     void remove(Groups group){}

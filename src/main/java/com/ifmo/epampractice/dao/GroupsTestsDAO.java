@@ -5,21 +5,30 @@ import com.ifmo.epampractice.service.DatabaseService;
 
 import java.util.List;
 
-public class GroupsTestsDAO extends DatabaseService  {
+public class GroupsTestsDAO extends DatabaseService {
 
     //create
-    void add(GroupsTests groupTest){}
+    void add(GroupsTests groupTest) {
+    }
 
     //read
-    List<GroupsTests> getAll(){return null;}
+    List<GroupsTests> getAll() {
+        return null;
+    }
 
-    GroupsTests getById(int id){return null;}
+    GroupsTests getById(int id) {
+        return null;
+    }
 
-    GroupsTests getByGroupAndTestId(int groupId, int testId){return null;}
+    GroupsTests getByGroupAndTestId(int groupId, int testId) {
+        return null;
+    }
 
     //update
-    void update (GroupsTests groupTest){}
+    void update(GroupsTests groupTest) {
+    }
 
     //delete
-    void remove(GroupsTests groupTest){}
+    void remove(GroupsTests groupTest) {
+    }
 }

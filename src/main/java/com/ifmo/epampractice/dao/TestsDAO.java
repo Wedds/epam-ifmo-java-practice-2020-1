@@ -1,4 +1,5 @@
 package com.ifmo.epampractice.dao;
+
 import com.ifmo.epampractice.entity.Tests;
 import com.ifmo.epampractice.service.DatabaseService;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestsDAO extends DatabaseService   {
+public class TestsDAO extends DatabaseService {
 
     //private Connection connection = getConnection();
 
@@ -17,7 +18,7 @@ public class TestsDAO extends DatabaseService   {
 
         PreparedStatement preparedStatement = null;
         String query = "INSERT INTO TESTS(title, subject_id, is_random, creator_id) VALUES(?,?,?,?)";
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, test.getTitle());
             preparedStatement.setInt(2, test.getSubjectId());
@@ -25,14 +26,13 @@ public class TestsDAO extends DatabaseService   {
             preparedStatement.setInt(4, test.getCreatorId());
 
             preparedStatement.executeUpdate();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
-            if (connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
@@ -45,11 +45,11 @@ public class TestsDAO extends DatabaseService   {
         List<Tests> testsList = new ArrayList<>();
         String query = "SELECT id, title, subject_id, is_random, creator_id FROM TESTS";
         Statement statement = null;
-        try{
+        try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Tests test = new Tests();
                 test.setId(resultSet.getInt("id"));
                 test.setTitle(resultSet.getString("title"));
@@ -58,19 +58,18 @@ public class TestsDAO extends DatabaseService   {
                 test.setCreatorId(resultSet.getInt("creator_id"));
                 testsList.add(test);
             }
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (statement != null){
+            if (statement != null) {
                 statement.close();
             }
-            if (connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
 
-    return testsList;
+        return testsList;
     }
 
     public Tests getById(int id) throws SQLException {
@@ -80,7 +79,7 @@ public class TestsDAO extends DatabaseService   {
         PreparedStatement preparedStatement = null;
         String query = "SELECT title, subject_id, is_random, creator_id FROM TESTS WHERE id=?";
         Tests test = new Tests();
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -90,18 +89,17 @@ public class TestsDAO extends DatabaseService   {
             test.setSubjectId(resultSet.getInt("subject_id"));
             test.setRandom(resultSet.getBoolean("is_random"));
             test.setCreatorId(resultSet.getInt("creator_id"));
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
-            if (connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
-      return test;
+        return test;
     }
 
     public void update(Tests test) throws SQLException {
@@ -109,7 +107,7 @@ public class TestsDAO extends DatabaseService   {
         Connection connection = getConnection();
         PreparedStatement preparedStatement = null;
         String query = "UPDATE TESTS SET title=?, subject_id=?, is_random=?, creator_id=? WHERE id=?";
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setString(1, test.getTitle());
@@ -119,14 +117,13 @@ public class TestsDAO extends DatabaseService   {
             preparedStatement.setInt(5, test.getId());
 
             preparedStatement.executeUpdate();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
-            if (connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }
@@ -137,19 +134,18 @@ public class TestsDAO extends DatabaseService   {
 
         PreparedStatement preparedStatement = null;
         String query = "DELETE FROM TESTS WHERE id=?";
-        try{
+        try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, test.getId());
             preparedStatement.executeUpdate();
 
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (preparedStatement != null){
+            if (preparedStatement != null) {
                 preparedStatement.close();
             }
-            if (connection != null){
+            if (connection != null) {
                 connection.close();
             }
         }

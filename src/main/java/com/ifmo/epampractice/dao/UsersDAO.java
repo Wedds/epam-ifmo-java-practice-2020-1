@@ -5,20 +5,27 @@ import com.ifmo.epampractice.service.DatabaseService;
 
 import java.util.List;
 
-public class UsersDAO extends DatabaseService  {
+public class UsersDAO extends DatabaseService {
 
     //create
-    void add(Users user){}
+    void add(Users user) {
+    }
 
     //read
-    List<Users> getAll(){return null;}
+    List<Users> getAll() {
+        return null;
+    }
 
-    Users getById(int id){return null;}
+    Users getById(int id) {
+        return null;
+    }
 
     //update
-    void update (Users user){}
+    void update(Users user) {
+    }
 
     //delete
-    void remove(Users user){}
+    void remove(Users user) {
+    }
 
 }
