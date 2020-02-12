@@ -1,6 +1,5 @@
 package com.ifmo.epampractice.dao;
 
-import com.ifmo.epampractice.entity.GroupsTests;
 import com.ifmo.epampractice.entity.TestAttemptAnswers;
 import com.ifmo.epampractice.service.DatabaseService;
 import com.ifmo.epampractice.service.DatabaseSource;

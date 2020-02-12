@@ -24,11 +24,11 @@ public class Questions {
         this.id = id;
     }
 
-    public String getType() {
+    public String getQuestionType() {
         return question_type;
     }
 
-    public void setType(String type) {
+    public void setQuestionType(String type) {
         this.question_type = type;
     }
 
