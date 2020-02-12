@@ -9,8 +9,8 @@ public class DatabaseService {
 
     private static final String DB_DRIVER = "org.postgresql.Driver";
     private static final String DB_URL = "jdbs:postgresql://localhost:5432/testing_system_db";
-    private static final String DB_USERNAME = "esclide";
-    private static final String DB_PASSWORD = "Pa$$w0rd";
+    private static final String DB_USERNAME = "asuka";
+    private static final String DB_PASSWORD = "12345";
 
     public Connection getConnection(){
         try {
