@@ -1,26 +1,42 @@
-DROP DATABASE IF EXISTS testing_system_db;
-CREATE DATABASE testing_system_db;
+DO $$
+    BEGIN
+        IF EXISTS (SELECT FROM pg_database WHERE datname = 'testing_system_db') THEN
+            RAISE NOTICE 'Database testing_system_db already exists';
+        ELSE
+            PERFORM dblink_exec('dbname=' || current_database()
+                , 'CREATE DATABASE testing_system_db');
+        END IF;
 
-CREATE USER asuka WITH encrypted PASSWORD '12345';
-GRANT all privileges ON DATABASE testing_system_db TO username;
-ALTER USER asuka WITH SUPERUSER;
+        IF EXISTS (SELECT FROM pg_user WHERE usename = 'asuka') THEN
+            RAISE NOTICE 'User asuka already exists';
+        ELSE
+            CREATE USER asuka WITH encrypted PASSWORD '12345';
+            GRANT all privileges ON DATABASE testing_system_db TO asuka;
+            ALTER USER asuka WITH SUPERUSER;
+        END IF;
+    END
+$$;
+
+
 \c testing_system_db;
 
-CREATE TYPE "roles" AS ENUM (
-  'admin',
-  'moderator',
-  'teacher',
-  'student'
-);
+DO $$
+    BEGIN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'roles') THEN
+            create type roles AS ENUM ('admin', 'moderator', 'teacher', 'student');
+        ELSE
+            RAISE NOTICE 'Type roles already exists';
+        END IF;
 
-CREATE TYPE "block_types" AS ENUM (
-  'input',
-  'checkbox',
-  'radiobutton',
-  'textfield'
-);
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'block_types') THEN
+            create type block_types AS ENUM ('input', 'checkbox', 'radiobutton', 'textfield');
+        ELSE
+            RAISE NOTICE 'Type block_types already exists';
+        END IF;
+    END
+$$;
 
-CREATE TABLE "users" (
+CREATE TABLE IF NOT EXISTS "users" (
   "id" SERIAL PRIMARY KEY,
   "role_type" roles NOT NULL,
   "email" varchar NOT NULL,
@@ -34,24 +50,24 @@ CREATE TABLE "users" (
   "created_at" timestamp NOT NULL
 );
 
-CREATE TABLE "groups" (
+CREATE TABLE IF NOT EXISTS "groups" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL,
   "is_open" boolean NOT NULL
 );
 
-CREATE TABLE "users_groups" (
+CREATE TABLE IF NOT EXISTS "users_groups" (
   "id" SERIAL PRIMARY KEY,
   "user_id" int NOT NULL,
   "group_id" int NOT NULL
 );
 
-CREATE TABLE "subjects" (
+CREATE TABLE IF NOT EXISTS "subjects" (
   "id" SERIAL PRIMARY KEY,
   "name" varchar NOT NULL
 );
 
-CREATE TABLE "tests" (
+CREATE TABLE IF NOT EXISTS "tests" (
   "id" SERIAL PRIMARY KEY,
   "title" varchar NOT NULL,
   "subject_id" int,
@@ -60,7 +76,7 @@ CREATE TABLE "tests" (
 
 );
 
-CREATE TABLE "questions" (
+CREATE TABLE IF NOT EXISTS "questions" (
   "id" SERIAL PRIMARY KEY,
   "question_type" block_types NOT NULL,
   "test_id" int NOT NULL,
@@ -69,7 +85,7 @@ CREATE TABLE "questions" (
   "structure" varchar
 );
 
-CREATE TABLE "test_attempts" (
+CREATE TABLE IF NOT EXISTS "test_attempts" (
   "user_id" int NOT NULL,
   "id" SERIAL PRIMARY KEY,
   "test_id" int NOT NULL,
@@ -77,7 +93,7 @@ CREATE TABLE "test_attempts" (
   "passing_date" date
 );
 
-CREATE TABLE "test_attempt_answers" (
+CREATE TABLE IF NOT EXISTS "test_attempt_answers" (
   "id" SERIAL PRIMARY KEY,
   "test_attempt_id" int NOT NULL,
   "question_id" int NOT NULL,
@@ -85,7 +101,7 @@ CREATE TABLE "test_attempt_answers" (
   "score" int
 );
 
-CREATE TABLE "groups_tests" (
+CREATE TABLE IF NOT EXISTS "groups_tests" (
   "id" SERIAL PRIMARY KEY,
   "group_id" int NOT NULL,
   "test_id" int NOT NULL,
