@@ -13,10 +13,6 @@ public class DatabaseService {
     private static final String DB_PASSWORD = "Pa$$w0rd";
 
     public Connection getConnection(){
-        return conn;
-    }
-
-    public DatabaseService() {
         try {
             Class.forName(DB_DRIVER);
         } catch (ClassNotFoundException e) {
@@ -31,7 +27,9 @@ public class DatabaseService {
             e.printStackTrace();
             System.out.println("Connection error");
         }
+        return conn;
     }
+
 
     public static DatabaseService getInstance() {
         DatabaseService localInstance = instance;

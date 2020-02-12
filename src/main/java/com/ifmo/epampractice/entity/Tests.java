@@ -7,9 +7,10 @@ public class Tests {
     private int id;
     private String title;
     private boolean isRandom;
-    private Users creator;
-    private TestAttempts testAttempt;
-    private Subjects subject;
+    private int creator_id;
+    private int subject_id;
+    private List<TestAttempts> testAttemptsList;
+
     private List<Questions> questionsList;
     private List<GroupsTests>groupsTestsList;
 
@@ -40,28 +41,28 @@ public class Tests {
         isRandom = random;
     }
 
-    public Users getCreator() {
-        return creator;
+    public int getCreatorId() {
+        return creator_id;
     }
 
-    public void setCreator(Users creator) {
-        this.creator = creator;
+    public void setCreatorId(int creator_id) {
+        this.creator_id = creator_id;
     }
 
-    public TestAttempts getTestAttempt() {
-        return testAttempt;
+    public List<TestAttempts> getTestAttemptsList() {
+        return testAttemptsList;
     }
 
-    public void setTestAttempt(TestAttempts testAttempt) {
-        this.testAttempt = testAttempt;
+    public void setTestAttemptsList(List<TestAttempts> testAttemptsList) {
+        this.testAttemptsList = testAttemptsList;
     }
 
-    public Subjects getSubject() {
-        return subject;
+    public int getSubjectId() {
+        return subject_id;
     }
 
-    public void setSubject(Subjects subject) {
-        this.subject = subject;
+    public void setSubjectId(int subject_id) {
+        this.subject_id = subject_id;
     }
 
     public List<Questions> getQuestionsList() {
@@ -88,16 +89,16 @@ public class Tests {
         return id == tests.id &&
                 isRandom == tests.isRandom &&
                 Objects.equals(title, tests.title) &&
-                Objects.equals(creator, tests.creator) &&
-                Objects.equals(testAttempt, tests.testAttempt) &&
-                Objects.equals(subject, tests.subject) &&
+                Objects.equals(creator_id, tests.creator_id) &&
+                Objects.equals(testAttemptsList, tests.testAttemptsList) &&
+                Objects.equals(subject_id, tests.subject_id) &&
                 Objects.equals(questionsList, tests.questionsList) &&
                 Objects.equals(groupsTestsList, tests.groupsTestsList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, isRandom, creator, testAttempt, subject, questionsList, groupsTestsList);
+        return Objects.hash(id, title, isRandom, creator_id, testAttemptsList, subject_id, questionsList, groupsTestsList);
     }
 
     @Override
@@ -106,11 +107,11 @@ public class Tests {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", isRandom=" + isRandom +
-                ", creator=" + creator +
-                ", testAttempt=" + testAttempt +
-                ", subject=" + subject +
-                ", questionsList=" + questionsList +
-                ", groupsTestsList=" + groupsTestsList +
+                ", creator_id=" + creator_id +
+                //", testAttempt=" + testAttemptsList +
+                ", subject=" + subject_id +
+                //", questionsList=" + questionsList +
+                //", groupsTestsList=" + groupsTestsList +
                 '}';
     }
 }
