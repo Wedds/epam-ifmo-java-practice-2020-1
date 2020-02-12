@@ -1,4 +1,5 @@
 package com.ifmo.epampractice.entity;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ public class Tests {
     private List<TestAttempts> testAttemptsList;
 
     private List<Questions> questionsList;
-    private List<GroupsTests>groupsTestsList;
+    private List<GroupsTests> groupsTestsList;
 
     public Tests() {
     }
@@ -109,7 +110,7 @@ public class Tests {
                 ", isRandom=" + isRandom +
                 ", creator_id=" + creator_id +
                 //", testAttempt=" + testAttemptsList +
-                ", subject=" + subject_id +
+                ", subject_id=" + subject_id +
                 //", questionsList=" + questionsList +
                 //", groupsTestsList=" + groupsTestsList +
                 '}';

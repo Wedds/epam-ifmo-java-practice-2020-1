@@ -2,30 +2,35 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Users;
 import com.ifmo.epampractice.service.DatabaseService;
+import com.ifmo.epampractice.service.DatabaseSource;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public class UsersDAO extends DatabaseService {
+public class UsersDAO extends DatabaseSource implements DatabaseService<Users> {
 
-    //create
-    void add(Users user) {
+    @Override
+    public void add(Users object) throws SQLException {
+
     }
 
-    //read
-    List<Users> getAll() {
+    @Override
+    public List<Users> getAll() throws SQLException {
         return null;
     }
 
-    Users getById(int id) {
+    @Override
+    public Users getById(int id) throws SQLException {
         return null;
     }
 
-    //update
-    void update(Users user) {
+    @Override
+    public void update(Users object) throws SQLException {
+
     }
 
-    //delete
-    void remove(Users user) {
-    }
+    @Override
+    public void remove(Users object) throws SQLException {
 
+    }
 }

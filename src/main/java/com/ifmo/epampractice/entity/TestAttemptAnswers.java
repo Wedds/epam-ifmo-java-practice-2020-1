@@ -7,9 +7,9 @@ public class TestAttemptAnswers {
 
     private int id;
     private int score;
-    private Date passingDate;
-    private Questions question;
-    private Tests test;
+    private String answer;
+    private int question_id;
+    private int test_attempt_id;
 
     public TestAttemptAnswers() {
     }
@@ -30,28 +30,28 @@ public class TestAttemptAnswers {
         this.score = score;
     }
 
-    public Date getPassingDate() {
-        return passingDate;
+    public String getAnswer() {
+        return answer;
     }
 
-    public void setPassingDate(Date passingDate) {
-        this.passingDate = passingDate;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
-    public Questions getQuestion() {
-        return question;
+    public int getQuestionId() {
+        return question_id;
     }
 
-    public void setQuestion(Questions question) {
-        this.question = question;
+    public void setQuestionId(int question_id) {
+        this.question_id = question_id;
     }
 
-    public Tests getTest() {
-        return test;
+    public int getTestAttemptId() {
+        return test_attempt_id;
     }
 
-    public void setTest(Tests test) {
-        this.test = test;
+    public void setTestAttemptId(int test_attempt_id) {
+        this.test_attempt_id = test_attempt_id;
     }
 
     @Override
@@ -61,14 +61,14 @@ public class TestAttemptAnswers {
         TestAttemptAnswers that = (TestAttemptAnswers) o;
         return id == that.id &&
                 score == that.score &&
-                Objects.equals(passingDate, that.passingDate) &&
-                Objects.equals(question, that.question) &&
-                Objects.equals(test, that.test);
+                Objects.equals(answer, that.answer) &&
+                Objects.equals(question_id, that.question_id) &&
+                Objects.equals(test_attempt_id, that.test_attempt_id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, score, passingDate, question, test);
+        return Objects.hash(id, score, answer, question_id, test_attempt_id);
     }
 
     @Override
@@ -76,9 +76,9 @@ public class TestAttemptAnswers {
         return "TestAttemptAnswers{" +
                 "id=" + id +
                 ", score=" + score +
-                ", passingDate=" + passingDate +
-                ", question=" + question +
-                ", test=" + test +
+                ", answer=" + answer +
+                ", question_id=" + question_id +
+                ", test_attempt_id=" + test_attempt_id +
                 '}';
     }
 }

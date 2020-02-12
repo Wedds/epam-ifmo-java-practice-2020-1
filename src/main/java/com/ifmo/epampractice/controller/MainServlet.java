@@ -1,6 +1,6 @@
 package com.ifmo.epampractice.controller;
 
-import com.ifmo.epampractice.service.DatabaseService;
+import com.ifmo.epampractice.service.DatabaseSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +18,7 @@ public class MainServlet extends HttpServlet {
 
         PrintWriter pw = resp.getWriter();
         try {
-            DatabaseService dbs = DatabaseService.getInstance();
+            DatabaseSource dbs = DatabaseSource.getInstance();
             Connection conn = dbs.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT email FROM users");

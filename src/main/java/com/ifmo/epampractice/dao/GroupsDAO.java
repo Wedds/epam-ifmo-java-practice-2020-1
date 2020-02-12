@@ -1,28 +1,32 @@
 package com.ifmo.epampractice.dao;
 
-
 import com.ifmo.epampractice.entity.Groups;
 import com.ifmo.epampractice.service.DatabaseService;
+import com.ifmo.epampractice.service.DatabaseSource;
 
 import java.util.List;
 
-public class GroupsDAO extends DatabaseService  {
+public class GroupsDAO extends DatabaseSource implements DatabaseService<Groups> {
 
-    //create
-    void add(Groups group){}
+    @Override
+    public void add(Groups group) {
+    }
 
-    //read
-    List<Groups> getAll(){
+    @Override
+    public List<Groups> getAll() {
         return null;
     }
 
-    Groups getById(int id){
+    @Override
+    public Groups getById(int id) {
         return null;
     }
 
-    //update
-    void update(Groups group){}
+    @Override
+    public void update(Groups group) {
+    }
 
-    //delete
-    void remove(Groups group){}
+    @Override
+    public void remove(Groups group) {
+    }
 }

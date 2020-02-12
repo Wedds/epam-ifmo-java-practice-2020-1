@@ -2,22 +2,21 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Tests;
 import com.ifmo.epampractice.service.DatabaseService;
+import com.ifmo.epampractice.service.DatabaseSource;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestsDAO extends DatabaseService {
 
-    //private Connection connection = getConnection();
-
+public class TestsDAO extends DatabaseSource implements DatabaseService<Tests> {
+    @Override
     public void add(Tests test) throws SQLException {
-
+        String query = "INSERT INTO TESTS(title, subject_id, is_random, creator_id) VALUES(?,?,?,?)";
         Connection connection = getConnection();
 
         PreparedStatement preparedStatement = null;
-        String query = "INSERT INTO TESTS(title, subject_id, is_random, creator_id) VALUES(?,?,?,?)";
+
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, test.getTitle());
@@ -38,12 +37,13 @@ public class TestsDAO extends DatabaseService {
         }
     }
 
+    @Override
     public List<Tests> getAll() throws SQLException {
-
+        String query = "SELECT id, title, subject_id, is_random, creator_id FROM TESTS";
         Connection connection = getConnection();
 
         List<Tests> testsList = new ArrayList<>();
-        String query = "SELECT id, title, subject_id, is_random, creator_id FROM TESTS";
+
         Statement statement = null;
         try {
             statement = connection.createStatement();
@@ -72,12 +72,13 @@ public class TestsDAO extends DatabaseService {
         return testsList;
     }
 
+    @Override
     public Tests getById(int id) throws SQLException {
-
+        String query = "SELECT title, subject_id, is_random, creator_id FROM TESTS WHERE id=?";
         Connection connection = getConnection();
 
         PreparedStatement preparedStatement = null;
-        String query = "SELECT title, subject_id, is_random, creator_id FROM TESTS WHERE id=?";
+
         Tests test = new Tests();
         try {
             preparedStatement = connection.prepareStatement(query);
@@ -102,11 +103,12 @@ public class TestsDAO extends DatabaseService {
         return test;
     }
 
+    @Override
     public void update(Tests test) throws SQLException {
-
+        String query = "UPDATE TESTS SET title=?, subject_id=?, is_random=?, creator_id=? WHERE id=?";
         Connection connection = getConnection();
         PreparedStatement preparedStatement = null;
-        String query = "UPDATE TESTS SET title=?, subject_id=?, is_random=?, creator_id=? WHERE id=?";
+
         try {
             preparedStatement = connection.prepareStatement(query);
 
@@ -129,6 +131,7 @@ public class TestsDAO extends DatabaseService {
         }
     }
 
+    @Override
     public void remove(Tests test) throws SQLException {
         Connection connection = getConnection();
 
