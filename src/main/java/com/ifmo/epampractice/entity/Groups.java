@@ -3,11 +3,12 @@ package com.ifmo.epampractice.entity;
 import java.util.List;
 import java.util.Objects;
 
+
 public class Groups {
 
     private int id;
     private String name;
-    private boolean is_open;
+    private boolean isOpen;
     private List<Users>usersList;
     private List<GroupsTests>groupsTests;
 
@@ -31,11 +32,11 @@ public class Groups {
     }
 
     public boolean isIs_open() {
-        return is_open;
+        return isOpen;
     }
 
-    public void setIs_open(boolean is_open) {
-        this.is_open = is_open;
+    public void setIs_open(boolean isOpen) {
+        this.isOpen = isOpen;
     }
 
     public List<Users> getUsersList() {
@@ -58,17 +59,17 @@ public class Groups {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Groups groups = (Groups) o;
-        return id == groups.id &&
-                is_open == groups.is_open &&
-                Objects.equals(name, groups.name) &&
-                Objects.equals(usersList, groups.usersList) &&
-                Objects.equals(groupsTests, groups.groupsTests);
+        Groups that = (Groups) o;
+        return id == that.id &&
+                isOpen == that.isOpen &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(usersList, that.usersList) &&
+                Objects.equals(groupsTests, that.groupsTests);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, is_open, usersList, groupsTests);
+        return Objects.hash(id, name, isOpen, usersList, groupsTests);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class Groups {
         return "Groups{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", is_open=" + is_open +
+                ", is_open=" + isOpen +
                 ", usersList=" + usersList +
                 ", groupsTests=" + groupsTests +
                 '}';

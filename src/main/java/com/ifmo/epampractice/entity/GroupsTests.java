@@ -10,8 +10,8 @@ public class GroupsTests {
     private int maxAttemps;
     private int timeLimit;
     private Date deadline;
-    private Groups group;
-    private Tests test;
+    private int groupId;
+    private int testId;
 
     public GroupsTests() {
     }
@@ -24,11 +24,11 @@ public class GroupsTests {
         this.id = id;
     }
 
-    public boolean isNeccessary() {
+    public boolean isIsNeccessary() {
         return isNeccessary;
     }
 
-    public void setNeccessary(boolean neccessary) {
+    public void setIsNeccessary(boolean neccessary) {
         isNeccessary = neccessary;
     }
 
@@ -56,20 +56,20 @@ public class GroupsTests {
         this.deadline = deadline;
     }
 
-    public Groups getGroup() {
-        return group;
+    public int getGroup_id() {
+        return groupId;
     }
 
-    public void setGroup(Groups group) {
-        this.group = group;
+    public void setGroup_id(int groupId) {
+        this.groupId = groupId;
     }
 
-    public Tests getTest() {
-        return test;
+    public int getTest_id() {
+        return testId;
     }
 
-    public void setTest(Tests test) {
-        this.test = test;
+    public void setTest_id(int testId) {
+        this.testId = testId;
     }
 
     @Override
@@ -82,13 +82,13 @@ public class GroupsTests {
                 maxAttemps == that.maxAttemps &&
                 timeLimit == that.timeLimit &&
                 Objects.equals(deadline, that.deadline) &&
-                Objects.equals(group, that.group) &&
-                Objects.equals(test, that.test);
+                Objects.equals(groupId, that.groupId) &&
+                Objects.equals(testId, that.testId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, isNeccessary, maxAttemps, timeLimit, deadline, group, test);
+        return Objects.hash(id, isNeccessary, maxAttemps, timeLimit, deadline, groupId, testId);
     }
 
     @Override
@@ -99,8 +99,8 @@ public class GroupsTests {
                 ", maxAttemps=" + maxAttemps +
                 ", timeLimit=" + timeLimit +
                 ", deadline=" + deadline +
-                ", group=" + group +
-                ", test=" + test +
+                ", group=" + groupId +
+                ", test=" + testId +
                 '}';
     }
 }
