@@ -1,6 +1,5 @@
 package com.ifmo.epampractice.entity;
 
-import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
@@ -45,8 +44,6 @@ public class GroupsTests {
         this.maxAttempts = maxAttempts;
     }
 
-    @Basic
-    @Column(name = "deadline")
     public Date getDeadline() {
         return deadline;
     }
@@ -55,8 +52,6 @@ public class GroupsTests {
         this.deadline = deadline;
     }
 
-    @Basic
-    @Column(name = "time_limit")
     public Integer getTimeLimit() {
         return timeLimit;
     }

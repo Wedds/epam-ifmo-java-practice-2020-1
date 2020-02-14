@@ -1,10 +1,5 @@
 package com.ifmo.epampractice.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 public class Answers {
     private int id;
     private int questionId;
