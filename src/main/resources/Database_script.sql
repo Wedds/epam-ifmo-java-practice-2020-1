@@ -30,7 +30,7 @@ $$
             RAISE NOTICE 'Type roles already exists';
         END IF;
 
-        IF NOT EXISTS(SELECT 1 FROM pg_type WHERE typname = 'block_types') THEN
+        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'types') THEN
             create type types AS ENUM ('checkbox', 'radiobutton');
         ELSE
             RAISE NOTICE 'Type types already exists';
