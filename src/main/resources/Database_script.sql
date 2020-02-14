@@ -42,7 +42,7 @@ $$;
 CREATE TABLE IF NOT EXISTS "subjects"
 (
     "id"   SERIAL PRIMARY KEY,
-    "name" varchar
+    "name" varchar UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS "groups"
