@@ -1,17 +1,30 @@
 package com.ifmo.epampractice.entity;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class Groups {
-
     private int id;
     private String name;
-    private boolean is_open;
-    private List<Users>usersList;
-    private List<GroupsTests>groupsTests;
+    private Date createdAt;
+    private List<Users> usersList;
+    private List<Tests> testsList;
 
-    public Groups() {
+    public List<Users> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<Users> usersList) {
+        this.usersList = usersList;
+    }
+
+    public List<Tests> getTestsList() {
+        return testsList;
+    }
+
+    public void setTestsList(List<Tests> testsList) {
+        this.testsList = testsList;
     }
 
     public int getId() {
@@ -30,28 +43,12 @@ public class Groups {
         this.name = name;
     }
 
-    public boolean isIs_open() {
-        return is_open;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setIs_open(boolean is_open) {
-        this.is_open = is_open;
-    }
-
-    public List<Users> getUsersList() {
-        return usersList;
-    }
-
-    public void setUsersList(List<Users> usersList) {
-        this.usersList = usersList;
-    }
-
-    public List<GroupsTests> getGroupsTests() {
-        return groupsTests;
-    }
-
-    public void setGroupsTests(List<GroupsTests> groupsTests) {
-        this.groupsTests = groupsTests;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
@@ -60,15 +57,15 @@ public class Groups {
         if (o == null || getClass() != o.getClass()) return false;
         Groups groups = (Groups) o;
         return id == groups.id &&
-                is_open == groups.is_open &&
-                Objects.equals(name, groups.name) &&
+                name.equals(groups.name) &&
+                createdAt.equals(groups.createdAt) &&
                 Objects.equals(usersList, groups.usersList) &&
-                Objects.equals(groupsTests, groups.groupsTests);
+                Objects.equals(testsList, groups.testsList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, is_open, usersList, groupsTests);
+        return Objects.hash(id, name, createdAt, usersList, testsList);
     }
 
     @Override
@@ -76,9 +73,11 @@ public class Groups {
         return "Groups{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", is_open=" + is_open +
+                ", createdAt=" + createdAt +
                 ", usersList=" + usersList +
-                ", groupsTests=" + groupsTests +
+                ", testsList=" + testsList +
                 '}';
     }
+
+
 }

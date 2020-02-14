@@ -1,53 +1,52 @@
 package com.ifmo.epampractice.entity;
 
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
 public class GroupsTests {
-
-    private int id;
-    private boolean isNeccessary;
-    private int maxAttemps;
-    private int timeLimit;
+    private int testId;
+    private int groupId;
+    private Boolean isNecessary;
+    private Integer maxAttempts;
     private Date deadline;
-    private Groups group;
-    private Tests test;
+    private Integer timeLimit;
 
-    public GroupsTests() {
+
+    public int getTestId() {
+        return testId;
     }
 
-    public int getId() {
-        return id;
+    public void setTestId(int testId) {
+        this.testId = testId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public boolean isNeccessary() {
-        return isNeccessary;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
-    public void setNeccessary(boolean neccessary) {
-        isNeccessary = neccessary;
+    public Boolean getNecessary() {
+        return isNecessary;
     }
 
-    public int getMaxAttemps() {
-        return maxAttemps;
+    public void setNecessary(Boolean necessary) {
+        isNecessary = necessary;
     }
 
-    public void setMaxAttemps(int maxAttemps) {
-        this.maxAttemps = maxAttemps;
+    public Integer getMaxAttempts() {
+        return maxAttempts;
     }
 
-    public int getTimeLimit() {
-        return timeLimit;
+    public void setMaxAttempts(Integer maxAttempts) {
+        this.maxAttempts = maxAttempts;
     }
 
-    public void setTimeLimit(int timeLimit) {
-        this.timeLimit = timeLimit;
-    }
-
+    @Basic
+    @Column(name = "deadline")
     public Date getDeadline() {
         return deadline;
     }
@@ -56,20 +55,14 @@ public class GroupsTests {
         this.deadline = deadline;
     }
 
-    public Groups getGroup() {
-        return group;
+    @Basic
+    @Column(name = "time_limit")
+    public Integer getTimeLimit() {
+        return timeLimit;
     }
 
-    public void setGroup(Groups group) {
-        this.group = group;
-    }
-
-    public Tests getTest() {
-        return test;
-    }
-
-    public void setTest(Tests test) {
-        this.test = test;
+    public void setTimeLimit(Integer timeLimit) {
+        this.timeLimit = timeLimit;
     }
 
     @Override
@@ -77,30 +70,28 @@ public class GroupsTests {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GroupsTests that = (GroupsTests) o;
-        return id == that.id &&
-                isNeccessary == that.isNeccessary &&
-                maxAttemps == that.maxAttemps &&
-                timeLimit == that.timeLimit &&
-                Objects.equals(deadline, that.deadline) &&
-                Objects.equals(group, that.group) &&
-                Objects.equals(test, that.test);
+        return testId == that.testId &&
+                groupId == that.groupId &&
+                isNecessary.equals(that.isNecessary) &&
+                maxAttempts.equals(that.maxAttempts) &&
+                deadline.equals(that.deadline) &&
+                timeLimit.equals(that.timeLimit);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, isNeccessary, maxAttemps, timeLimit, deadline, group, test);
+        return Objects.hash(testId, groupId, isNecessary, maxAttempts, deadline, timeLimit);
     }
 
     @Override
     public String toString() {
         return "GroupsTests{" +
-                "id=" + id +
-                ", isNeccessary=" + isNeccessary +
-                ", maxAttemps=" + maxAttemps +
-                ", timeLimit=" + timeLimit +
+                "testId=" + testId +
+                ", groupId=" + groupId +
+                ", isNecessary=" + isNecessary +
+                ", maxAttempts=" + maxAttempts +
                 ", deadline=" + deadline +
-                ", group=" + group +
-                ", test=" + test +
+                ", timeLimit=" + timeLimit +
                 '}';
     }
 }

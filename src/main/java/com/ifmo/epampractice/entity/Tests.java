@@ -1,21 +1,44 @@
 package com.ifmo.epampractice.entity;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class Tests {
-
     private int id;
+    private int subjectId;
     private String title;
-    private boolean isRandom;
-    private int creator_id;
-    private int subject_id;
-    private List<TestAttempts> testAttemptsList;
-
+    private String description;
+    private Boolean isRandom;
+    private Date createdAt;
+    private Integer maxPoints;
+    private Integer creatorId;
+    private List<Attempts> attemptsList;
     private List<Questions> questionsList;
-    private List<GroupsTests> groupsTestsList;
+    private List<Groups> groupsList;
 
-    public Tests() {
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public List<Questions> getQuestionsList() {
+        return questionsList;
+    }
+
+    public void setQuestionsList(List<Questions> questionsList) {
+        this.questionsList = questionsList;
+    }
+
+    public List<Groups> getGroupsList() {
+        return groupsList;
+    }
+
+    public void setGroupsList(List<Groups> groupsList) {
+        this.groupsList = groupsList;
     }
 
     public int getId() {
@@ -34,53 +57,54 @@ public class Tests {
         this.title = title;
     }
 
-    public boolean isRandom() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getRandom() {
         return isRandom;
     }
 
-    public void setRandom(boolean random) {
+    public void setRandom(Boolean random) {
         isRandom = random;
     }
 
-    public int getCreatorId() {
-        return creator_id;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatorId(int creator_id) {
-        this.creator_id = creator_id;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public List<TestAttempts> getTestAttemptsList() {
-        return testAttemptsList;
+    public Integer getMaxPoints() {
+        return maxPoints;
     }
 
-    public void setTestAttemptsList(List<TestAttempts> testAttemptsList) {
-        this.testAttemptsList = testAttemptsList;
+    public void setMaxPoints(Integer maxPoints) {
+        this.maxPoints = maxPoints;
     }
 
-    public int getSubjectId() {
-        return subject_id;
+    public Integer getCreatorId() {
+        return creatorId;
     }
 
-    public void setSubjectId(int subject_id) {
-        this.subject_id = subject_id;
+    public void setCreatorId(Integer creatorId) {
+        this.creatorId = creatorId;
     }
 
-    public List<Questions> getQuestionsList() {
-        return questionsList;
+    public List<Attempts> getAttemptsList() {
+        return attemptsList;
     }
 
-    public void setQuestionsList(List<Questions> questionsList) {
-        this.questionsList = questionsList;
+    public void setAttemptsList(List<Attempts> attemptsList) {
+        this.attemptsList = attemptsList;
     }
 
-    public List<GroupsTests> getGroupsTestsList() {
-        return groupsTestsList;
-    }
-
-    public void setGroupsTestsList(List<GroupsTests> groupsTestsList) {
-        this.groupsTestsList = groupsTestsList;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -88,31 +112,37 @@ public class Tests {
         if (o == null || getClass() != o.getClass()) return false;
         Tests tests = (Tests) o;
         return id == tests.id &&
-                isRandom == tests.isRandom &&
-                Objects.equals(title, tests.title) &&
-                Objects.equals(creator_id, tests.creator_id) &&
-                Objects.equals(testAttemptsList, tests.testAttemptsList) &&
-                Objects.equals(subject_id, tests.subject_id) &&
-                Objects.equals(questionsList, tests.questionsList) &&
-                Objects.equals(groupsTestsList, tests.groupsTestsList);
+                subjectId == tests.subjectId &&
+                title.equals(tests.title) &&
+                description.equals(tests.description) &&
+                isRandom.equals(tests.isRandom) &&
+                createdAt.equals(tests.createdAt) &&
+                maxPoints.equals(tests.maxPoints) &&
+                creatorId.equals(tests.creatorId) &&
+                attemptsList.equals(tests.attemptsList) &&
+                questionsList.equals(tests.questionsList) &&
+                groupsList.equals(tests.groupsList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, isRandom, creator_id, testAttemptsList, subject_id, questionsList, groupsTestsList);
+        return Objects.hash(id, subjectId, title, description, isRandom, createdAt, maxPoints, creatorId, attemptsList, questionsList, groupsList);
     }
 
     @Override
     public String toString() {
         return "Tests{" +
                 "id=" + id +
+                ", subjectId=" + subjectId +
                 ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
                 ", isRandom=" + isRandom +
-                ", creator_id=" + creator_id +
-                //", testAttempt=" + testAttemptsList +
-                ", subject_id=" + subject_id +
-                //", questionsList=" + questionsList +
-                //", groupsTestsList=" + groupsTestsList +
+                ", createdAt=" + createdAt +
+                ", maxPoints=" + maxPoints +
+                ", creatorId=" + creatorId +
+                ", attemptsList=" + attemptsList +
+                ", questionsList=" + questionsList +
+                ", groupsList=" + groupsList +
                 '}';
     }
 }

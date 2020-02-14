@@ -4,12 +4,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class Subjects {
-
     private int id;
     private String name;
-    private List<Tests>testsList;
+    private List<Tests> testsList;
 
-    public Subjects() {
+    public List<Tests> getTestsList() {
+        return testsList;
+    }
+
+    public void setTestsList(List<Tests> testsList) {
+        this.testsList = testsList;
     }
 
     public int getId() {
@@ -28,27 +32,18 @@ public class Subjects {
         this.name = name;
     }
 
-    public List<Tests> getTestsList() {
-        return testsList;
-    }
-
-    public void setTestsList(List<Tests> testsList) {
-        this.testsList = testsList;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Subjects subjects = (Subjects) o;
         return id == subjects.id &&
-                Objects.equals(name, subjects.name) &&
-                Objects.equals(testsList, subjects.testsList);
+                name.equals(subjects.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, testsList);
+        return Objects.hash(id, name);
     }
 
     @Override

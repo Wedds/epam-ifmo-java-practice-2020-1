@@ -4,16 +4,29 @@ import java.util.List;
 import java.util.Objects;
 
 public class Questions {
-
     private int id;
-    private String question_type;
-    private String phrase;
-    private String rightAnswer;
-    private String structure;
-    private int test_id;
-    private List<TestAttemptAnswers> testAttemptAnswersList;
+    private Object questionType;
+    private String title;
+    private String image;
+    private String questionText;
+    private int testId;
 
-    public Questions() {
+    public int getTestId() {
+        return testId;
+    }
+
+    public void setTestId(int testId) {
+        this.testId = testId;
+    }
+
+    private List<Answers> answersList;
+
+    public List<Answers> getAnswersList() {
+        return answersList;
+    }
+
+    public void setAnswersList(List<Answers> answersList) {
+        this.answersList = answersList;
     }
 
     public int getId() {
@@ -24,52 +37,36 @@ public class Questions {
         this.id = id;
     }
 
-    public String getQuestionType() {
-        return question_type;
+    public Object getQuestionType() {
+        return questionType;
     }
 
-    public void setQuestionType(String type) {
-        this.question_type = type;
+    public void setQuestionType(Object questionType) {
+        this.questionType = questionType;
     }
 
-    public String getPhrase() {
-        return phrase;
+    public String getTitle() {
+        return title;
     }
 
-    public void setPhrase(String phrase) {
-        this.phrase = phrase;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getRightAnswer() {
-        return rightAnswer;
+    public String getImage() {
+        return image;
     }
 
-    public void setRightAnswer(String rightAnswer) {
-        this.rightAnswer = rightAnswer;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public String getStructure() {
-        return structure;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setStructure(String structure) {
-        this.structure = structure;
-    }
-
-    public int getTestId() {
-        return test_id;
-    }
-
-    public void setTestId(int test_id) {
-        this.test_id = test_id;
-    }
-
-    public List<TestAttemptAnswers> getTestAttemptAnswersList() {
-        return testAttemptAnswersList;
-    }
-
-    public void setTestAttemptAnswersList(List<TestAttemptAnswers> testAttemptAnswersList) {
-        this.testAttemptAnswersList = testAttemptAnswersList;
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
     @Override
@@ -78,29 +75,29 @@ public class Questions {
         if (o == null || getClass() != o.getClass()) return false;
         Questions questions = (Questions) o;
         return id == questions.id &&
-                Objects.equals(question_type, questions.question_type) &&
-                Objects.equals(phrase, questions.phrase) &&
-                Objects.equals(rightAnswer, questions.rightAnswer) &&
-                Objects.equals(structure, questions.structure) &&
-                Objects.equals(test_id, questions.test_id) &&
-                Objects.equals(testAttemptAnswersList, questions.testAttemptAnswersList);
+                testId == questions.testId &&
+                questionType.equals(questions.questionType) &&
+                title.equals(questions.title) &&
+                image.equals(questions.image) &&
+                questionText.equals(questions.questionText) &&
+                answersList.equals(questions.answersList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, question_type, phrase, rightAnswer, structure, test_id, testAttemptAnswersList);
+        return Objects.hash(id, questionType, title, image, questionText, testId, answersList);
     }
 
     @Override
     public String toString() {
         return "Questions{" +
                 "id=" + id +
-                ", question_type='" + question_type + '\'' +
-                ", phrase='" + phrase + '\'' +
-                ", rightAnswer='" + rightAnswer + '\'' +
-                ", structure='" + structure + '\'' +
-                ", test_id=" + test_id +
-                //", testAttemptAnswersList=" + testAttemptAnswersList +
+                ", questionType=" + questionType +
+                ", title='" + title + '\'' +
+                ", image='" + image + '\'' +
+                ", questionText='" + questionText + '\'' +
+                ", testId=" + testId +
+                ", answersList=" + answersList +
                 '}';
     }
 }

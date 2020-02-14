@@ -5,23 +5,36 @@ import java.util.List;
 import java.util.Objects;
 
 public class Users {
-
     private int id;
-    private String role_type;
+    private Object roleType;
     private String email;
     private String hash;
     private String salt;
-    private String first_name;
-    private String last_name;
-    private String middle_name;
-    private Date birth_date;
-    private String work_title;
-    private Date created_at;
-    private List<Groups>groupsList;
-    private List<TestAttempts>testAttemptsList;
-    private List<Tests>createdTests;
+    private String firstName;
+    private String lastName;
+    private String middleName;
+    private Date birthDate;
+    private String workTitle;
+    private Date createdAt;
+    private String avatar;
+    private int groupId;
+    private List<Tests> testsList;
+    private List<Attempts> attemptsList;
 
-    public Users() {
+    public List<Tests> getTestsList() {
+        return testsList;
+    }
+
+    public void setTestsList(List<Tests> testsList) {
+        this.testsList = testsList;
+    }
+
+    public List<Attempts> getAttemptsList() {
+        return attemptsList;
+    }
+
+    public void setAttemptsList(List<Attempts> attemptsList) {
+        this.attemptsList = attemptsList;
     }
 
     public int getId() {
@@ -32,12 +45,12 @@ public class Users {
         this.id = id;
     }
 
-    public String getRole_type() {
-        return role_type;
+    public Object getRoleType() {
+        return roleType;
     }
 
-    public void setRole_type(String role_type) {
-        this.role_type = role_type;
+    public void setRoleType(Object roleType) {
+        this.roleType = roleType;
     }
 
     public String getEmail() {
@@ -64,76 +77,68 @@ public class Users {
         this.salt = salt;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getMiddle_name() {
-        return middle_name;
+    public String getMiddleName() {
+        return middleName;
     }
 
-    public void setMiddle_name(String middle_name) {
-        this.middle_name = middle_name;
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
-    public Date getBirth_date() {
-        return birth_date;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirth_date(Date birth_date) {
-        this.birth_date = birth_date;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public String getWork_title() {
-        return work_title;
+    public String getWorkTitle() {
+        return workTitle;
     }
 
-    public void setWork_title(String work_title) {
-        this.work_title = work_title;
+    public void setWorkTitle(String workTitle) {
+        this.workTitle = workTitle;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public List<Groups> getGroupsList() {
-        return groupsList;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setGroupsList(List<Groups> groupsList) {
-        this.groupsList = groupsList;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public List<TestAttempts> getTestAttemptsList() {
-        return testAttemptsList;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public void setTestAttemptsList(List<TestAttempts> testAttemptsList) {
-        this.testAttemptsList = testAttemptsList;
-    }
-
-    public List<Tests> getCreatedTests() {
-        return createdTests;
-    }
-
-    public void setCreatedTests(List<Tests> createdTests) {
-        this.createdTests = createdTests;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     @Override
@@ -142,43 +147,45 @@ public class Users {
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
         return id == users.id &&
-                Objects.equals(role_type, users.role_type) &&
-                Objects.equals(email, users.email) &&
-                Objects.equals(hash, users.hash) &&
-                Objects.equals(salt, users.salt) &&
-                Objects.equals(first_name, users.first_name) &&
-                Objects.equals(last_name, users.last_name) &&
-                Objects.equals(middle_name, users.middle_name) &&
-                Objects.equals(birth_date, users.birth_date) &&
-                Objects.equals(work_title, users.work_title) &&
-                Objects.equals(created_at, users.created_at) &&
-                Objects.equals(groupsList, users.groupsList) &&
-                Objects.equals(testAttemptsList, users.testAttemptsList) &&
-                Objects.equals(createdTests, users.createdTests);
+                groupId == users.groupId &&
+                roleType.equals(users.roleType) &&
+                email.equals(users.email) &&
+                hash.equals(users.hash) &&
+                salt.equals(users.salt) &&
+                firstName.equals(users.firstName) &&
+                lastName.equals(users.lastName) &&
+                middleName.equals(users.middleName) &&
+                birthDate.equals(users.birthDate) &&
+                workTitle.equals(users.workTitle) &&
+                createdAt.equals(users.createdAt) &&
+                avatar.equals(users.avatar) &&
+                testsList.equals(users.testsList) &&
+                attemptsList.equals(users.attemptsList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, role_type, email, hash, salt, first_name, last_name, middle_name, birth_date, work_title, created_at, groupsList, testAttemptsList, createdTests);
+        return Objects.hash(id, roleType, email, hash, salt, firstName, lastName, middleName, birthDate, workTitle, createdAt, avatar, groupId, testsList, attemptsList);
     }
 
     @Override
     public String toString() {
         return "Users{" +
                 "id=" + id +
-                ", role_type='" + role_type + '\'' +
+                ", roleType=" + roleType +
                 ", email='" + email + '\'' +
                 ", hash='" + hash + '\'' +
                 ", salt='" + salt + '\'' +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", middle_name='" + middle_name + '\'' +
-                ", birth_date=" + birth_date +
-                ", work_title='" + work_title + '\'' +
-                ", created_at=" + created_at +
-                ", groupsList=" + groupsList +
-                ", testAttemptsList=" + testAttemptsList +
-                ", createdTests=" + createdTests +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", birthDate=" + birthDate +
+                ", workTitle='" + workTitle + '\'' +
+                ", createdAt=" + createdAt +
+                ", avatar='" + avatar + '\'' +
+                ", groupId=" + groupId +
+                ", testsList=" + testsList +
+                ", attemptsList=" + attemptsList +
                 '}';
     }
 }
