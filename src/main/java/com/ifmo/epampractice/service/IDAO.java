@@ -3,7 +3,7 @@ package com.ifmo.epampractice.service;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface DatabaseService<T> {
+public interface IDAO<T> {
 
     void add(T object) throws SQLException;
 
