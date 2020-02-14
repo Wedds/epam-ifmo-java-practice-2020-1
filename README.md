@@ -26,13 +26,14 @@ Skype: 243771@niuitmo.ru
 ...
 
 ## Sitemap & API Scheme
-![sitemap](https://user-images.githubusercontent.com/57772708/74509170-e730e100-4f11-11ea-8057-3f3266f9ef0a.png)
+![sitemap](https://user-images.githubusercontent.com/57772708/74525752-f2483900-4f32-11ea-994a-c886ba2c2ded.png)
 
 ## Database model
 
 [Link](https://dbdiagram.io/d/5e4586df9e76504e0ef16b30)
 
-![Database model](https://user-images.githubusercontent.com/57772708/74509089-be105080-4f11-11ea-8db3-1a31890b9ee0.png)
+![Database model](https://user-images.githubusercontent.com/57772708/74524583-5d444080-4f30-11ea-8af7-a5d0009935b1.png)
+
 
 
 
