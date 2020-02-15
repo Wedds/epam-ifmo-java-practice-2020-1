@@ -1,8 +1,10 @@
 package com.ifmo.epampractice.entity;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 
 public class Groups {
     private int id;
@@ -10,6 +12,13 @@ public class Groups {
     private Date createdAt;
     private List<Users> usersList;
     private List<Tests> testsList;
+    private List<GroupsTests> groupsTestsList;
+
+    public Groups() {
+        this.usersList = new ArrayList<Users>();
+        this.testsList = new ArrayList<Tests>();
+        this.groupsTestsList = new ArrayList<GroupsTests>();
+    }
 
     public List<Users> getUsersList() {
         return usersList;
@@ -25,6 +34,14 @@ public class Groups {
 
     public void setTestsList(List<Tests> testsList) {
         this.testsList = testsList;
+    }
+
+    public List<GroupsTests> getGroupsTestsList() {
+        return this.groupsTestsList;
+    }
+
+    public void setGroupsTestsList(List<GroupsTests> groupsTests) {
+        this.groupsTestsList = groupsTests;
     }
 
     public int getId() {
@@ -76,6 +93,7 @@ public class Groups {
                 ", createdAt=" + createdAt +
                 ", usersList=" + usersList +
                 ", testsList=" + testsList +
+                ", groupsTestsList= " + groupsTestsList +
                 '}';
     }
 

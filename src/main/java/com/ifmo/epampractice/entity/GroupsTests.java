@@ -3,6 +3,7 @@ package com.ifmo.epampractice.entity;
 import java.sql.Date;
 import java.util.Objects;
 
+
 public class GroupsTests {
     private int testId;
     private int groupId;
@@ -10,7 +11,6 @@ public class GroupsTests {
     private Integer maxAttempts;
     private Date deadline;
     private Integer timeLimit;
-
 
     public int getTestId() {
         return testId;
@@ -28,12 +28,12 @@ public class GroupsTests {
         this.groupId = groupId;
     }
 
-    public Boolean getNecessary() {
+    public Boolean getIsNecessary() {
         return isNecessary;
     }
 
-    public void setNecessary(Boolean necessary) {
-        isNecessary = necessary;
+    public void setIsNecessary(Boolean isNecessary) {
+        this.isNecessary = isNecessary;
     }
 
     public Integer getMaxAttempts() {
