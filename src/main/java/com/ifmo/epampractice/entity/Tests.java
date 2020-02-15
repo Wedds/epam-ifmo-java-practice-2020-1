@@ -65,11 +65,11 @@ public class Tests {
         this.description = description;
     }
 
-    public Boolean getRandom() {
+    public Boolean getIsRandom() {
         return isRandom;
     }
 
-    public void setRandom(Boolean random) {
+    public void setIsRandom(Boolean random) {
         isRandom = random;
     }
 
@@ -108,8 +108,12 @@ public class Tests {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Tests tests = (Tests) o;
         return id == tests.id &&
                 subjectId == tests.subjectId &&

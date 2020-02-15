@@ -11,6 +11,11 @@ public class Questions {
     private String questionText;
     private int testId;
 
+//    public enum questionType {
+//        checkbox,
+//        radiobutton;
+//    }
+
     public int getTestId() {
         return testId;
     }
@@ -71,8 +76,12 @@ public class Questions {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Questions questions = (Questions) o;
         return id == questions.id &&
                 testId == questions.testId &&
