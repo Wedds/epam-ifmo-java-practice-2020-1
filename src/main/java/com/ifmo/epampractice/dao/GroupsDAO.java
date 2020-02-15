@@ -1,7 +1,6 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Groups;
-import com.ifmo.epampractice.entity.Tests;
 import com.ifmo.epampractice.service.DatabaseService;
 import com.ifmo.epampractice.service.DatabaseSource;
 
@@ -11,15 +10,18 @@ import java.util.List;
 
 public class GroupsDAO extends DatabaseSource implements DatabaseService<Groups> {
 
+    private static final String addQuery = "INSERT INTO groups(name, is_open) VALUES(?,?)";
+    private static final String getAllQuery = "SELECT id, name, is_open FROM groups";
+    private static final String getByIdQuery = "SELECT name, is_open FROM groups WHERE id=?";
+    private static final String updateQuery = "UPDATE groups SET name=?, is_open=? WHERE id=?";
     @Override
     public void add(Groups group) throws SQLException {
-        String query = "INSERT INTO groups(name, is_open) VALUES(?,?)";
         Connection connection = getConnection();
 
         PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement = connection.prepareStatement(query);
+            preparedStatement = connection.prepareStatement(addQuery);
             preparedStatement.setString(1, group.getName());
             preparedStatement.setBoolean(2, group.isIs_open());
 
@@ -38,7 +40,6 @@ public class GroupsDAO extends DatabaseSource implements DatabaseService<Groups>
 
     @Override
     public List<Groups> getAll() throws SQLException {
-        String query = "SELECT id, name, is_open FROM groups";
         Connection connection = getConnection();
 
         List<Groups> groupsList = new ArrayList<>();
@@ -46,7 +47,7 @@ public class GroupsDAO extends DatabaseSource implements DatabaseService<Groups>
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery(getAllQuery);
 
             while (resultSet.next()) {
                 Groups group = new Groups();
@@ -71,14 +72,13 @@ public class GroupsDAO extends DatabaseSource implements DatabaseService<Groups>
 
     @Override
     public Groups getById(int id) throws SQLException {
-        String query = "SELECT name, is_open FROM groups WHERE id=?";
         Connection connection = getConnection();
 
         PreparedStatement preparedStatement = null;
 
         Groups group = new Groups();
         try {
-            preparedStatement = connection.prepareStatement(query);
+            preparedStatement = connection.prepareStatement(getByIdQuery);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -105,7 +105,7 @@ public class GroupsDAO extends DatabaseSource implements DatabaseService<Groups>
         PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement = connection.prepareStatement(query);
+            preparedStatement = connection.prepareStatement(updateQuery);
 
             preparedStatement.setString(1, group.getName());
             preparedStatement.setBoolean(2, group.isIs_open());
