@@ -10,14 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersDAO extends DatabaseSource implements IDAO<Users> {
-    private static final String INSERT_QUERY = "INSERT INTO users (role_type, email, hash, salt, first_name, last_name, " +
-            "middle_name, birth_date, work_title, created_at, avatar, group_id) VALUES(?::roles,?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String SELECT_ALL_QUERY = "SELECT id, role_type, email, hash, salt, first_name, last_name, " +
-            "middle_name, birth_date, work_title, created_at, avatar, group_id FROM users";
-    private static final String SELECT_BY_ID_QUERY = "SELECT id, role_type, email, hash, salt, first_name, last_name, " +
-            "middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE id=?";
-    private static final String UPDATE_QUERY = "UPDATE users SET role_type=?::roles, email=?, hash=?, salt=?, first_name=?, last_name=?, " +
-            "middle_name=?, birth_date=?, work_title=?, created_at=?, avatar=?, group_id=? WHERE id=?";
+    private static final String INSERT_QUERY = "INSERT INTO users (role_type, email, hash, salt, first_name, " +
+            "last_name, middle_name, birth_date, work_title, created_at, avatar, group_id) " +
+            "VALUES(?::roles,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String SELECT_ALL_QUERY = "SELECT id, role_type, email, hash, salt, first_name, " +
+            "last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users";
+    private static final String SELECT_BY_ID_QUERY = "SELECT id, role_type, email, hash, salt, first_name," +
+            " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE id=?";
+    private static final String UPDATE_QUERY = "UPDATE users SET role_type=?::roles, email=?, hash=?, salt=?," +
+            " first_name=?, last_name=?, middle_name=?, birth_date=?, work_title=?, created_at=?, avatar=?," +
+            " group_id=? WHERE id=?";
     private static final String REMOVE_QUERY = "DELETE FROM users WHERE id=?";
 
 
@@ -134,6 +136,8 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
                 user.setRoleType(Roles.STUDENT);
                 break;
             }
+            default:
+                user.setRoleType(Roles.STUDENT);
         }
 
         user.setEmail(rs.getString("email"));
