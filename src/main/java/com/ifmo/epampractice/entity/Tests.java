@@ -130,7 +130,8 @@ public class Tests {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, subjectId, title, description, isRandom, createdAt, maxPoints, creatorId, attemptsList, questionsList, groupsList);
+        return Objects.hash(id, subjectId, title, description, isRandom, createdAt,
+                maxPoints, creatorId, attemptsList, questionsList, groupsList);
     }
 
     @Override

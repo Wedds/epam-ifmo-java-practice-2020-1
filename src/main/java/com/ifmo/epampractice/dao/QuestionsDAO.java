@@ -1,6 +1,7 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Questions;
+import com.ifmo.epampractice.enums.QuestionType;
 import com.ifmo.epampractice.service.IDAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
@@ -86,7 +87,6 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     }
 
 
-
     @Override
     public void remove(Questions question) throws SQLException {
         try (Connection connection = getConnection();
@@ -101,7 +101,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     }
 
     private void setObjectFromResultSet(Questions question, ResultSet resultSet) throws SQLException {
-        question.setQuestionType(resultSet.getObject("question_type"));
+        question.setQuestionType(getQuestionTypeFromString(resultSet.getString("question_type")));
         question.setTestId(resultSet.getInt("test_id"));
         question.setTitle(resultSet.getString("title"));
         question.setImage(resultSet.getString("image"));
@@ -109,11 +109,27 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     }
 
     private void execQueryFromObject(Questions question, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setObject(1, question.getQuestionType());
+        preparedStatement.setString(1, getStringFromQuestionType(question.getQuestionType()));
         preparedStatement.setInt(2, question.getTestId());
         preparedStatement.setString(3, question.getTitle());
         preparedStatement.setString(4, question.getImage());
         preparedStatement.setString(5, question.getQuestionText());
         preparedStatement.setInt(6, question.getId());
+    }
+
+    private QuestionType getQuestionTypeFromString(String questionTypeString) {
+        if (questionTypeString.equals("checkbox")) {
+            return QuestionType.CHECKBOX;
+        } else {
+            return QuestionType.RADIOBUTTON;
+        }
+    }
+
+    private String getStringFromQuestionType(QuestionType questionType) {
+        if (questionType.equals(QuestionType.CHECKBOX)) {
+            return ("checkbox");
+        } else {
+            return ("radiobutton");
+        }
     }
 }

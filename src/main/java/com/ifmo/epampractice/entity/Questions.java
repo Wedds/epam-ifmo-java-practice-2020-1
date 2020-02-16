@@ -1,20 +1,17 @@
 package com.ifmo.epampractice.entity;
 
+import com.ifmo.epampractice.enums.QuestionType;
+
 import java.util.List;
 import java.util.Objects;
 
 public class Questions {
     private int id;
-    private Object questionType;
+    private QuestionType questionType;
     private String title;
     private String image;
     private String questionText;
     private int testId;
-
-//    public enum questionType {
-//        checkbox,
-//        radiobutton;
-//    }
 
     public int getTestId() {
         return testId;
@@ -42,11 +39,11 @@ public class Questions {
         this.id = id;
     }
 
-    public Object getQuestionType() {
+    public QuestionType getQuestionType() {
         return questionType;
     }
 
-    public void setQuestionType(Object questionType) {
+    public void setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
     }
 
