@@ -25,11 +25,11 @@ INSERT INTO tests (id, title, subject_id, is_random, creator_id, description, ma
 INSERT INTO tests (id, title, subject_id, is_random, creator_id, description, max_points) values (4, 'And math again', 1, TRUE, 6, 'и нет теперь нам спасенья', 10);
 INSERT INTO tests (id, title, subject_id, is_random, creator_id, description, max_points) values (5,'SLOJNAAA', 3, TRUE, 2, 'памагииииити', 5);
 
-INSERT INTO groups_tests (group_id, test_id, is_neccessary, max_attemps, time_limit, deadline) values (1, 3, FALSE, 10, 30, '2030-01-08');
-INSERT INTO groups_tests (group_id, test_id, is_neccessary, max_attemps, time_limit, deadline) values (2, 1, TRUE, 1, 30, '2020-02-15');
-INSERT INTO groups_tests (group_id, test_id, is_neccessary) values (3, 4, FALSE);
-INSERT INTO groups_tests (group_id, test_id, is_neccessary, time_limit, deadline) values (4, 1, TRUE, 20, '2020-02-11');
-INSERT INTO groups_tests (group_id, test_id, is_neccessary, deadline) values (1, 2, FALSE, '2020-06-11');
+INSERT INTO groups_tests (group_id, test_id, is_necessary, max_attempts, time_limit, deadline) values (1, 3, FALSE, 10, 30, '2030-01-08');
+INSERT INTO groups_tests (group_id, test_id, is_necessary, max_attempts, time_limit, deadline) values (2, 1, TRUE, 1, 30, '2020-02-15');
+INSERT INTO groups_tests (group_id, test_id, is_necessary) values (3, 4, FALSE);
+INSERT INTO groups_tests (group_id, test_id, is_necessary, time_limit, deadline) values (4, 1, TRUE, 20, '2020-02-11');
+INSERT INTO groups_tests (group_id, test_id, is_necessary, deadline) values (1, 2, FALSE, '2020-06-11');
 
 INSERT INTO attempts (id, test_id, user_id, score, passing_date) VALUES (1, 3, 1, 10, '2020-02-01');
 INSERT INTO attempts (id, test_id, user_id, score, passing_date) VALUES (2, 5, 1, 8, '2020-02-12');
