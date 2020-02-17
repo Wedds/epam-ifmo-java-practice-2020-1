@@ -60,8 +60,12 @@ public class Groups {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Groups groups = (Groups) o;
         return id == groups.id &&
                 name.equals(groups.name) &&

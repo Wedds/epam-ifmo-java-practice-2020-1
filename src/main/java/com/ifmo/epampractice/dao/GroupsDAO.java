@@ -10,15 +10,15 @@ import java.util.List;
 
 
 public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
-    private static final String addQuery = "INSERT INTO groups(name, created_at) VALUES(?,?)";
-    private static final String getAllQuery = "SELECT id, name, created_at FROM groups";
-    private static final String getByIdQuery = "SELECT name, created_at FROM groups WHERE id=?";
-    private static final String updateQuery = "UPDATE groups SET name=?, created_at=? WHERE id=?";
-    private static final String removeQuery = "DELETE FROM groups WHERE id=?";
+    private static final String ADDQUERY = "INSERT INTO groups(name, created_at) VALUES(?,?)";
+    private static final String GETALLQUERY = "SELECT id, name, created_at FROM groups";
+    private static final String GETBYIDQUERY = "SELECT name, created_at FROM groups WHERE id=?";
+    private static final String UPDATEQUERY = "UPDATE groups SET name=?, created_at=? WHERE id=?";
+    private static final String REMOVEQUERY = "DELETE FROM groups WHERE id=?";
 
     @Override
     public void add(Groups group) {
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(addQuery)) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(ADDQUERY)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
             preparedStatement.executeUpdate();
@@ -32,7 +32,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
         List<Groups> groupsList = new ArrayList<>();
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement();) {
-            ResultSet resultSet = statement.executeQuery(getAllQuery);
+            ResultSet resultSet = statement.executeQuery(GETALLQUERY);
 
             while (resultSet.next()) {
                 Groups group = new Groups();
@@ -53,7 +53,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
         Groups group = new Groups();
 
         try (Connection connection = getConnection();
-                PreparedStatement preparedStatement =connection.prepareStatement(getByIdQuery);) {
+                PreparedStatement preparedStatement =connection.prepareStatement(GETBYIDQUERY);) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -69,7 +69,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     @Override
     public void update(Groups group) {
         try (Connection connection = getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)){
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATEQUERY)){
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
             preparedStatement.setInt(3, group.getId());
@@ -82,7 +82,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     @Override
     public void remove(Groups group) {
         try (Connection connection = getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(removeQuery);) {
+                PreparedStatement preparedStatement = connection.prepareStatement(REMOVEQUERY);) {
             preparedStatement.setInt(1, group.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
