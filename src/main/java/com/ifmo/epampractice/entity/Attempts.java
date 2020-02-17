@@ -7,6 +7,8 @@ public class Attempts {
     private int id;
     private int testId;
     private int userId;
+    private Integer score;
+    private Date passingDate;
 
     public int getTestId() {
         return testId;
@@ -23,9 +25,6 @@ public class Attempts {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-    private Integer score;
-    private Date passingDate;
 
     public int getId() {
         return id;

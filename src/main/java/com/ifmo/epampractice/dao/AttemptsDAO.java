@@ -45,7 +45,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
                 while (resultSet.next()) {
                     Attempts attempt = new Attempts();
                     attempt.setId(resultSet.getInt("id"));
-                    setObjectFromResultSet(attempt, resultSet);
+                    fillAttemptObjectFromResultSet(attempt, resultSet);
                     testAttemptsList.add(attempt);
                 }
             } catch (SQLException e) {
@@ -65,7 +65,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
                 attempt.setId(id);
-                setObjectFromResultSet(attempt, resultSet);
+                fillAttemptObjectFromResultSet(attempt, resultSet);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -101,7 +101,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
         }
     }
 
-    private void setObjectFromResultSet(Attempts attempt, ResultSet resultSet) throws SQLException {
+    private void fillAttemptObjectFromResultSet(Attempts attempt, ResultSet resultSet) throws SQLException {
         attempt.setUserId(resultSet.getInt("user_id"));
         attempt.setTestId(resultSet.getInt("test_id"));
         attempt.setScore(resultSet.getInt("score"));

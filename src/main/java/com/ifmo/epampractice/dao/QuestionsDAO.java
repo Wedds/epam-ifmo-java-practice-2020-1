@@ -44,7 +44,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
                 while (resultSet.next()) {
                     Questions question = new Questions();
                     question.setId(resultSet.getInt("id"));
-                    setObjectFromResultSet(question, resultSet);
+                    fillQuestionObjectFromResultSet(question, resultSet);
                     questionsList.add(question);
                 }
             } catch (SQLException e) {
@@ -64,7 +64,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
                 question.setId(id);
-                setObjectFromResultSet(question, resultSet);
+                fillQuestionObjectFromResultSet(question, resultSet);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -100,7 +100,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
         }
     }
 
-    private void setObjectFromResultSet(Questions question, ResultSet resultSet) throws SQLException {
+    private void fillQuestionObjectFromResultSet(Questions question, ResultSet resultSet) throws SQLException {
         question.setQuestionType(getQuestionTypeFromString(resultSet.getString("question_type")));
         question.setTestId(resultSet.getInt("test_id"));
         question.setTitle(resultSet.getString("title"));

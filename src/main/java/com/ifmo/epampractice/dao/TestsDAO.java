@@ -15,10 +15,13 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS";
     private static final String SELECT_BY_ID_QUERY = "SELECT title, description," +
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE id=?";
+    private static final String SELECT_BY_TEST_ID_QUERY = "SELECT title, description," +
+            "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE id=?";
+    private static final String SELECT_BY_TEST_AND_GROUP_ID_QUERY = "SELECT is_necessary, max_attempts," +
+            "deadline, time_limit FROM GROUPS_TESTS WHERE test_id=? AND group_id=?";
     private static final String UPDATE_QUERY = "UPDATE TESTS SET title=?, description=?, " +
             "subject_id=?, is_random=?, created_at=?, max_points = ?, creator_id=? WHERE id=?";
     private static final String REMOVE_QUERY = "DELETE FROM TESTS WHERE id=?";
-
 
     @Override
     public void add(Tests test) throws SQLException {
@@ -43,7 +46,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
                 while (resultSet.next()) {
                     Tests test = new Tests();
                     test.setId(resultSet.getInt("id"));
-                    setObjectFromResultSet(test, resultSet);
+                    fillGeneralTestObjectFromResultSet(test, resultSet);
                     testsList.add(test);
                 }
             } catch (SQLException e) {
@@ -63,7 +66,48 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
                 test.setId(id);
-                setObjectFromResultSet(test, resultSet);
+                fillGeneralTestObjectFromResultSet(test, resultSet);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return test;
+    }
+
+    public Tests getByTestAndGroupId(int testId, int groupId) throws SQLException {
+        Tests test = new Tests();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatementTest = connection.prepareStatement(SELECT_BY_TEST_ID_QUERY);
+             PreparedStatement preparedStatementGroup =
+                     connection.prepareStatement(SELECT_BY_TEST_AND_GROUP_ID_QUERY)) {
+            try {
+                preparedStatementTest.setInt(1, testId);
+                ResultSet resultSetTest = preparedStatementTest.executeQuery();
+                resultSetTest.next();
+                test.setId(testId);
+                fillGeneralTestObjectFromResultSet(test, resultSetTest);
+                preparedStatementGroup.setInt(1, testId);
+                preparedStatementGroup.setInt(2, groupId);
+                ResultSet resultSetGroup = preparedStatementGroup.executeQuery();
+                resultSetGroup.next();
+                test.setGroupId(groupId);
+                fillTestForGroupObjectFromResultSet(test, resultSetGroup);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return test;
+    }
+
+    public Tests fillByGroupId(Tests test, int groupId) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_TEST_AND_GROUP_ID_QUERY)) {
+            try {
+                preparedStatement.setInt(1, test.getId());
+                preparedStatement.setInt(2, groupId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                resultSet.next();
+                fillTestForGroupObjectFromResultSet(test, resultSet);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -98,7 +142,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    private void setObjectFromResultSet(Tests test, ResultSet resultSet) throws SQLException {
+    private void fillGeneralTestObjectFromResultSet(Tests test, ResultSet resultSet) throws SQLException {
         test.setTitle(resultSet.getString("title"));
         test.setDescription(resultSet.getString("description"));
         test.setSubjectId(resultSet.getInt("subject_id"));
@@ -106,6 +150,13 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         test.setCreatedAt(resultSet.getDate("created_at"));
         test.setMaxPoints(resultSet.getInt("max_points"));
         test.setCreatorId(resultSet.getInt("creator_id"));
+    }
+
+    private void fillTestForGroupObjectFromResultSet(Tests test, ResultSet resultSet) throws SQLException {
+        test.setIsNecessary(resultSet.getBoolean("is_necessary"));
+        test.setMaxAttempts(resultSet.getInt("max_attempts"));
+        test.setDeadline(resultSet.getDate("deadline"));
+        test.setTimeLimit(resultSet.getInt("time_limit"));
     }
 
     private void execQueryFromObject(Tests test, PreparedStatement preparedStatement) throws SQLException {

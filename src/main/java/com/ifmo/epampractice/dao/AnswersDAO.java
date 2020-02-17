@@ -43,7 +43,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
                 while (resultSet.next()) {
                     Answers answer = new Answers();
                     answer.setId(resultSet.getInt("id"));
-                    setObjectFromResultSet(answer, resultSet);
+                    fillAnswerObjectFromResultSet(answer, resultSet);
                     answersList.add(answer);
                 }
             } catch (SQLException e) {
@@ -63,7 +63,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
                 answer.setId(id);
-                setObjectFromResultSet(answer, resultSet);
+                fillAnswerObjectFromResultSet(answer, resultSet);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -96,7 +96,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
         }
     }
 
-    private void setObjectFromResultSet(Answers answer, ResultSet resultSet) throws SQLException {
+    private void fillAnswerObjectFromResultSet(Answers answer, ResultSet resultSet) throws SQLException {
         answer.setImage(resultSet.getString("image"));
         answer.setAnswerText(resultSet.getString("answer_text"));
         answer.setQuestionId(resultSet.getInt("question_id"));

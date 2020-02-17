@@ -5,6 +5,10 @@ import java.util.Objects;
 public class Answers {
     private int id;
     private int questionId;
+    private String image;
+    private String answerText;
+    private Boolean isCorrect;
+    private Integer points;
 
     public int getQuestionId() {
         return questionId;
@@ -13,12 +17,6 @@ public class Answers {
     public void setQuestionId(int questionId) {
         this.questionId = questionId;
     }
-
-    private String image;
-    private String answerText;
-    private Boolean isCorrect;
-    private Integer points;
-
 
     public int getId() {
         return id;

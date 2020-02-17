@@ -2,6 +2,7 @@ package com.ifmo.epampractice.entity;
 
 import com.ifmo.epampractice.enums.QuestionType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +13,11 @@ public class Questions {
     private String image;
     private String questionText;
     private int testId;
+    private List<Answers> answersList;
+
+    public Questions() {
+        this.answersList = new ArrayList<Answers>();
+    }
 
     public int getTestId() {
         return testId;
@@ -20,8 +26,6 @@ public class Questions {
     public void setTestId(int testId) {
         this.testId = testId;
     }
-
-    private List<Answers> answersList;
 
     public List<Answers> getAnswersList() {
         return answersList;
