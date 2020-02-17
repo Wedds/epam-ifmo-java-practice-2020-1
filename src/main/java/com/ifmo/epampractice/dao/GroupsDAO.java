@@ -17,7 +17,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     private static final String removeQuery = "DELETE FROM groups WHERE id=?";
 
     @Override
-    public void add(Groups group) throws SQLException {
+    public void add(Groups group) {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(addQuery)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
@@ -28,7 +28,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     }
 
     @Override
-    public List<Groups> getAll() throws SQLException {
+    public List<Groups> getAll() {
         List<Groups> groupsList = new ArrayList<>();
 
         try (Connection connection = getConnection(); Statement statement = connection.createStatement();) {
@@ -49,7 +49,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     }
 
     @Override
-    public Groups getById(int id) throws SQLException {
+    public Groups getById(int id) {
         Groups group = new Groups();
 
         try (Connection connection = getConnection();
@@ -67,7 +67,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     }
 
     @Override
-    public void update(Groups group) throws SQLException {
+    public void update(Groups group) {
         try (Connection connection = getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(updateQuery)){
             preparedStatement.setString(1, group.getName());
@@ -80,7 +80,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     }
 
     @Override
-    public void remove(Groups group) throws SQLException {
+    public void remove(Groups group) {
         try (Connection connection = getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(removeQuery);) {
             preparedStatement.setInt(1, group.getId());
