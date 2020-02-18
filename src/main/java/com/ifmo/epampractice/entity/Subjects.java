@@ -9,26 +9,32 @@ public class Subjects {
     private List<Tests> testsList;
 
     public List<Tests> getTestsList() {
+
         return testsList;
     }
 
     public void setTestsList(List<Tests> testsList) {
+
         this.testsList = testsList;
     }
 
     public int getId() {
+
         return id;
     }
 
     public void setId(int id) {
+
         this.id = id;
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
@@ -43,6 +49,7 @@ public class Subjects {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(id, name);
     }
 
