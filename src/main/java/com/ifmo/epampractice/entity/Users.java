@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Users {
     private int id;
-    private Object roleType;
+    private Enum<Roles> roleType;
     private String email;
     private String hash;
     private String salt;
@@ -45,11 +45,11 @@ public class Users {
         this.id = id;
     }
 
-    public Object getRoleType() {
+    public Enum<Roles> getRoleType() {
         return roleType;
     }
 
-    public void setRoleType(Object roleType) {
+    public void setRoleType(Enum<Roles> roleType) {
         this.roleType = roleType;
     }
 
@@ -143,8 +143,12 @@ public class Users {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Users users = (Users) o;
         return id == users.id &&
                 groupId == users.groupId &&
@@ -187,5 +191,13 @@ public class Users {
                 ", testsList=" + testsList +
                 ", attemptsList=" + attemptsList +
                 '}';
+    }
+
+    public Users(){
+
+    }
+
+    public Users(int id) {
+        this.setId(id);
     }
 }
