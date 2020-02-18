@@ -48,25 +48,52 @@ INSERT INTO attempts (id, test_id, user_id, score, passing_date) VALUES (6, 3, 3
 
 ALTER SEQUENCE attempts_id_seq RESTART WITH 7;
 
-INSERT INTO questions (id, question_type, test_id, question_text) values (1, 'radiobutton', 1, '2 + 2 is?');
-INSERT INTO questions (id, question_type, test_id, question_text) values (2, 'checkbox', 1, 'x^2 = 4, x is?');
-INSERT INTO questions (id, question_type, test_id, question_text) values (3, 'radiobutton', 1, '2^64 is');
-INSERT INTO questions (id, question_type, test_id, question_text) values (4, 'checkbox', 5, 'На чьей стороне ты?');
-INSERT INTO questions (id, question_type, test_id, question_text) values (5, 'checkbox', 5, 'Translate of cat');
-INSERT INTO questions (id, question_type, test_id, question_text) values (6, 'radiobutton', 2, 'The best OS');
-INSERT INTO questions (id, question_type, test_id, question_text) values (7, 'radiobutton', 3, 'You anyway will not understand it, so just try to guess');
-INSERT INTO questions (id, question_type, test_id, question_text) values (8, 'checkbox', 3, '1/0');
+INSERT INTO questions (id, question_type, test_id, question_text) values (1, 'radiobutton', 1, '2 + 2 = ?');
+INSERT INTO questions (id, question_type, test_id, question_text) values (2, 'checkbox', 1, 'x^y = ?');
+INSERT INTO questions (id, question_type, test_id, question_text) values (3, 'radiobutton', 1, 'Best OS?');
+INSERT INTO questions (id, question_type, test_id, question_text) values (4, 'checkbox', 1, 'Translate "cat":');
+INSERT INTO questions (id, question_type, test_id, question_text) values (5, 'radiobutton', 1, 'Wheel of fortune (Randomize)');
+INSERT INTO questions (id, question_type, test_id, question_text) values (6, 'checkbox', 1, 'The best PL:');
+INSERT INTO questions (id, question_type, test_id, question_text) values (7, 'radiobutton', 1, '-1/0');
 
-ALTER SEQUENCE questions_id_seq RESTART WITH 9;
+ALTER SEQUENCE questions_id_seq RESTART WITH 8;
 
+/* Question 1 */
 INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (1, '4', 1, True, 2);
-INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (2, '5', 1, True, 2);
-INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (3, '2', 1, FALSE, -2);
-INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (4, 'многа', 2, True, 3);
-INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (5, 'ваще прям дофига', 3, True, 3);
-INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (6, 'мало чет', 3, FALSE, -5);
-INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (7, 'Apple', 4, True, 5);
-INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (8, 'Android', 4, FALSE, -5);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (2, '5', 1, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (3, '6', 1, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (4, '7', 1, False, 0);
+/* Question 2 */
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (5, '= 8 where x = 2, y = 3', 2, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (6, '= 25 where x = 5, y = 2', 2, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (7, '= 25 where x = 5, y = 7', 2, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (8, '= 10 where x = 5, y = 2', 2, False, 0);
+/* Question 3 */
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (9, 'Linux', 3, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (10, 'Windows', 3, False, -10);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (11, 'FreeDOS', 3, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (12, 'MS-DOS', 3, False, 0);
+/* Question 4 */
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (13, 'Котики', 4, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (14, 'Котятки', 4, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (15, 'Котятушки', 4, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (16, 'Котофеи', 4, True, 2);
+/* Question 5 */
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (17, '1', 5, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (18, '2', 5, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (19, '3', 5, True, 2);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (20, '4', 5, True, 2);
+/* Question 6 */
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (21, 'Python', 6, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (22, 'Java', 6, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (23, 'JavaScript', 6, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (24, 'C', 6, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (25, 'Depends on', 6, True, 5);
+/* Question 7 */
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (26, 'Infinity', 7, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (27, '-Infinity', 7, True, 5);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (28, '0', 7, False, 0);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (29, '-0', 7, False, 0);
 
-ALTER SEQUENCE answers_id_seq RESTART WITH 9;
+ALTER SEQUENCE answers_id_seq RESTART WITH 30;
 
