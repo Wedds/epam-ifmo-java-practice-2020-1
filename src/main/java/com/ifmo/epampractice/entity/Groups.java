@@ -1,10 +1,8 @@
 package com.ifmo.epampractice.entity;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 
 public class Groups {
     private int id;
@@ -12,11 +10,6 @@ public class Groups {
     private Date createdAt;
     private List<Users> usersList;
     private List<Tests> testsList;
-
-    public Groups() {
-        this.usersList = new ArrayList<Users>();
-        this.testsList = new ArrayList<Tests>();
-    }
 
     public List<Users> getUsersList() {
         return usersList;
@@ -60,12 +53,8 @@ public class Groups {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Groups groups = (Groups) o;
         return id == groups.id &&
                 name.equals(groups.name) &&
