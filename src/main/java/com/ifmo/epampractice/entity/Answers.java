@@ -1,8 +1,14 @@
 package com.ifmo.epampractice.entity;
 
+import java.util.Objects;
+
 public class Answers {
     private int id;
     private int questionId;
+    private String image;
+    private String answerText;
+    private Boolean isCorrect;
+    private Integer points;
 
     public int getQuestionId() {
         return questionId;
@@ -11,11 +17,6 @@ public class Answers {
     public void setQuestionId(int questionId) {
         this.questionId = questionId;
     }
-
-    private String image;
-    private String answerText;
-    private Boolean isCorrect;
-    private Integer points;
 
     public int getId() {
         return id;
@@ -41,11 +42,11 @@ public class Answers {
         this.answerText = answerText;
     }
 
-    public Boolean getCorrect() {
+    public Boolean getIsCorrect() {
         return isCorrect;
     }
 
-    public void setCorrect(Boolean correct) {
+    public void setIsCorrect(Boolean correct) {
         isCorrect = correct;
     }
 
@@ -57,5 +58,32 @@ public class Answers {
         this.points = points;
     }
 
+    @Override
+    public boolean equals(Object o) {
 
+        Answers answers = (Answers) o;
+        return id == answers.id &&
+                questionId == answers.questionId &&
+                Objects.equals(image, answers.image) &&
+                Objects.equals(answerText, answers.answerText) &&
+                Objects.equals(isCorrect, answers.isCorrect) &&
+                Objects.equals(points, answers.points);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, questionId, image, answerText, isCorrect, points);
+    }
+
+    @Override
+    public String toString() {
+        return "Answers{" +
+                "id=" + id +
+                ", questionId=" + questionId +
+                ", image='" + image + '\'' +
+                ", answerText='" + answerText + '\'' +
+                ", isCorrect=" + isCorrect +
+                ", points=" + points +
+                '}';
+    }
 }

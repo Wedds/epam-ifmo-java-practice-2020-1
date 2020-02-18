@@ -1,6 +1,7 @@
 package com.ifmo.epampractice.entity;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,6 +17,17 @@ public class Tests {
     private List<Attempts> attemptsList;
     private List<Questions> questionsList;
     private List<Groups> groupsList;
+    private int groupId;
+    private Boolean isNecessary;
+    private int maxAttempts;
+    private Date deadline;
+    private int timeLimit;
+
+    public Tests() {
+        this.attemptsList = new ArrayList<Attempts>();
+        this.questionsList = new ArrayList<Questions>();
+        this.groupsList = new ArrayList<Groups>();
+    }
 
     public int getSubjectId() {
         return subjectId;
@@ -65,11 +77,11 @@ public class Tests {
         this.description = description;
     }
 
-    public Boolean getRandom() {
+    public Boolean getIsRandom() {
         return isRandom;
     }
 
-    public void setRandom(Boolean random) {
+    public void setIsRandom(Boolean random) {
         isRandom = random;
     }
 
@@ -105,28 +117,78 @@ public class Tests {
         this.attemptsList = attemptsList;
     }
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    public Boolean getIsNecessary() {
+        return isNecessary;
+    }
+
+    public void setIsNecessary(Boolean necessary) {
+        isNecessary = necessary;
+    }
+
+    public int getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public void setMaxAttempts(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
+    public int getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Tests tests = (Tests) o;
         return id == tests.id &&
                 subjectId == tests.subjectId &&
-                title.equals(tests.title) &&
-                description.equals(tests.description) &&
-                isRandom.equals(tests.isRandom) &&
-                createdAt.equals(tests.createdAt) &&
-                maxPoints.equals(tests.maxPoints) &&
-                creatorId.equals(tests.creatorId) &&
-                attemptsList.equals(tests.attemptsList) &&
-                questionsList.equals(tests.questionsList) &&
-                groupsList.equals(tests.groupsList);
+                maxAttempts == tests.maxAttempts &&
+                timeLimit == tests.timeLimit &&
+                Objects.equals(title, tests.title) &&
+                Objects.equals(description, tests.description) &&
+                Objects.equals(isRandom, tests.isRandom) &&
+                Objects.equals(createdAt, tests.createdAt) &&
+                Objects.equals(maxPoints, tests.maxPoints) &&
+                Objects.equals(creatorId, tests.creatorId) &&
+                Objects.equals(attemptsList, tests.attemptsList) &&
+                Objects.equals(questionsList, tests.questionsList) &&
+                Objects.equals(groupsList, tests.groupsList) &&
+                Objects.equals(groupId, tests.groupId) &&
+                Objects.equals(isNecessary, tests.isNecessary) &&
+                Objects.equals(deadline, tests.deadline);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, subjectId, title, description, isRandom, createdAt, maxPoints, creatorId, attemptsList, questionsList, groupsList);
+        return Objects.hash(id, subjectId, title, description, isRandom, createdAt,
+                maxPoints, creatorId, attemptsList, questionsList, groupsList, groupId,
+                isNecessary, maxAttempts, deadline, timeLimit);
     }
 
     @Override
@@ -143,6 +205,11 @@ public class Tests {
                 ", attemptsList=" + attemptsList +
                 ", questionsList=" + questionsList +
                 ", groupsList=" + groupsList +
+                ", groupId=" + groupId +
+                ", isNecessary=" + isNecessary +
+                ", maxAttempts=" + maxAttempts +
+                ", deadline=" + deadline +
+                ", timeLimit=" + timeLimit +
                 '}';
     }
 }
