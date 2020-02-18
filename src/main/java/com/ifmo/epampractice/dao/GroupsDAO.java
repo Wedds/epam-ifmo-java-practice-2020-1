@@ -69,7 +69,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
         Groups group = new Groups();
 
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY)) {
+                PreparedStatement preparedStatement =connection.prepareStatement(GET_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
