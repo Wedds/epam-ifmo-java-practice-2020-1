@@ -1,23 +1,15 @@
 package com.ifmo.epampractice.entity;
 
-import com.ifmo.epampractice.enums.QuestionType;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Questions {
     private int id;
-    private QuestionType questionType;
+    private Object questionType;
     private String title;
     private String image;
     private String questionText;
     private int testId;
-    private List<Answers> answersList;
-
-    public Questions() {
-        this.answersList = new ArrayList<Answers>();
-    }
 
     public int getTestId() {
         return testId;
@@ -26,6 +18,8 @@ public class Questions {
     public void setTestId(int testId) {
         this.testId = testId;
     }
+
+    private List<Answers> answersList;
 
     public List<Answers> getAnswersList() {
         return answersList;
@@ -43,11 +37,11 @@ public class Questions {
         this.id = id;
     }
 
-    public QuestionType getQuestionType() {
+    public Object getQuestionType() {
         return questionType;
     }
 
-    public void setQuestionType(QuestionType questionType) {
+    public void setQuestionType(Object questionType) {
         this.questionType = questionType;
     }
 
@@ -77,12 +71,8 @@ public class Questions {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Questions questions = (Questions) o;
         return id == questions.id &&
                 testId == questions.testId &&
