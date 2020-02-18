@@ -99,7 +99,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
-    public void fillByGroupId(Tests test, int groupId) throws SQLException {
+    public Tests fillByGroupId(Tests test, int groupId) throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_TEST_AND_GROUP_ID_QUERY)) {
             try {
@@ -112,6 +112,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
                 e.printStackTrace();
             }
         }
+        return test;
     }
 
     @Override
@@ -129,24 +130,11 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     }
 
     @Override
-    public void removeByObject(Tests test) throws SQLException {
+    public void remove(Tests test) throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             try {
                 preparedStatement.setInt(1, test.getId());
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void removeById(int id) throws SQLException {
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
-            try {
-                preparedStatement.setInt(1, id);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

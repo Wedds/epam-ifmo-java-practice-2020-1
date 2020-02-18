@@ -13,9 +13,7 @@ public interface IDAO<T> {
 
     void update(T object) throws SQLException;
 
-    void removeByObject(T object) throws SQLException;
-
-    void removeById(int id) throws SQLException;
+    void remove(T object) throws SQLException;
 
 
 }

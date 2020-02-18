@@ -84,24 +84,11 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
     }
 
     @Override
-    public void removeByObject(Users user) throws SQLException {
+    public void remove(Users user) throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             try {
                 preparedStatement.setInt(1, user.getId());
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void removeById(int id) throws SQLException {
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
-            try {
-                preparedStatement.setInt(1, id);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
