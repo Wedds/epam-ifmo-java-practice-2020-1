@@ -169,7 +169,8 @@ public class Users {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleType, email, hash, salt, firstName, lastName, middleName, birthDate, workTitle, createdAt, avatar, groupId, testsList, attemptsList);
+        return Objects.hash(id, roleType, email, hash, salt, firstName, lastName,
+                middleName, birthDate, workTitle, createdAt, avatar, groupId, testsList, attemptsList);
     }
 
     @Override

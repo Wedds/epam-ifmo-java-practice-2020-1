@@ -84,11 +84,24 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
         }
     }
     @Override
-    public void remove(Answers answer) throws SQLException {
+    public void removeByObject(Answers answer) throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             try {
                 preparedStatement.setInt(1, answer.getId());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void removeById(int id) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
+            try {
+                preparedStatement.setInt(1, id);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -33,7 +33,6 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
         }
     }
 
-
     @Override
     public List<Questions> getAll() throws SQLException {
         List<Questions> questionsList = new ArrayList<>();
@@ -86,13 +85,25 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
         }
     }
 
-
     @Override
-    public void remove(Questions question) throws SQLException {
+    public void removeByObject(Questions question) throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             try {
                 preparedStatement.setInt(1, question.getId());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void removeById(int id) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
+            try {
+                preparedStatement.setInt(1, id);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

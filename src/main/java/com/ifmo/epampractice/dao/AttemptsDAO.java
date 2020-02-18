@@ -89,11 +89,24 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
     }
 
     @Override
-    public void remove(Attempts testAttempt) throws SQLException {
+    public void removeByObject(Attempts testAttempt) throws SQLException {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             try {
                 preparedStatement.setInt(1, testAttempt.getId());
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void removeById(int id) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
+            try {
+                preparedStatement.setInt(1, id);
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
