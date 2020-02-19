@@ -5,15 +5,15 @@ import java.util.List;
 
 public interface IDAO<T> {
 
-    void add(T object) throws SQLException;
+    void addObject(T object);
 
-    List<T> getAll() throws SQLException;
+    List<T> getAll();
 
-    T getById(int id) throws SQLException;
+    T getById(int id);
 
-    void update(T object) throws SQLException;
+    void updateByObject(T object);
 
-    void remove(T object) throws SQLException;
+    void removeByObject(T object);
 
-
+    void removeById(T object);
 }
