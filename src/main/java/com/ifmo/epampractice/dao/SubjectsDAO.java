@@ -1,6 +1,10 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Subjects;
+<<<<<<< HEAD
+=======
+import com.ifmo.epampractice.entity.Tests;
+>>>>>>> Change DAO & entity Subjects. Again.
 import com.ifmo.epampractice.service.IDAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
@@ -50,6 +54,10 @@ public class SubjectsDAO extends DatabaseSource implements IDAO<Subjects> {
         Subjects subject = new Subjects();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
+<<<<<<< HEAD
+=======
+            try {
+>>>>>>> Change DAO & entity Subjects. Again.
                 preparedStatement.setInt(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
@@ -57,6 +65,10 @@ public class SubjectsDAO extends DatabaseSource implements IDAO<Subjects> {
                 subject.setName(resultSet.getString("name"));
             } catch (SQLException e) {
                 e.printStackTrace();
+<<<<<<< HEAD
+=======
+            }
+>>>>>>> Change DAO & entity Subjects. Again.
         }
         return subject;
     }
@@ -84,8 +96,11 @@ public class SubjectsDAO extends DatabaseSource implements IDAO<Subjects> {
                 e.printStackTrace();
         }
     }
+<<<<<<< HEAD
 
     @Override
     public void removeById(int id) {
         }
+=======
+>>>>>>> Change DAO & entity Subjects. Again.
 }
