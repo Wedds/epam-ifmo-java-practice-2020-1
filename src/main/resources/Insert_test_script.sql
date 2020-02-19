@@ -70,7 +70,7 @@ INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (7
 INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (8, '= 10 where x = 5, y = 2', 2, False, 0);
 /* Question 3 */
 INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (9, 'Linux', 3, True, 2);
-INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (10, 'Windows', 3, False, -10);
+INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (10, 'Windows', 3, False, 0);
 INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (11, 'FreeDOS', 3, False, 0);
 INSERT INTO answers (id, answer_text, question_id, is_correct, points) VALUES (12, 'MS-DOS', 3, False, 0);
 /* Question 4 */
