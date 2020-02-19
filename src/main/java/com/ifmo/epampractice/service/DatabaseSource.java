@@ -36,7 +36,8 @@ public class DatabaseSource {
             synchronized (DatabaseSource.class) {
                 localInstance = instance;
                 if (localInstance == null) {
-                    instance = localInstance = new DatabaseSource();
+                    localInstance = new DatabaseSource();
+                    instance = localInstance;
                 }
             }
         }
