@@ -17,26 +17,22 @@ public class SubjectsDAO extends DatabaseSource implements IDAO<Subjects> {
     private static final String REMOVE_QUERY = "DELETE FROM SUBJECTS WHERE id=?";
 
     @Override
-    public void add(Subjects subject) throws SQLException {
-
+    public void addObject(Subjects subject) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
-            try {
                 preparedStatement.setInt(1, subject.getId());
                 preparedStatement.setString(2, subject.getName());
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
         }
     }
 
     @Override
-    public List<Subjects> getAll() throws SQLException {
+    public List<Subjects> getAll() {
         List<Subjects> subjectsList = new ArrayList<>();
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
-            try {
                 ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
                 while (resultSet.next()) {
                     Subjects subject = new Subjects();
@@ -47,12 +43,11 @@ public class SubjectsDAO extends DatabaseSource implements IDAO<Subjects> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
         return subjectsList;
     }
 
     @Override
-    public Subjects getById(int id) throws SQLException {
+    public Subjects getById(int id) {
         Subjects subject = new Subjects();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
@@ -70,29 +65,26 @@ public class SubjectsDAO extends DatabaseSource implements IDAO<Subjects> {
     }
 
     @Override
-    public void update(Subjects subject) throws SQLException {
+    public void updateByObject(Subjects subject) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
-            try {
                 preparedStatement.setInt(1, subject.getId());
                 preparedStatement.setString(2, subject.getName());
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
         }
     }
 
     @Override
-    public void remove(Subjects subject) throws SQLException {
+    public void removeByObject(Subjects subject) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
-            try {
+
                 preparedStatement.setInt(1, subject.getId());
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
         }
     }
 }
