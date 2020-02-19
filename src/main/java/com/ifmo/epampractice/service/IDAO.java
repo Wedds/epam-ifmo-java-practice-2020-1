@@ -1,6 +1,5 @@
 package com.ifmo.epampractice.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface IDAO<T> {
