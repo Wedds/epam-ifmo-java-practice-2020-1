@@ -15,5 +15,5 @@ public interface IDAO<T> {
 
     void removeByObject(T object);
 
-    void removeById(T object);
+    void removeById(int id);
 }
