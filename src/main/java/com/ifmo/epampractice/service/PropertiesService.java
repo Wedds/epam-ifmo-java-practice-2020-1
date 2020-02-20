@@ -15,7 +15,7 @@ public class PropertiesService {
         this.props = new Properties();
         try (InputStream stream = getClass().getClassLoader().getResourceAsStream(DEFAULT_FOLDER + fileName)) {
             if (stream == null) {
-                throw new FileNotFoundException();
+                throw new IllegalArgumentException("Can't reach required properties file!");
             }
             props.load(stream);
         } catch (IOException e) {
