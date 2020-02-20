@@ -24,9 +24,9 @@ public class Tests {
     private int timeLimit;
 
     public Tests() {
-        this.attemptsList = new ArrayList<Attempts>();
-        this.questionsList = new ArrayList<Questions>();
-        this.groupsList = new ArrayList<Groups>();
+        this.attemptsList = new ArrayList<>();
+        this.questionsList = new ArrayList<>();
+        this.groupsList = new ArrayList<>();
     }
 
     public int getSubjectId() {

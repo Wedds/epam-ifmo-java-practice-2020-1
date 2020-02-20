@@ -31,17 +31,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillTestsQueryFromObject(test, preparedStatement);
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating test failed, no rows affected.");
-            }
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    test.setId(generatedKeys.getInt(1));
-                } else {
-                    throw new SQLException("Creating test failed, no ID obtained.");
-                }
-            }
+            executeStatementAndCheck(test, preparedStatement);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,24 +44,28 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillGroupsTestsQueryFromObject(test, preparedStatement);
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating test failed, no rows affected.");
-            }
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    test.setId(generatedKeys.getInt(1));
-                } else {
-                    throw new SQLException("Creating test failed, no ID obtained.");
-                }
-            }
+            executeStatementAndCheck(test, preparedStatement);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return test;
     }
 
-    public void addGroupsTests(Tests test) {
+    private void executeStatementAndCheck(Tests test, PreparedStatement preparedStatement) throws SQLException {
+        int affectedRows = preparedStatement.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Creating test failed, no rows affected.");
+        }
+        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                test.setId(generatedKeys.getInt(1));
+            } else {
+                throw new SQLException("Creating test failed, no ID obtained.");
+            }
+        }
+    }
+
+    public Tests addGroupsTests(Tests test) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY)) {
             fillGroupsTestsQueryFromObject(test, preparedStatement);
@@ -89,6 +83,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return test;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class Questions {
     private List<Answers> answersList;
 
     public Questions() {
-        this.answersList = new ArrayList<Answers>();
+        this.answersList = new ArrayList<>();
     }
 
     public int getTestId() {
