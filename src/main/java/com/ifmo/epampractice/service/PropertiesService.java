@@ -6,12 +6,12 @@ import java.util.Properties;
 
 
 public class PropertiesService {
-    private static final String DEFAULT_FOLDER = "properties/";
+    private static final String FOLDER = "properties/";
     private Properties props;
 
     public PropertiesService(String fileName) {
         this.props = new Properties();
-        try (InputStream stream = getClass().getClassLoader().getResourceAsStream(DEFAULT_FOLDER + fileName)) {
+        try (InputStream stream = getClass().getClassLoader().getResourceAsStream(FOLDER + fileName)) {
             if (stream == null) {
                 throw new IllegalArgumentException("Can't reach required properties file!");
             }
@@ -21,7 +21,7 @@ public class PropertiesService {
         }
     }
 
-    public String getPropsByName(String name) {
+    public String getProperty(String name) {
         return props.getProperty(name);
     }
 
