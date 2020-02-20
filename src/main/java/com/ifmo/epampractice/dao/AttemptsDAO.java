@@ -23,7 +23,8 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
     @Override
     public Attempts addObject(Attempts attempt) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             execQueryFromObject(attempt, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
