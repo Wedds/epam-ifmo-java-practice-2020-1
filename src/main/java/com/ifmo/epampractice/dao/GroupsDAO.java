@@ -21,9 +21,9 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     private static final String REMOVE_QUERY = "DELETE FROM groups WHERE id=?";
 
     @Override
-    public Groups addObject(final Groups group) {
-        try (Connection connection = getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(ADD_QUERY)) {
+    public Groups addObject(Groups group) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement =
+                connection.prepareStatement(ADD_QUERY)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
             int affectedRows = preparedStatement.executeUpdate();
@@ -68,8 +68,8 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     public Groups getById(final int id) {
         Groups group = new Groups();
 
-        try (Connection connection = getConnection();
-                PreparedStatement preparedStatement =connection.prepareStatement(GET_BY_ID_QUERY)) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement =
+                connection.prepareStatement(GET_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -97,8 +97,8 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
 
     @Override
     public void removeById(final int id) {
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement =
+                connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
