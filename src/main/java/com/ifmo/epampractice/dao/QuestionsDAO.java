@@ -23,7 +23,8 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     @Override
     public Questions addObject(Questions question) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             execQueryFromObject(question, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {

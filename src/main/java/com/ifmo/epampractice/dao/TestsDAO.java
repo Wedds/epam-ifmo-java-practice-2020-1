@@ -28,7 +28,8 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     @Override
     public Tests addObject(Tests test) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillTestsQueryFromObject(test, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -50,7 +51,8 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     public Tests addTestsWithGroupsTests(Tests test) {
         this.addObject(test);
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillGroupsTestsQueryFromObject(test, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
