@@ -25,7 +25,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-            execQueryFromObject(answer, preparedStatement);
+            fillQueryFromObject(answer, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating answer failed, no rows affected.");
@@ -81,7 +81,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
     public void updateByObject(Answers answer) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
-            execQueryFromObject(answer, preparedStatement);
+            fillQueryFromObject(answer, preparedStatement);
             preparedStatement.setInt(8, answer.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -106,20 +106,30 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
         }
     }
 
-    private void fillAnswerObjectFromResultSet(Answers answer, ResultSet resultSet) throws SQLException {
-        answer.setImage(resultSet.getString("image"));
-        answer.setAnswerText(resultSet.getString("answer_text"));
-        answer.setQuestionId(resultSet.getInt("question_id"));
-        answer.setIsCorrect(resultSet.getBoolean("is_correct"));
-        answer.setPoints(resultSet.getInt("points"));
+    private void fillAnswerObjectFromResultSet(Answers answer, ResultSet resultSet) {
+        try {
+            answer.setImage(resultSet.getString("image"));
+            answer.setAnswerText(resultSet.getString("answer_text"));
+            answer.setQuestionId(resultSet.getInt("question_id"));
+            answer.setIsCorrect(resultSet.getBoolean("is_correct"));
+            answer.setPoints(resultSet.getInt("points"));
+        } catch (SQLException e) {
+            System.err.println("Error with fill group object from result set");
+            e.printStackTrace();
+        }
     }
 
-    private void execQueryFromObject(Answers answer, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, answer.getImage());
-        preparedStatement.setString(2, answer.getAnswerText());
-        preparedStatement.setInt(3, answer.getQuestionId());
-        preparedStatement.setBoolean(4, answer.getIsCorrect());
-        preparedStatement.setInt(5, answer.getPoints());
-        preparedStatement.setInt(6, answer.getId());
+    private void fillQueryFromObject(Answers answer, PreparedStatement preparedStatement) {
+        try {
+            preparedStatement.setString(1, answer.getImage());
+            preparedStatement.setString(2, answer.getAnswerText());
+            preparedStatement.setInt(3, answer.getQuestionId());
+            preparedStatement.setBoolean(4, answer.getIsCorrect());
+            preparedStatement.setInt(5, answer.getPoints());
+            preparedStatement.setInt(6, answer.getId());
+        } catch (SQLException e) {
+            System.err.println("Error with fill query");
+            e.printStackTrace();
+        }
     }
 }
