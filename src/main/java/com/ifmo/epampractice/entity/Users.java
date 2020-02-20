@@ -33,7 +33,7 @@ public class Users {
         return testsList;
     }
 
-    public void setTestsList(List<Tests> testsList) {
+    public void setTestsList(final List<Tests> testsList) {
         this.testsList = testsList;
     }
 
@@ -41,7 +41,7 @@ public class Users {
         return attemptsList;
     }
 
-    public void setAttemptsList(List<Attempts> attemptsList) {
+    public void setAttemptsList(final List<Attempts> attemptsList) {
         this.attemptsList = attemptsList;
     }
 
@@ -49,7 +49,7 @@ public class Users {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -57,7 +57,7 @@ public class Users {
         return roleType;
     }
 
-    public void setRoleType(Enum<Roles> roleType) {
+    public void setRoleType(final Enum<Roles> roleType) {
         this.roleType = roleType;
     }
 
@@ -65,7 +65,7 @@ public class Users {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -73,7 +73,7 @@ public class Users {
         return hash;
     }
 
-    public void setHash(String hash) {
+    public void setHash(final String hash) {
         this.hash = hash;
     }
 
@@ -81,7 +81,7 @@ public class Users {
         return salt;
     }
 
-    public void setSalt(String salt) {
+    public void setSalt(final String salt) {
         this.salt = salt;
     }
 
@@ -89,7 +89,7 @@ public class Users {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
@@ -97,7 +97,7 @@ public class Users {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
@@ -105,7 +105,7 @@ public class Users {
         return middleName;
     }
 
-    public void setMiddleName(String middleName) {
+    public void setMiddleName(final String middleName) {
         this.middleName = middleName;
     }
 
@@ -113,7 +113,7 @@ public class Users {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(final Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -121,7 +121,7 @@ public class Users {
         return workTitle;
     }
 
-    public void setWorkTitle(String workTitle) {
+    public void setWorkTitle(final String workTitle) {
         this.workTitle = workTitle;
     }
 
@@ -129,7 +129,7 @@ public class Users {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(final Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -137,7 +137,7 @@ public class Users {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(final String avatar) {
         this.avatar = avatar;
     }
 
@@ -145,12 +145,12 @@ public class Users {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(final int groupId) {
         this.groupId = groupId;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }

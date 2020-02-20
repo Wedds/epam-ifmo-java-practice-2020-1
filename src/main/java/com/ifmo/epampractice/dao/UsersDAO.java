@@ -5,7 +5,11 @@ import com.ifmo.epampractice.enums.Roles;
 import com.ifmo.epampractice.service.DatabaseSource;
 import com.ifmo.epampractice.service.IDAO;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +28,11 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
 
 
     @Override
-    public Users addObject(Users user) {
+    public Users addObject(final Users user) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)
+        ) {
             this.convertObjectToFields(user, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -51,9 +57,6 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(SELECT_ALL_QUERY);
-            if (!rs.next()) {
-                return usersArrayList;
-            }
             while (rs.next()) {
                 usersArrayList.add(this.convertFieldsToObject(rs));
             }
@@ -64,7 +67,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
     }
 
     @Override
-    public Users getById(int id) {
+    public Users getById(final int id) {
         Users user = new Users();
         user.setId(id);
         try (Connection connection = getConnection();
@@ -74,7 +77,6 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
             if (!rs.next()) {
                 return user;
             }
-            rs.next();
             user = this.convertFieldsToObject(rs);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,7 +85,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
     }
 
     @Override
-    public void updateByObject(Users user) {
+    public void updateByObject(final Users user) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             this.convertObjectToFields(user, preparedStatement);
@@ -97,7 +99,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
     }
 
     @Override
-    public void removeById(int id) {
+    public void removeById(final int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -110,7 +112,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
         }
     }
 
-    private void convertObjectToFields(Users user, PreparedStatement ps) throws SQLException {
+    private void convertObjectToFields(final Users user, final PreparedStatement ps) throws SQLException {
         String roleName = user.getRoleType().name().toLowerCase();
         ps.setString(1, roleName);
         ps.setString(2, user.getEmail());
@@ -119,7 +121,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
         ps.setString(5, user.getFirstName());
         ps.setString(6, user.getLastName());
         ps.setString(7, user.getMiddleName());
-        ps.setDate(8,  user.getBirthDate());
+        ps.setDate(8, user.getBirthDate());
         ps.setString(9, user.getWorkTitle());
         ps.setDate(10, user.getCreatedAt());
         ps.setString(11, user.getAvatar());
@@ -130,7 +132,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
         }
     }
 
-    private Users convertFieldsToObject(ResultSet rs) throws SQLException {
+    private Users convertFieldsToObject(final ResultSet rs) throws SQLException {
         Users user = new Users();
         user.setId(rs.getInt("id"));
         switch (rs.getString("role_type")) {
