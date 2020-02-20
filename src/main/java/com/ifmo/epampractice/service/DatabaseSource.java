@@ -10,7 +10,7 @@ public final class DatabaseSource {
     private static volatile DatabaseSource instance;
     ComboPooledDataSource cpds;
 
-    private DatabaseSource(){
+    private DatabaseSource() {
 
         PropertiesService props = new PropertiesService("database.properties");
 
@@ -30,14 +30,6 @@ public final class DatabaseSource {
 
     }
 
-    public Connection getConnection() throws SQLException {
-        return cpds.getConnection();
-    }
-
-    private void closeConnection(Connection connection) throws SQLException {
-        connection.close();
-    }
-
     public static DatabaseSource getInstance() {
         DatabaseSource result = instance;
         if (result != null) {
@@ -49,5 +41,13 @@ public final class DatabaseSource {
             }
             return instance;
         }
+    }
+
+    public Connection getConnection() throws SQLException {
+        return cpds.getConnection();
+    }
+
+    private void closeConnection(final Connection connection) throws SQLException {
+        connection.close();
     }
 }
