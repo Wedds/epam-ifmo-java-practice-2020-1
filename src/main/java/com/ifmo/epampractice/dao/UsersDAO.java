@@ -3,7 +3,7 @@ package com.ifmo.epampractice.dao;
 import com.ifmo.epampractice.entity.Users;
 import com.ifmo.epampractice.enums.Roles;
 import com.ifmo.epampractice.service.DatabaseSource;
-import com.ifmo.epampractice.service.IDAO;
+import com.ifmo.epampractice.service.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersDAO extends DatabaseSource implements IDAO<Users> {
+public class UsersDAO extends DatabaseSource implements DAO<Users> {
     private static final String INSERT_QUERY = "INSERT INTO users (role_type, email, hash, salt, first_name, " +
             "last_name, middle_name, birth_date, work_title, created_at, avatar, group_id) " +
             "VALUES(?::roles,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -131,6 +131,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
             ps.setInt(13, user.getId());
         }
     }
+
 
     private Users convertFieldsToObject(final ResultSet rs) throws SQLException {
         Users user = new Users();
