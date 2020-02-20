@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
-    private static final String INSERT_QUERY = "INSERT INTO TESTS(title, description," +
+    private static final String INSERT_TESTS_QUERY = "INSERT INTO TESTS(title, description," +
             "subject_id, is_random, created_at, max_points, creator_id) VALUES(?,?,?,?,?,?,?) RETURNING id";
     private static final String INSERT_GROUPS_TESTS_QUERY = "INSERT INTO GROUPS_TESTS(test_id, group_id," +
             "is_necessary, max_attempts, deadline, time_limit) VALUES(?,?,?,?,?,?)";
@@ -21,15 +21,18 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE id=?";
     private static final String SELECT_BY_TEST_AND_GROUP_ID_QUERY = "SELECT is_necessary, max_attempts," +
             "deadline, time_limit FROM GROUPS_TESTS WHERE test_id=? AND group_id=?";
-    private static final String UPDATE_QUERY = "UPDATE TESTS SET title=?, description=?, " +
+    private static final String UPDATE_TESTS_QUERY = "UPDATE TESTS SET title=?, description=?, " +
             "subject_id=?, is_random=?, created_at=?, max_points = ?, creator_id=? WHERE id=?";
+    private static final String UPDATE_GROUPS_TESTS_QUERY = "UPDATE GROUPS_TESTS SET is_necessary=?, " +
+            "max_attempts=?, deadline=?, time_limit = ? WHERE test_id=? AND group_id=?";
     private static final String REMOVE_QUERY = "DELETE FROM TESTS WHERE id=?";
+    private static final String REMOVE_GROUPS_TESTS_QUERY = "DELETE FROM GROUPS_TESTS WHERE test_id=?";
 
     @Override
     public Tests addObject(Tests test) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
-                     connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+                     connection.prepareStatement(INSERT_TESTS_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillTestsQueryFromObject(test, preparedStatement);
             executeStatementAndCheck(test, preparedStatement);
         } catch (SQLException e) {
@@ -51,20 +54,6 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
-    private void executeStatementAndCheck(Tests test, PreparedStatement preparedStatement) throws SQLException {
-        int affectedRows = preparedStatement.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("Creating test failed, no rows affected.");
-        }
-        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-                test.setId(generatedKeys.getInt(1));
-            } else {
-                throw new SQLException("Creating test failed, no ID obtained.");
-            }
-        }
-    }
-
     public Tests addGroupsTests(Tests test) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY)) {
@@ -72,13 +61,6 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating record in GroupsTests failed, no rows affected.");
-            }
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    test.setId(generatedKeys.getInt(1));
-                } else {
-                    throw new SQLException("Creating record in GroupsTests failed, no ID obtained.");
-                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,7 +102,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
-    public Tests getByTestAndGroupId(int testId, int groupId) {
+    public Tests getObjectByTestAndGroupId(int testId, int groupId) {
         Tests test = new Tests();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatementTest = connection.prepareStatement(SELECT_BY_TEST_ID_QUERY);
@@ -143,7 +125,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
-    public Tests fillByGroupId(Tests test, int groupId) {
+    public Tests fillObjectByGroupId(Tests test, int groupId) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_TEST_AND_GROUP_ID_QUERY)) {
             preparedStatement.setInt(1, test.getId());
@@ -160,15 +142,37 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     @Override
     public void updateByObject(Tests test) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TESTS_QUERY)) {
             fillTestsQueryFromObject(test, preparedStatement);
             preparedStatement.setInt(8, test.getId());
-            if (test.getGroupId() != 0) {
-                fillGroupsTestsQueryFromObject(test, preparedStatement);
-            }
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update test failed, no rows affected.");
+            }
+            if (test.getGroupId() != 0) {
+                updateGroupsTests(test);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateGroupsTests(Tests test) {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_GROUPS_TESTS_QUERY)) {
+            fillTestsQueryFromObject(test, preparedStatement);
+            preparedStatement.setInt(8, test.getId());
+            if (test.getGroupId() != 0) {
+                preparedStatement.setBoolean(1, test.getIsNecessary());
+                preparedStatement.setInt(2, test.getMaxAttempts());
+                preparedStatement.setDate(3, test.getDeadline());
+                preparedStatement.setInt(4, test.getTimeLimit());
+                preparedStatement.setInt(5, test.getId());
+                preparedStatement.setInt(6, test.getGroupId());
+            }
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Update groups_tests failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -180,12 +184,43 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
+            Tests test = getById(id);
+            if (isGroupsTestsObjectExistsByTestId(test.getId())) {
+                removeGroupsTestsById(id);
+            }
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Remove test failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void removeGroupsTestsById(int id) {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_GROUPS_TESTS_QUERY)) {
+            preparedStatement.setInt(1, id);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Remove groups_tests failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void executeStatementAndCheck(Tests test, PreparedStatement preparedStatement) throws SQLException {
+        int affectedRows = preparedStatement.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Creating test failed, no rows affected.");
+        }
+        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                test.setId(generatedKeys.getInt(1));
+            } else {
+                throw new SQLException("Creating test failed, no ID obtained.");
+            }
         }
     }
 
@@ -223,5 +258,22 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         preparedStatement.setInt(4, test.getMaxAttempts());
         preparedStatement.setDate(5, test.getDeadline());
         preparedStatement.setInt(6, test.getTimeLimit());
+    }
+
+    public Boolean isGroupsTestsObjectExistsByTestId(int id) {
+        String query = "SELECT 1 FROM groups_tests WHERE test_id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Boolean.FALSE;
     }
 }
