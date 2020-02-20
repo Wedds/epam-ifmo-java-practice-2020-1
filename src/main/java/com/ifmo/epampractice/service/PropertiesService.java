@@ -9,7 +9,7 @@ public class PropertiesService {
     private static final String FOLDER = "properties/";
     private Properties props;
 
-    public PropertiesService(String fileName) {
+    public PropertiesService(final String fileName) {
         this.props = new Properties();
         try (InputStream stream = getClass().getClassLoader().getResourceAsStream(FOLDER + fileName)) {
             if (stream == null) {
@@ -21,7 +21,7 @@ public class PropertiesService {
         }
     }
 
-    public String getProperty(String name) {
+    public String getProperty(final String name) {
         return props.getProperty(name);
     }
 
