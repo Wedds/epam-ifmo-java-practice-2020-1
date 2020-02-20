@@ -25,7 +25,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-            execQueryFromObject(attempt, preparedStatement);
+            fillQueryFromObject(attempt, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating attempt failed, no rows affected.");
@@ -82,7 +82,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
     public void updateByObject(Attempts attempt) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
-            execQueryFromObject(attempt, preparedStatement);
+            fillQueryFromObject(attempt, preparedStatement);
             preparedStatement.setInt(8, attempt.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -107,18 +107,28 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
         }
     }
 
-    private void fillAttemptObjectFromResultSet(Attempts attempt, ResultSet resultSet) throws SQLException {
-        attempt.setUserId(resultSet.getInt("user_id"));
-        attempt.setTestId(resultSet.getInt("test_id"));
-        attempt.setScore(resultSet.getInt("score"));
-        attempt.setPassingDate(resultSet.getDate("passing_date"));
+    private void fillAttemptObjectFromResultSet(Attempts attempt, ResultSet resultSet) {
+        try {
+            attempt.setUserId(resultSet.getInt("user_id"));
+            attempt.setTestId(resultSet.getInt("test_id"));
+            attempt.setScore(resultSet.getInt("score"));
+            attempt.setPassingDate(resultSet.getDate("passing_date"));
+        } catch (SQLException e) {
+            System.err.println("Error with fill group object from result set");
+            e.printStackTrace();
+        }
     }
 
-    private void execQueryFromObject(Attempts attempt, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setInt(1, attempt.getUserId());
-        preparedStatement.setInt(2, attempt.getTestId());
-        preparedStatement.setInt(3, attempt.getScore());
-        preparedStatement.setDate(4, attempt.getPassingDate());
-        preparedStatement.setInt(5, attempt.getId());
+    private void fillQueryFromObject(Attempts attempt, PreparedStatement preparedStatement) {
+        try {
+            preparedStatement.setInt(1, attempt.getUserId());
+            preparedStatement.setInt(2, attempt.getTestId());
+            preparedStatement.setInt(3, attempt.getScore());
+            preparedStatement.setDate(4, attempt.getPassingDate());
+            preparedStatement.setInt(5, attempt.getId());
+        } catch (SQLException e) {
+            System.err.println("Error with fill query");
+            e.printStackTrace();
+        }
     }
 }

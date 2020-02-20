@@ -15,12 +15,14 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
             "is_necessary, max_attempts, deadline, time_limit) VALUES(?,?,?,?,?,?)";
     private static final String SELECT_ALL_QUERY = "SELECT id, title, description," +
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS";
-    private static final String SELECT_BY_ID_QUERY = "SELECT title, description," +
+    private static final String SELECT_TEST_BY_ID_QUERY = "SELECT title, description," +
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE id=?";
-    private static final String SELECT_BY_TEST_ID_QUERY = "SELECT title, description," +
+    private static final String SELECT_TESTS_BY_TEST_ID_QUERY = "SELECT title, description," +
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE id=?";
-    private static final String SELECT_BY_TEST_AND_GROUP_ID_QUERY = "SELECT is_necessary, max_attempts," +
+    private static final String SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY = "SELECT is_necessary, max_attempts," +
             "deadline, time_limit FROM GROUPS_TESTS WHERE test_id=? AND group_id=?";
+    private static final String SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY = "SELECT group_id, is_necessary," +
+            "max_attempts, deadline, time_limit FROM GROUPS_TESTS WHERE test_id=?";
     private static final String UPDATE_TESTS_QUERY = "UPDATE TESTS SET title=?, description=?, " +
             "subject_id=?, is_random=?, created_at=?, max_points = ?, creator_id=? WHERE id=?";
     private static final String UPDATE_GROUPS_TESTS_QUERY = "UPDATE GROUPS_TESTS SET is_necessary=?, " +
@@ -90,7 +92,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     public Tests getById(int id) {
         Tests test = new Tests();
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TEST_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -102,12 +104,33 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
+    public List<Tests>  getAllGroupsTestsByTestId(int id) {
+        List<Tests> groupsTestsList = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Tests test = new Tests();
+                test.setId(id);
+                test = getById(id);
+                fillTestForGroupObjectFromResultSet(test, resultSet);
+                groupsTestsList.add(test);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return groupsTestsList;
+    }
+
+
     public Tests getObjectByTestAndGroupId(int testId, int groupId) {
         Tests test = new Tests();
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatementTest = connection.prepareStatement(SELECT_BY_TEST_ID_QUERY);
+             PreparedStatement preparedStatementTest = connection.prepareStatement(SELECT_TESTS_BY_TEST_ID_QUERY);
              PreparedStatement preparedStatementGroup =
-                     connection.prepareStatement(SELECT_BY_TEST_AND_GROUP_ID_QUERY)) {
+                     connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
             preparedStatementTest.setInt(1, testId);
             ResultSet resultSetTest = preparedStatementTest.executeQuery();
             resultSetTest.next();
@@ -127,11 +150,13 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
 
     public Tests fillObjectByGroupId(Tests test, int groupId) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_TEST_AND_GROUP_ID_QUERY)) {
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
             preparedStatement.setInt(1, test.getId());
             preparedStatement.setInt(2, groupId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
+            test.setGroupId(groupId);
             fillTestForGroupObjectFromResultSet(test, resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -160,16 +185,12 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     public void updateGroupsTests(Tests test) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_GROUPS_TESTS_QUERY)) {
-            fillTestsQueryFromObject(test, preparedStatement);
-            preparedStatement.setInt(8, test.getId());
-            if (test.getGroupId() != 0) {
-                preparedStatement.setBoolean(1, test.getIsNecessary());
-                preparedStatement.setInt(2, test.getMaxAttempts());
-                preparedStatement.setDate(3, test.getDeadline());
-                preparedStatement.setInt(4, test.getTimeLimit());
-                preparedStatement.setInt(5, test.getId());
-                preparedStatement.setInt(6, test.getGroupId());
-            }
+            preparedStatement.setBoolean(1, test.getIsNecessary());
+            preparedStatement.setInt(2, test.getMaxAttempts());
+            preparedStatement.setDate(3, test.getDeadline());
+            preparedStatement.setInt(4, test.getTimeLimit());
+            preparedStatement.setInt(5, test.getId());
+            preparedStatement.setInt(6, test.getGroupId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update groups_tests failed, no rows affected.");
@@ -224,40 +245,60 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    private void fillGeneralTestObjectFromResultSet(Tests test, ResultSet resultSet) throws SQLException {
-        test.setTitle(resultSet.getString("title"));
-        test.setDescription(resultSet.getString("description"));
-        test.setSubjectId(resultSet.getInt("subject_id"));
-        test.setIsRandom(resultSet.getBoolean("is_random"));
-        test.setCreatedAt(resultSet.getDate("created_at"));
-        test.setMaxPoints(resultSet.getInt("max_points"));
-        test.setCreatorId(resultSet.getInt("creator_id"));
+    private void fillGeneralTestObjectFromResultSet(Tests test, ResultSet resultSet) {
+        try {
+            test.setTitle(resultSet.getString("title"));
+            test.setDescription(resultSet.getString("description"));
+            test.setSubjectId(resultSet.getInt("subject_id"));
+            test.setIsRandom(resultSet.getBoolean("is_random"));
+            test.setCreatedAt(resultSet.getDate("created_at"));
+            test.setMaxPoints(resultSet.getInt("max_points"));
+            test.setCreatorId(resultSet.getInt("creator_id"));
+        } catch (SQLException e) {
+            System.err.println("Error with fill general test object from result ser");
+            e.printStackTrace();
+        }
     }
 
-    private void fillTestForGroupObjectFromResultSet(Tests test, ResultSet resultSet) throws SQLException {
-        test.setIsNecessary(resultSet.getBoolean("is_necessary"));
-        test.setMaxAttempts(resultSet.getInt("max_attempts"));
-        test.setDeadline(resultSet.getDate("deadline"));
-        test.setTimeLimit(resultSet.getInt("time_limit"));
+    private void fillTestForGroupObjectFromResultSet(Tests test, ResultSet resultSet) {
+        try {
+            test.setIsNecessary(resultSet.getBoolean("is_necessary"));
+            test.setMaxAttempts(resultSet.getInt("max_attempts"));
+            test.setDeadline(resultSet.getDate("deadline"));
+            test.setTimeLimit(resultSet.getInt("time_limit"));
+        } catch (SQLException e) {
+            System.err.println("Error with fill test for groups object from result set");
+            e.printStackTrace();
+        }
     }
 
-    private void fillTestsQueryFromObject(Tests test, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, test.getTitle());
-        preparedStatement.setString(2, test.getDescription());
-        preparedStatement.setInt(3, test.getSubjectId());
-        preparedStatement.setBoolean(4, test.getIsRandom());
-        preparedStatement.setDate(5, test.getCreatedAt());
-        preparedStatement.setInt(6, test.getMaxPoints());
-        preparedStatement.setInt(7, test.getCreatorId());
+    private void fillTestsQueryFromObject(Tests test, PreparedStatement preparedStatement) {
+        try {
+            preparedStatement.setString(1, test.getTitle());
+            preparedStatement.setString(2, test.getDescription());
+            preparedStatement.setInt(3, test.getSubjectId());
+            preparedStatement.setBoolean(4, test.getIsRandom());
+            preparedStatement.setDate(5, test.getCreatedAt());
+            preparedStatement.setInt(6, test.getMaxPoints());
+            preparedStatement.setInt(7, test.getCreatorId());
+        } catch (SQLException e) {
+            System.err.println("Error with fill tests query");
+            e.printStackTrace();
+        }
     }
 
-    private void fillGroupsTestsQueryFromObject(Tests test, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setInt(1, test.getId());
-        preparedStatement.setInt(2, test.getGroupId());
-        preparedStatement.setBoolean(3, test.getIsNecessary());
-        preparedStatement.setInt(4, test.getMaxAttempts());
-        preparedStatement.setDate(5, test.getDeadline());
-        preparedStatement.setInt(6, test.getTimeLimit());
+    private void fillGroupsTestsQueryFromObject(Tests test, PreparedStatement preparedStatement) {
+        try {
+            preparedStatement.setInt(1, test.getId());
+            preparedStatement.setInt(2, test.getGroupId());
+            preparedStatement.setBoolean(3, test.getIsNecessary());
+            preparedStatement.setInt(4, test.getMaxAttempts());
+            preparedStatement.setDate(5, test.getDeadline());
+            preparedStatement.setInt(6, test.getTimeLimit());
+        } catch (SQLException e) {
+            System.err.println("Error with filling groups tests query");
+            e.printStackTrace();
+        }
     }
 
     public Boolean isGroupsTestsObjectExistsByTestId(int id) {
