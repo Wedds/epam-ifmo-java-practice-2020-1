@@ -1,46 +1,53 @@
 package com.ifmo.epampractice.service;
 
-import java.sql.*;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-public class DatabaseSource {
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public final class DatabaseSource {
     private static volatile DatabaseSource instance;
-    private Connection conn;
+    ComboPooledDataSource cpds;
 
-    private static final String DB_DRIVER = "org.postgresql.Driver";
-    private static final String DB_URL = "jdbs:postgresql://localhost:5432/testing_system_db";
-    private static final String DB_USERNAME = "asuka";
-    private static final String DB_PASSWORD = "12345";
+    private DatabaseSource(){
 
-    public Connection getConnection() {
+        PropertiesService props = new PropertiesService("database.properties");
+
+        cpds = new ComboPooledDataSource();
+
+        String jdbcUrl = props.getProperty("dbProto") + props.getProperty("serverName") +
+                "/" + props.getProperty("databaseName");
+
         try {
-            Class.forName(DB_DRIVER);
-        } catch (ClassNotFoundException e) {
+            cpds.setDriverClass(props.getProperty("databaseDriver"));
+        } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
-        try {
-            conn = DriverManager.getConnection(
-                    DB_URL,
-                    DB_USERNAME, DB_PASSWORD);
-            System.out.println("Connection established");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Connection error");
-        }
-        return conn;
+        cpds.setJdbcUrl(jdbcUrl);
+        cpds.setUser(props.getProperty("user"));
+        cpds.setPassword(props.getProperty("password"));
+
     }
 
+    public Connection getConnection() throws SQLException {
+        return cpds.getConnection();
+    }
+
+    private void closeConnection(Connection connection) throws SQLException {
+        connection.close();
+    }
 
     public static DatabaseSource getInstance() {
-        DatabaseSource localInstance = instance;
-        if (localInstance == null) {
-            synchronized (DatabaseSource.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    localInstance = new DatabaseSource();
-                    instance = localInstance;
-                }
-            }
+        DatabaseSource result = instance;
+        if (result != null) {
+            return result;
         }
-        return localInstance;
+        synchronized (DatabaseSource.class) {
+            if (instance == null) {
+                instance = new DatabaseSource();
+            }
+            return instance;
+        }
     }
 }
