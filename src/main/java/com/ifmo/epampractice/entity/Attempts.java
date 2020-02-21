@@ -14,7 +14,7 @@ public class Attempts {
         return testId;
     }
 
-    public void setTestId(int testId) {
+    public void setTestId(final int testId) {
         this.testId = testId;
     }
 
@@ -22,7 +22,7 @@ public class Attempts {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(final int userId) {
         this.userId = userId;
     }
 
@@ -30,7 +30,7 @@ public class Attempts {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -38,7 +38,7 @@ public class Attempts {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(final Integer score) {
         this.score = score;
     }
 
@@ -46,12 +46,12 @@ public class Attempts {
         return passingDate;
     }
 
-    public void setPassingDate(Date passingDate) {
+    public void setPassingDate(final Date passingDate) {
         this.passingDate = passingDate;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }

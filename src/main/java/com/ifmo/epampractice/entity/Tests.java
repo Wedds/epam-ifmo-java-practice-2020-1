@@ -33,7 +33,7 @@ public class Tests {
         return subjectId;
     }
 
-    public void setSubjectId(int subjectId) {
+    public void setSubjectId(final int subjectId) {
         this.subjectId = subjectId;
     }
 
@@ -41,7 +41,7 @@ public class Tests {
         return questionsList;
     }
 
-    public void setQuestionsList(List<Questions> questionsList) {
+    public void setQuestionsList(final List<Questions> questionsList) {
         this.questionsList = questionsList;
     }
 
@@ -49,7 +49,7 @@ public class Tests {
         return groupsList;
     }
 
-    public void setGroupsList(List<Groups> groupsList) {
+    public void setGroupsList(final List<Groups> groupsList) {
         this.groupsList = groupsList;
     }
 
@@ -57,7 +57,7 @@ public class Tests {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -65,7 +65,7 @@ public class Tests {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -73,7 +73,7 @@ public class Tests {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -81,7 +81,7 @@ public class Tests {
         return isRandom;
     }
 
-    public void setIsRandom(Boolean random) {
+    public void setIsRandom(final Boolean random) {
         isRandom = random;
     }
 
@@ -89,7 +89,7 @@ public class Tests {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(final Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -97,7 +97,7 @@ public class Tests {
         return maxPoints;
     }
 
-    public void setMaxPoints(Integer maxPoints) {
+    public void setMaxPoints(final Integer maxPoints) {
         this.maxPoints = maxPoints;
     }
 
@@ -105,7 +105,7 @@ public class Tests {
         return creatorId;
     }
 
-    public void setCreatorId(Integer creatorId) {
+    public void setCreatorId(final Integer creatorId) {
         this.creatorId = creatorId;
     }
 
@@ -113,7 +113,7 @@ public class Tests {
         return attemptsList;
     }
 
-    public void setAttemptsList(List<Attempts> attemptsList) {
+    public void setAttemptsList(final List<Attempts> attemptsList) {
         this.attemptsList = attemptsList;
     }
 
@@ -121,7 +121,7 @@ public class Tests {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(final int groupId) {
         this.groupId = groupId;
     }
 
@@ -129,7 +129,7 @@ public class Tests {
         return isNecessary;
     }
 
-    public void setIsNecessary(Boolean necessary) {
+    public void setIsNecessary(final Boolean necessary) {
         isNecessary = necessary;
     }
 
@@ -137,7 +137,7 @@ public class Tests {
         return maxAttempts;
     }
 
-    public void setMaxAttempts(int maxAttempts) {
+    public void setMaxAttempts(final int maxAttempts) {
         this.maxAttempts = maxAttempts;
     }
 
@@ -145,7 +145,7 @@ public class Tests {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(final Date deadline) {
         this.deadline = deadline;
     }
 
@@ -153,12 +153,12 @@ public class Tests {
         return timeLimit;
     }
 
-    public void setTimeLimit(int timeLimit) {
+    public void setTimeLimit(final int timeLimit) {
         this.timeLimit = timeLimit;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }

@@ -4,7 +4,11 @@ import com.ifmo.epampractice.entity.Tests;
 import com.ifmo.epampractice.service.DatabaseSource;
 import com.ifmo.epampractice.service.IDAO;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +35,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     private static final String REMOVE_GROUPS_TESTS_QUERY = "DELETE FROM GROUPS_TESTS WHERE test_id=?";
 
     @Override
-    public Tests addObject(Tests test) {
+    public Tests addObject(final Tests test) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_TESTS_QUERY, Statement.RETURN_GENERATED_KEYS)) {
@@ -43,7 +47,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
-    public Tests addTestsWithGroupsTests(Tests test) {
+    public Tests addTestsWithGroupsTests(final Tests test) {
         this.addObject(test);
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
@@ -56,7 +60,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
-    public Tests addGroupsTests(Tests test) {
+    public Tests addGroupsTests(final Tests test) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY)) {
             fillGroupsTestsQueryFromObject(test, preparedStatement);
@@ -89,7 +93,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     }
 
     @Override
-    public Tests getById(int id) {
+    public Tests getById(final int id) {
         Tests test = new Tests();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TEST_BY_ID_QUERY)) {
@@ -104,7 +108,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
-    public List<Tests>  getAllGroupsTestsByTestId(int id) {
+    public List<Tests>  getAllGroupsTestsByTestId(final int id) {
         List<Tests> groupsTestsList = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
@@ -125,7 +129,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     }
 
 
-    public Tests getObjectByTestAndGroupId(int testId, int groupId) {
+    public Tests getObjectByTestAndGroupId(final int testId, final int groupId) {
         Tests test = new Tests();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatementTest = connection.prepareStatement(SELECT_TESTS_BY_TEST_ID_QUERY);
@@ -148,7 +152,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         return test;
     }
 
-    public Tests fillObjectByGroupId(Tests test, int groupId) {
+    public Tests fillObjectByGroupId(final Tests test, final int groupId) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
@@ -165,7 +169,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     }
 
     @Override
-    public void updateByObject(Tests test) {
+    public void updateByObject(final Tests test) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TESTS_QUERY)) {
             fillTestsQueryFromObject(test, preparedStatement);
@@ -182,7 +186,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    public void updateGroupsTests(Tests test) {
+    public void updateGroupsTests(final Tests test) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_GROUPS_TESTS_QUERY)) {
             preparedStatement.setBoolean(1, test.getIsNecessary());
@@ -201,7 +205,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
     }
 
     @Override
-    public void removeById(int id) {
+    public void removeById(final int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -218,7 +222,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    public void removeGroupsTestsById(int id) {
+    public void removeGroupsTestsById(final int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_GROUPS_TESTS_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -231,7 +235,8 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    private void executeStatementAndCheck(Tests test, PreparedStatement preparedStatement) throws SQLException {
+    private void executeStatementAndCheck(final Tests test, final PreparedStatement preparedStatement)
+            throws SQLException {
         int affectedRows = preparedStatement.executeUpdate();
         if (affectedRows == 0) {
             throw new SQLException("Creating test failed, no rows affected.");
@@ -245,7 +250,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    private void fillGeneralTestObjectFromResultSet(Tests test, ResultSet resultSet) {
+    private void fillGeneralTestObjectFromResultSet(final Tests test, final ResultSet resultSet) {
         try {
             test.setTitle(resultSet.getString("title"));
             test.setDescription(resultSet.getString("description"));
@@ -260,7 +265,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    private void fillTestForGroupObjectFromResultSet(Tests test, ResultSet resultSet) {
+    private void fillTestForGroupObjectFromResultSet(final Tests test, final ResultSet resultSet) {
         try {
             test.setIsNecessary(resultSet.getBoolean("is_necessary"));
             test.setMaxAttempts(resultSet.getInt("max_attempts"));
@@ -272,7 +277,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    private void fillTestsQueryFromObject(Tests test, PreparedStatement preparedStatement) {
+    private void fillTestsQueryFromObject(final Tests test, final PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, test.getTitle());
             preparedStatement.setString(2, test.getDescription());
@@ -287,7 +292,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    private void fillGroupsTestsQueryFromObject(Tests test, PreparedStatement preparedStatement) {
+    private void fillGroupsTestsQueryFromObject(final Tests test, final PreparedStatement preparedStatement) {
         try {
             preparedStatement.setInt(1, test.getId());
             preparedStatement.setInt(2, test.getGroupId());
@@ -301,7 +306,7 @@ public class TestsDAO extends DatabaseSource implements IDAO<Tests> {
         }
     }
 
-    public Boolean isGroupsTestsObjectExistsByTestId(int id) {
+    public Boolean isGroupsTestsObjectExistsByTestId(final int id) {
         String query = "SELECT 1 FROM groups_tests WHERE test_id = ?";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
