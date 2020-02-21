@@ -23,7 +23,7 @@ public class Questions {
         return testId;
     }
 
-    public void setTestId(int testId) {
+    public void setTestId(final int testId) {
         this.testId = testId;
     }
 
@@ -31,7 +31,7 @@ public class Questions {
         return answersList;
     }
 
-    public void setAnswersList(List<Answers> answersList) {
+    public void setAnswersList(final List<Answers> answersList) {
         this.answersList = answersList;
     }
 
@@ -39,7 +39,7 @@ public class Questions {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -47,7 +47,7 @@ public class Questions {
         return questionType;
     }
 
-    public void setQuestionType(QuestionType questionType) {
+    public void setQuestionType(final QuestionType questionType) {
         this.questionType = questionType;
     }
 
@@ -55,7 +55,7 @@ public class Questions {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -63,7 +63,7 @@ public class Questions {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(final String image) {
         this.image = image;
     }
 
@@ -71,12 +71,12 @@ public class Questions {
         return questionText;
     }
 
-    public void setQuestionText(String questionText) {
+    public void setQuestionText(final String questionText) {
         this.questionText = questionText;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }

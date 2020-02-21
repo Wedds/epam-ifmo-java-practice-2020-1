@@ -4,7 +4,11 @@ import com.ifmo.epampractice.entity.Attempts;
 import com.ifmo.epampractice.service.IDAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +25,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
 
 
     @Override
-    public Attempts addObject(Attempts attempt) {
+    public Attempts addObject(final Attempts attempt) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
@@ -63,7 +67,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
     }
 
     @Override
-    public Attempts getById(int id) {
+    public Attempts getById(final int id) {
         Attempts attempt = new Attempts();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
@@ -79,7 +83,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
     }
 
     @Override
-    public void updateByObject(Attempts attempt) {
+    public void updateByObject(final Attempts attempt) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             fillQueryFromObject(attempt, preparedStatement);
@@ -94,7 +98,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
     }
 
     @Override
-    public void removeById(int id) {
+    public void removeById(final int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -107,7 +111,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
         }
     }
 
-    private void fillAttemptObjectFromResultSet(Attempts attempt, ResultSet resultSet) {
+    private void fillAttemptObjectFromResultSet(final Attempts attempt, final ResultSet resultSet) {
         try {
             attempt.setUserId(resultSet.getInt("user_id"));
             attempt.setTestId(resultSet.getInt("test_id"));
@@ -119,7 +123,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
         }
     }
 
-    private void fillQueryFromObject(Attempts attempt, PreparedStatement preparedStatement) {
+    private void fillQueryFromObject(final Attempts attempt, final PreparedStatement preparedStatement) {
         try {
             preparedStatement.setInt(1, attempt.getUserId());
             preparedStatement.setInt(2, attempt.getTestId());

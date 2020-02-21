@@ -5,7 +5,11 @@ import com.ifmo.epampractice.enums.QuestionType;
 import com.ifmo.epampractice.service.IDAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +25,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     private static final String REMOVE_QUERY = "DELETE FROM QUESTIONS WHERE id=?";
 
     @Override
-    public Questions addObject(Questions question) {
+    public Questions addObject(final Questions question) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
@@ -63,7 +67,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     }
 
     @Override
-    public Questions getById(int id) {
+    public Questions getById(final int id) {
         Questions question = new Questions();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
@@ -79,7 +83,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     }
 
     @Override
-    public void updateByObject(Questions question) {
+    public void updateByObject(final Questions question) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             fillQueryFromObject(question, preparedStatement);
@@ -94,7 +98,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     }
 
     @Override
-    public void removeById(int id) {
+    public void removeById(final int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -107,7 +111,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
         }
     }
 
-    private void fillQuestionObjectFromResultSet(Questions question, ResultSet resultSet) {
+    private void fillQuestionObjectFromResultSet(final Questions question, final ResultSet resultSet) {
         try {
             question.setQuestionType(getQuestionTypeFromString(resultSet.getString("question_type")));
             question.setTestId(resultSet.getInt("test_id"));
@@ -120,7 +124,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
         }
     }
 
-    private void fillQueryFromObject(Questions question, PreparedStatement preparedStatement) {
+    private void fillQueryFromObject(final Questions question, final PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, getStringFromQuestionType(question.getQuestionType()));
             preparedStatement.setInt(2, question.getTestId());
@@ -133,7 +137,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
         }
     }
 
-    private QuestionType getQuestionTypeFromString(String questionTypeString) {
+    private QuestionType getQuestionTypeFromString(final String questionTypeString) {
         if (questionTypeString.equals("checkbox")) {
             return QuestionType.CHECKBOX;
         } else {
@@ -141,7 +145,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
         }
     }
 
-    private String getStringFromQuestionType(QuestionType questionType) {
+    private String getStringFromQuestionType(final QuestionType questionType) {
         if (questionType.equals(QuestionType.CHECKBOX)) {
             return ("checkbox");
         } else {

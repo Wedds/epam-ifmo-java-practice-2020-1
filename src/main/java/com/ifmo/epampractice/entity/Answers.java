@@ -14,7 +14,7 @@ public class Answers {
         return questionId;
     }
 
-    public void setQuestionId(int questionId) {
+    public void setQuestionId(final int questionId) {
         this.questionId = questionId;
     }
 
@@ -22,7 +22,7 @@ public class Answers {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -30,7 +30,7 @@ public class Answers {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(final String image) {
         this.image = image;
     }
 
@@ -38,7 +38,7 @@ public class Answers {
         return answerText;
     }
 
-    public void setAnswerText(String answerText) {
+    public void setAnswerText(final String answerText) {
         this.answerText = answerText;
     }
 
@@ -46,7 +46,7 @@ public class Answers {
         return isCorrect;
     }
 
-    public void setIsCorrect(Boolean correct) {
+    public void setIsCorrect(final Boolean correct) {
         isCorrect = correct;
     }
 
@@ -54,12 +54,12 @@ public class Answers {
         return points;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(final Integer points) {
         this.points = points;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }

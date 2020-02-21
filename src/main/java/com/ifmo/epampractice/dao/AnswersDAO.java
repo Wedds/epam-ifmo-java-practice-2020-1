@@ -4,7 +4,12 @@ import com.ifmo.epampractice.entity.Answers;
 import com.ifmo.epampractice.service.IDAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +26,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
 
 
     @Override
-    public Answers addObject(Answers answer) {
+    public Answers addObject(final Answers answer) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
@@ -62,7 +67,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
     }
 
     @Override
-    public Answers getById(int id) {
+    public Answers getById(final int id) {
         Answers answer = new Answers();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
@@ -78,7 +83,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
     }
 
     @Override
-    public void updateByObject(Answers answer) {
+    public void updateByObject(final Answers answer) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             fillQueryFromObject(answer, preparedStatement);
@@ -93,7 +98,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
     }
 
     @Override
-    public void removeById(int id) {
+    public void removeById(final int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -106,7 +111,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
         }
     }
 
-    private void fillAnswerObjectFromResultSet(Answers answer, ResultSet resultSet) {
+    private void fillAnswerObjectFromResultSet(final Answers answer, final ResultSet resultSet) {
         try {
             answer.setImage(resultSet.getString("image"));
             answer.setAnswerText(resultSet.getString("answer_text"));
@@ -119,7 +124,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
         }
     }
 
-    private void fillQueryFromObject(Answers answer, PreparedStatement preparedStatement) {
+    private void fillQueryFromObject(final Answers answer, final PreparedStatement preparedStatement) {
         try {
             preparedStatement.setString(1, answer.getImage());
             preparedStatement.setString(2, answer.getAnswerText());
