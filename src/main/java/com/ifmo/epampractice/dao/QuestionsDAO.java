@@ -2,7 +2,7 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Questions;
 import com.ifmo.epampractice.enums.QuestionType;
-import com.ifmo.epampractice.service.IDAO;
+import com.ifmo.epampractice.service.DAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
 import java.sql.Connection;
@@ -12,13 +12,14 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
+public class QuestionsDAO extends DatabaseSource implements DAO<Questions> {
     private static final String INSERT_QUERY = "INSERT INTO QUESTIONS(question_type, test_id, " +
             "title, image, question_text) VALUES(?::types,?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, question_type, test_id, " +
             "title, image, question_text FROM QUESTIONS";
-    private static final String SELECT_BY_ID_QUERY = "SELECT question_type, test_id, " +
+    private static final String SELECT_BY_ID_QUERY = "SELECT id, question_type, test_id, " +
             "title, image, question_text FROM QUESTIONS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE QUESTIONS SET question_type=?::types, " +
             "test_id=?, title=?, image=?, question_text=? WHERE id=?";
@@ -56,7 +57,6 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
             while (resultSet.next()) {
                 Questions question = new Questions();
-                question.setId(resultSet.getInt("id"));
                 fillQuestionObjectFromResultSet(question, resultSet);
                 questionsList.add(question);
             }
@@ -67,19 +67,20 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     }
 
     @Override
-    public Questions getById(final int id) {
+    public Optional<Questions> getById(final int id) {
         Questions question = new Questions();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            question.setId(id);
+            if (!resultSet.next()){
+                return Optional.empty();
+            }
             fillQuestionObjectFromResultSet(question, resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return question;
+        return Optional.of(question);
     }
 
     @Override
@@ -113,6 +114,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
 
     private void fillQuestionObjectFromResultSet(final Questions question, final ResultSet resultSet) {
         try {
+            question.setId(resultSet.getInt("id"));
             question.setQuestionType(getQuestionTypeFromString(resultSet.getString("question_type")));
             question.setTestId(resultSet.getInt("test_id"));
             question.setTitle(resultSet.getString("title"));
