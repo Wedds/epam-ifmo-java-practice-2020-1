@@ -83,7 +83,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             fillQueryFromObject(attempt, preparedStatement);
-            preparedStatement.setInt(8, attempt.getId());
+            preparedStatement.setInt(5, attempt.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update attempt failed, no rows affected.");
@@ -125,7 +125,6 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
             preparedStatement.setInt(2, attempt.getTestId());
             preparedStatement.setInt(3, attempt.getScore());
             preparedStatement.setDate(4, attempt.getPassingDate());
-            preparedStatement.setInt(5, attempt.getId());
         } catch (SQLException e) {
             System.err.println("Error with fill query");
             e.printStackTrace();

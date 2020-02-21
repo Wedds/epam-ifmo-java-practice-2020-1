@@ -82,7 +82,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             fillQueryFromObject(answer, preparedStatement);
-            preparedStatement.setInt(8, answer.getId());
+            preparedStatement.setInt(6, answer.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update answer failed, no rows affected.");
@@ -126,7 +126,6 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
             preparedStatement.setInt(3, answer.getQuestionId());
             preparedStatement.setBoolean(4, answer.getIsCorrect());
             preparedStatement.setInt(5, answer.getPoints());
-            preparedStatement.setInt(6, answer.getId());
         } catch (SQLException e) {
             System.err.println("Error with fill query");
             e.printStackTrace();

@@ -86,11 +86,11 @@ public class Questions {
         Questions questions = (Questions) o;
         return id == questions.id &&
                 testId == questions.testId &&
-                questionType.equals(questions.questionType) &&
-                title.equals(questions.title) &&
-                image.equals(questions.image) &&
-                questionText.equals(questions.questionText) &&
-                answersList.equals(questions.answersList);
+                questionType == questions.questionType &&
+                Objects.equals(title, questions.title) &&
+                Objects.equals(image, questions.image) &&
+                Objects.equals(questionText, questions.questionText) &&
+                Objects.equals(answersList, questions.answersList);
     }
 
     @Override
