@@ -1,7 +1,7 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Attempts;
-import com.ifmo.epampractice.service.IDAO;
+import com.ifmo.epampractice.service.DAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
 import java.sql.Connection;
@@ -11,13 +11,14 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
+public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
     private static final String INSERT_QUERY = "INSERT INTO ATTEMPTS(user_id, " +
             "test_id, score, passing_date) VALUES(?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, user_id, test_id, " +
             "score, passing_date FROM ATTEMPTS";
-    private static final String SELECT_BY_ID_QUERY = "SELECT user_id, test_id, " +
+    private static final String SELECT_BY_ID_QUERY = "SELECT id, user_id, test_id, " +
             "score, passing_date FROM ATTEMPTS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE ATTEMPTS SET " +
             "user_id=?, test_id=?, score=?, passing_date=? WHERE id=?";
@@ -56,7 +57,6 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
             while (resultSet.next()) {
                 Attempts attempt = new Attempts();
-                attempt.setId(resultSet.getInt("id"));
                 fillAttemptObjectFromResultSet(attempt, resultSet);
                 testAttemptsList.add(attempt);
             }
@@ -67,19 +67,20 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
     }
 
     @Override
-    public Attempts getById(final int id) {
+    public Optional<Attempts> getById(final int id) {
         Attempts attempt = new Attempts();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            attempt.setId(id);
+            if (!resultSet.next()){
+                return Optional.empty();
+            }
             fillAttemptObjectFromResultSet(attempt, resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return attempt;
+        return Optional.of(attempt);
     }
 
     @Override
@@ -113,6 +114,7 @@ public class AttemptsDAO extends DatabaseSource implements IDAO<Attempts> {
 
     private void fillAttemptObjectFromResultSet(final Attempts attempt, final ResultSet resultSet) {
         try {
+            attempt.setId(resultSet.getInt("id"));
             attempt.setUserId(resultSet.getInt("user_id"));
             attempt.setTestId(resultSet.getInt("test_id"));
             attempt.setScore(resultSet.getInt("score"));

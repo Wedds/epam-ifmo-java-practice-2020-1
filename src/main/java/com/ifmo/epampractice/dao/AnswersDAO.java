@@ -1,7 +1,7 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Answers;
-import com.ifmo.epampractice.service.IDAO;
+import com.ifmo.epampractice.service.DAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
 
@@ -12,13 +12,14 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
+public class AnswersDAO extends DatabaseSource implements DAO<Answers> {
     private static final String INSERT_QUERY = "INSERT INTO ANSWERS(image, answer_text, " +
             "question_id, is_correct, points) VALUES(?,?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, image, answer_text, " +
             "question_id, is_correct, points FROM ANSWERS";
-    private static final String SELECT_BY_ID_QUERY = "SELECT image, answer_text, " +
+    private static final String SELECT_BY_ID_QUERY = "SELECT id, image, answer_text, " +
             "question_id, is_correct, points FROM ANSWERS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE ANSWERS SET image=?, answer_text=?, " +
             "question_id=?, is_correct=?, points=? WHERE id=?";
@@ -56,7 +57,6 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
             while (resultSet.next()) {
                 Answers answer = new Answers();
-                answer.setId(resultSet.getInt("id"));
                 fillAnswerObjectFromResultSet(answer, resultSet);
                 answersList.add(answer);
             }
@@ -67,19 +67,19 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
     }
 
     @Override
-    public Answers getById(final int id) {
+    public Optional<Answers> getById(final int id) {
         Answers answer = new Answers();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
-            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            answer.setId(id);
+            if (!resultSet.next()){
+                return Optional.empty();
+            }
             fillAnswerObjectFromResultSet(answer, resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return answer;
+        return Optional.of(answer);
     }
 
     @Override
@@ -113,6 +113,7 @@ public class AnswersDAO extends DatabaseSource implements IDAO<Answers> {
 
     private void fillAnswerObjectFromResultSet(final Answers answer, final ResultSet resultSet) {
         try {
+            answer.setId(resultSet.getInt("id"));
             answer.setImage(resultSet.getString("image"));
             answer.setAnswerText(resultSet.getString("answer_text"));
             answer.setQuestionId(resultSet.getInt("question_id"));
