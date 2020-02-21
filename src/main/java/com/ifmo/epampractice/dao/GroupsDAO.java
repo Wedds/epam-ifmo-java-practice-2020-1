@@ -21,7 +21,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     private static final String REMOVE_QUERY = "DELETE FROM groups WHERE id=?";
 
     @Override
-    public Groups addObject(Groups group) {
+    public Groups addObject(final Groups group) {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement =
                 connection.prepareStatement(ADD_QUERY)) {
             preparedStatement.setString(1, group.getName());
@@ -31,7 +31,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
                 throw new SQLException("No group has been added");
             }
             try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
-                if (keys.next()){
+                if (keys.next()) {
                     group.setId(keys.getInt("id"));
                 } else {
                     throw new SQLException("No id has been received");
@@ -85,7 +85,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     @Override
     public void updateByObject(final Groups group) {
         try (Connection connection = getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)){
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
             preparedStatement.setInt(3, group.getId());
