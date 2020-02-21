@@ -21,7 +21,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     private static final String REMOVE_QUERY = "DELETE FROM groups WHERE id=?";
 
     @Override
-    public Groups addObject(Groups group) {
+    public Groups addObject(final Groups group) {
         try (Connection connection = getConnection(); PreparedStatement preparedStatement =
                 connection.prepareStatement(ADD_QUERY)) {
             preparedStatement.setString(1, group.getName());
