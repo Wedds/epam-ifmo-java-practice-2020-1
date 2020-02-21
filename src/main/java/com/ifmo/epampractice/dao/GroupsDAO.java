@@ -85,7 +85,7 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     @Override
     public void updateByObject(final Groups group) {
         try (Connection connection = getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)){
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
             preparedStatement.setInt(3, group.getId());
