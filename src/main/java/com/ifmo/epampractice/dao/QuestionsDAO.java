@@ -11,12 +11,12 @@ import java.util.List;
 
 public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
     private static final String INSERT_QUERY = "INSERT INTO QUESTIONS(question_type, test_id, " +
-            "title, image, question_text) VALUES(?,?,?,?,?) RETURNING id";
+            "title, image, question_text) VALUES(?::types,?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, question_type, test_id, " +
             "title, image, question_text FROM QUESTIONS";
     private static final String SELECT_BY_ID_QUERY = "SELECT question_type, test_id, " +
             "title, image, question_text FROM QUESTIONS WHERE id=?";
-    private static final String UPDATE_QUERY = "UPDATE QUESTIONS SET question_type=?, " +
+    private static final String UPDATE_QUERY = "UPDATE QUESTIONS SET question_type=?::types, " +
             "test_id=?, title=?, image=?, question_text=? WHERE id=?";
     private static final String REMOVE_QUERY = "DELETE FROM QUESTIONS WHERE id=?";
 
@@ -83,7 +83,7 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             fillQueryFromObject(question, preparedStatement);
-            preparedStatement.setInt(8, question.getId());
+            preparedStatement.setInt(6, question.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Update question failed, no rows affected.");
@@ -127,7 +127,6 @@ public class QuestionsDAO extends DatabaseSource implements IDAO<Questions> {
             preparedStatement.setString(3, question.getTitle());
             preparedStatement.setString(4, question.getImage());
             preparedStatement.setString(5, question.getQuestionText());
-            preparedStatement.setInt(6, question.getId());
         } catch (SQLException e) {
             System.err.println("Error with fill query");
             e.printStackTrace();
