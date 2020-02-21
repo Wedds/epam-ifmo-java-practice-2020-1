@@ -33,13 +33,13 @@ public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
             fillQueryFromObject(attempt, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating attempt failed, no rows affected.");
+                throw new IllegalArgumentException("Creating attempt failed, no rows affected.");
             }
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     attempt.setId(generatedKeys.getInt(1));
                 } else {
-                    throw new SQLException("Creating attempt failed, no ID obtained.");
+                    throw new IllegalArgumentException("Creating attempt failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
@@ -91,7 +91,7 @@ public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
             preparedStatement.setInt(5, attempt.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Update attempt failed, no rows affected.");
+                throw new IllegalArgumentException("Update attempt failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,7 +105,7 @@ public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Remove attempt failed, no rows affected.");
+                throw new IllegalArgumentException("Remove attempt failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();

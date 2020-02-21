@@ -34,13 +34,13 @@ public class AnswersDAO extends DatabaseSource implements DAO<Answers> {
             fillQueryFromObject(answer, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating answer failed, no rows affected.");
+                throw new IllegalArgumentException("Creating answer failed, no rows affected.");
             }
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     answer.setId(generatedKeys.getInt(1));
                 } else {
-                    throw new SQLException("Creating answer failed, no ID obtained.");
+                    throw new IllegalArgumentException("Creating answer failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
@@ -91,7 +91,7 @@ public class AnswersDAO extends DatabaseSource implements DAO<Answers> {
             preparedStatement.setInt(6, answer.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Update answer failed, no rows affected.");
+                throw new IllegalArgumentException("Update answer failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,7 +105,7 @@ public class AnswersDAO extends DatabaseSource implements DAO<Answers> {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Remove answer failed, no rows affected.");
+                throw new IllegalArgumentException("Remove answer failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
