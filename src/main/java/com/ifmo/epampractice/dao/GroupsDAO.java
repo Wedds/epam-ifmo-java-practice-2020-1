@@ -1,7 +1,7 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Groups;
-import com.ifmo.epampractice.service.IDAO;
+import com.ifmo.epampractice.service.DAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
 import java.sql.ResultSet;
@@ -11,9 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
-public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
+public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
     private static final String ADD_QUERY = "INSERT INTO groups(name, created_at) VALUES(?,?) RETURNING id";
     private static final String GET_ALL_QUERY = "SELECT id, name, created_at FROM groups";
     private static final String GET_BY_ID_QUERY = "SELECT name, created_at FROM groups WHERE id=?";
@@ -65,21 +66,23 @@ public class GroupsDAO extends DatabaseSource implements IDAO<Groups> {
     }
 
     @Override
-    public Groups getById(final int id) {
+    public Optional<Groups> getById(final int id) {
         Groups group = new Groups();
 
         try (Connection connection = getConnection(); PreparedStatement preparedStatement =
                 connection.prepareStatement(GET_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
+            if (!resultSet.next()) {
+                Optional<Groups> groupsOptional = Optional.empty();
+            }
             group.setId(id);
             group.setName(resultSet.getString("name"));
             group.setCreatedAt(resultSet.getDate("created_at"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return group;
+        return Optional.of(group);
     }
 
     @Override
