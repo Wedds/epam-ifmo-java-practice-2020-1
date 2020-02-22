@@ -49,7 +49,7 @@ public final class DatabaseSource {
         } catch (PropertyVetoException e) {
             throw new IllegalArgumentException("Cannot set a database driver.", e);
         }
-        return dataSource;
+        return pool;
     }
 
     public void cleanUp() {
