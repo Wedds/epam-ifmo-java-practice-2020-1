@@ -1,46 +1,58 @@
 package com.ifmo.epampractice.service;
 
-import java.sql.*;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-public class DatabaseSource {
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public final class DatabaseSource {
+    private static final String DATABASE_PROPERTIES = "database.properties";
+    private static final String JDBC_URL = "jdbcUrl";
+    private static final String USER = "user";
+    private static final String PASSWORD = "password";
+    private static final String DATABASE_DRIVER = "databaseDriver";
+
     private static volatile DatabaseSource instance;
-    private Connection conn;
+    private final ComboPooledDataSource dataSource;
 
-    private static final String DB_DRIVER = "org.postgresql.Driver";
-    private static final String DB_URL = "jdbs:postgresql://localhost:5432/testing_system_db";
-    private static final String DB_USERNAME = "asuka";
-    private static final String DB_PASSWORD = "12345";
-
-    public Connection getConnection() {
-        try {
-            Class.forName(DB_DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            conn = DriverManager.getConnection(
-                    DB_URL,
-                    DB_USERNAME, DB_PASSWORD);
-            System.out.println("Connection established");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Connection error");
-        }
-        return conn;
+    private DatabaseSource() {
+        this.dataSource = getDataSource();
     }
 
-
     public static DatabaseSource getInstance() {
-        DatabaseSource localInstance = instance;
-        if (localInstance == null) {
-            synchronized (DatabaseSource.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    localInstance = new DatabaseSource();
-                    instance = localInstance;
-                }
-            }
+        if (instance != null) {
+            return instance;
         }
-        return localInstance;
+        synchronized (DatabaseSource.class) {
+            if (instance == null) {
+                instance = new DatabaseSource();
+            }
+            return instance;
+        }
+    }
+
+    public Connection getConnection() throws SQLException {
+        return this.dataSource.getConnection();
+    }
+
+    private ComboPooledDataSource getDataSource() {
+        ComboPooledDataSource pool = new ComboPooledDataSource();
+        PropertiesService props = new PropertiesService(DATABASE_PROPERTIES);
+
+        pool.setJdbcUrl(props.getProperty(JDBC_URL));
+        pool.setUser(props.getProperty(USER));
+        pool.setPassword(props.getProperty(PASSWORD));
+
+        try {
+            pool.setDriverClass(props.getProperty(DATABASE_DRIVER));
+        } catch (PropertyVetoException e) {
+            throw new IllegalArgumentException("Cannot set a database driver.", e);
+        }
+        return dataSource;
+    }
+
+    public void cleanUp() {
+        this.dataSource.close();
     }
 }
