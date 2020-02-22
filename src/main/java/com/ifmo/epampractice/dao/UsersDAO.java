@@ -37,13 +37,13 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
             this.convertObjectToFields(user, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
+                throw new IllegalArgumentException("Creating user failed, no rows affected.");
             }
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     user.setId(generatedKeys.getInt(1));
                 } else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
+                    throw new IllegalArgumentException("Creating user failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
@@ -63,6 +63,7 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new IllegalArgumentException("Getting all users failed. Users are not presented.");
         }
         return usersArrayList;
     }
@@ -92,7 +93,7 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
             this.convertObjectToFields(user, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Update user failed, no rows affected.");
+                throw new IllegalArgumentException("Update user failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,7 +107,7 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Remove user failed, no rows affected.");
+                throw new IllegalArgumentException("Remove user failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
