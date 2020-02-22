@@ -7,27 +7,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public final class DatabaseSource {
+    private static final String DATABASE_PROPERTIES = "database.properties";
+    private static final String JDBC_URL = "jdbcUrl";
+    private static final String USER = "user";
+    private static final String PASSWORD = "password";
+    private static final String DATABASE_DRIVER = "databaseDriver";
+
     private static volatile DatabaseSource instance;
     private final ComboPooledDataSource dataSource;
 
     private DatabaseSource() {
-
-        PropertiesService props = new PropertiesService("database.properties");
-
-        dataSource = new ComboPooledDataSource();
-
-        String jdbcUrl = props.getProperty("dbProto") + props.getProperty("serverName") +
-                "/" + props.getProperty("databaseName");
-
-        try {
-            dataSource.setDriverClass(props.getProperty("databaseDriver"));
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
-        dataSource.setJdbcUrl(jdbcUrl);
-        dataSource.setUser(props.getProperty("user"));
-        dataSource.setPassword(props.getProperty("password"));
-
+        this.dataSource = getDataSource();
     }
 
     public static DatabaseSource getInstance() {
@@ -43,6 +33,26 @@ public final class DatabaseSource {
     }
 
     public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        return this.dataSource.getConnection();
+    }
+
+    private ComboPooledDataSource getDataSource() {
+        ComboPooledDataSource pool = new ComboPooledDataSource();
+        PropertiesService props = new PropertiesService(DATABASE_PROPERTIES);
+
+        pool.setJdbcUrl(props.getProperty(JDBC_URL));
+        pool.setUser(props.getProperty(USER));
+        pool.setPassword(props.getProperty(PASSWORD));
+
+        try {
+            pool.setDriverClass(props.getProperty(DATABASE_DRIVER));
+        } catch (PropertyVetoException e) {
+            throw new IllegalArgumentException("Cannot set a database driver.", e);
+        }
+        return dataSource;
+    }
+
+    public void cleanUp() {
+        this.dataSource.close();
     }
 }
