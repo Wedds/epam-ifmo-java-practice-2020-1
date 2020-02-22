@@ -8,7 +8,7 @@ public class DatabaseSource {
 
     private static final String DB_DRIVER = "org.postgresql.Driver";
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/testing_system_db";
-    private static final String DB_USERNAME = "asuka";
+    private static final String DB_USERNAME = "evangelion";
     private static final String DB_PASSWORD = "12345";
 
     public Connection getConnection() {
