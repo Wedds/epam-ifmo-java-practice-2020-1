@@ -23,19 +23,19 @@ public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
 
     @Override
     public Groups addObject(final Groups group) {
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement =
-                connection.prepareStatement(ADD_QUERY)) {
+        try (Connection connection = getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(ADD_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("No group has been added");
+                throw new RuntimeException("No group has been added");
             }
             try (ResultSet keys = preparedStatement.getGeneratedKeys()) {
                 if (keys.next()) {
                     group.setId(keys.getInt("id"));
                 } else {
-                    throw new SQLException("No id has been received");
+                    throw new RuntimeException("No id has been received");
                 }
             }
         } catch (SQLException e) {
@@ -69,8 +69,8 @@ public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
     public Optional<Groups> getById(final int id) {
         Groups group = new Groups();
 
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement =
-                connection.prepareStatement(GET_BY_ID_QUERY)) {
+        try (Connection connection = getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
@@ -88,7 +88,7 @@ public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
     @Override
     public void updateByObject(final Groups group) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
             preparedStatement.setInt(3, group.getId());
