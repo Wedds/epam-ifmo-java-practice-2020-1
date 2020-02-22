@@ -5,6 +5,7 @@ import com.ifmo.epampractice.enums.Roles;
 import com.ifmo.epampractice.service.DatabaseSource;
 import com.ifmo.epampractice.service.DAO;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -101,7 +102,7 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
     }
 
     @Override
-    public void removeById(int id) {
+    public void removeById(final int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -113,7 +114,6 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
             e.printStackTrace();
         }
     }
-
 
     private void convertObjectToFields(final Users user, final PreparedStatement ps) throws SQLException {
         String roleName = user.getRoleType().name().toLowerCase();
