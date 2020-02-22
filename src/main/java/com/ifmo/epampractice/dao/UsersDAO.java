@@ -3,7 +3,7 @@ package com.ifmo.epampractice.dao;
 import com.ifmo.epampractice.entity.Users;
 import com.ifmo.epampractice.enums.Roles;
 import com.ifmo.epampractice.service.DatabaseSource;
-import com.ifmo.epampractice.service.IDAO;
+import com.ifmo.epampractice.service.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,8 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class UsersDAO extends DatabaseSource implements IDAO<Users> {
+public class UsersDAO extends DatabaseSource implements DAO<Users> {
     private static final String INSERT_QUERY = "INSERT INTO users (role_type, email, hash, salt, first_name, " +
             "last_name, middle_name, birth_date, work_title, created_at, avatar, group_id) " +
             "VALUES(?::roles,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -67,7 +68,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
     }
 
     @Override
-    public Users getById(final int id) {
+    public Optional<Users> getById(final int id) {
         Users user = new Users();
         user.setId(id);
         try (Connection connection = getConnection();
@@ -75,13 +76,13 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
             if (!rs.next()) {
-                return user;
+                return Optional.empty();
             }
             user = this.convertFieldsToObject(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user;
+        return Optional.of(user);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
     }
 
     @Override
-    public void removeById(final int id) {
+    public void removeById(int id) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -111,6 +112,7 @@ public class UsersDAO extends DatabaseSource implements IDAO<Users> {
             e.printStackTrace();
         }
     }
+
 
     private void convertObjectToFields(final Users user, final PreparedStatement ps) throws SQLException {
         String roleName = user.getRoleType().name().toLowerCase();
