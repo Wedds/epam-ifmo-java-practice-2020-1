@@ -138,7 +138,6 @@ public class UsersDAO implements DAO<Users> {
         }
     }
 
-
     private Users convertFieldsToObject(final ResultSet rs) throws SQLException {
         Users user = new Users();
         user.setId(rs.getInt("id"));
