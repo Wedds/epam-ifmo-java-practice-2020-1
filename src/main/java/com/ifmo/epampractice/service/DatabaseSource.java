@@ -8,32 +8,31 @@ import java.sql.SQLException;
 
 public final class DatabaseSource {
     private static volatile DatabaseSource instance;
-    ComboPooledDataSource cpds;
+    private final ComboPooledDataSource dataSource;
 
     private DatabaseSource() {
 
         PropertiesService props = new PropertiesService("database.properties");
 
-        cpds = new ComboPooledDataSource();
+        dataSource = new ComboPooledDataSource();
 
         String jdbcUrl = props.getProperty("dbProto") + props.getProperty("serverName") +
                 "/" + props.getProperty("databaseName");
 
         try {
-            cpds.setDriverClass(props.getProperty("databaseDriver"));
+            dataSource.setDriverClass(props.getProperty("databaseDriver"));
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
-        cpds.setJdbcUrl(jdbcUrl);
-        cpds.setUser(props.getProperty("user"));
-        cpds.setPassword(props.getProperty("password"));
+        dataSource.setJdbcUrl(jdbcUrl);
+        dataSource.setUser(props.getProperty("user"));
+        dataSource.setPassword(props.getProperty("password"));
 
     }
 
     public static DatabaseSource getInstance() {
-        DatabaseSource result = instance;
-        if (result != null) {
-            return result;
+        if (instance != null) {
+            return instance;
         }
         synchronized (DatabaseSource.class) {
             if (instance == null) {
@@ -44,10 +43,6 @@ public final class DatabaseSource {
     }
 
     public Connection getConnection() throws SQLException {
-        return cpds.getConnection();
-    }
-
-    private void closeConnection(final Connection connection) throws SQLException {
-        connection.close();
+        return dataSource.getConnection();
     }
 }
