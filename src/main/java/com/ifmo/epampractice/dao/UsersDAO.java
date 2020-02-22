@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UsersDAO extends DatabaseSource implements DAO<Users> {
+public class UsersDAO implements DAO<Users> {
     private static final String INSERT_QUERY = "INSERT INTO users (role_type, email, hash, salt, first_name, " +
             "last_name, middle_name, birth_date, work_title, created_at, avatar, group_id) " +
             "VALUES(?::roles,?,?,?,?,?,?,?,?,?,?,?) ";
@@ -30,7 +30,7 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
 
     @Override
     public Users addObject(final Users user) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)
         ) {
@@ -55,7 +55,7 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
     @Override
     public List<Users> getAll() {
         ArrayList<Users> usersArrayList = new ArrayList<>();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(SELECT_ALL_QUERY);
             while (rs.next()) {
@@ -72,7 +72,7 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
     public Optional<Users> getById(final int id) {
         Users user = new Users();
         user.setId(id);
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -88,7 +88,7 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
 
     @Override
     public void updateByObject(final Users user) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             this.convertObjectToFields(user, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
@@ -101,8 +101,8 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
     }
 
     @Override
-    public void removeById(int id) {
-        try (Connection connection = getConnection();
+    public void removeById(final int id) {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
