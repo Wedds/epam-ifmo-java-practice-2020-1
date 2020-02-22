@@ -117,6 +117,9 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
 
     private void convertObjectToFields(final Users user, final PreparedStatement ps) throws SQLException {
         String roleName = user.getRoleType().name().toLowerCase();
+        final int avatarPosition = 11;
+        final int groupIdPosition = 12;
+        final int idPosition = 13;
         ps.setString(1, roleName);
         ps.setString(2, user.getEmail());
         ps.setString(3, user.getHash());
@@ -127,11 +130,11 @@ public class UsersDAO extends DatabaseSource implements DAO<Users> {
         ps.setDate(8, user.getBirthDate());
         ps.setString(9, user.getWorkTitle());
         ps.setDate(10, user.getCreatedAt());
-        ps.setString(11, user.getAvatar());
-        ps.setInt(12, user.getGroupId());
+        ps.setString(avatarPosition, user.getAvatar());
+        ps.setInt(groupIdPosition, user.getGroupId());
 
         if (user.getId() != 0) {
-            ps.setInt(13, user.getId());
+            ps.setInt(idPosition, user.getId());
         }
     }
 
