@@ -1,106 +1,116 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Subjects;
-<<<<<<< HEAD
-=======
-import com.ifmo.epampractice.entity.Tests;
->>>>>>> Change DAO & entity Subjects. Again.
-import com.ifmo.epampractice.service.IDAO;
+import com.ifmo.epampractice.service.DAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class SubjectsDAO extends DatabaseSource implements IDAO<Subjects> {
-    private static final String INSERT_QUERY = "INSERT INTO SUBJECTS(id, name) VALUES(?,?)";
+public class SubjectsDAO implements DAO<Subjects> {
+    private static final String INSERT_QUERY = "INSERT INTO SUBJECTS(name) VALUES(?)";
     private static final String SELECT_ALL_QUERY = "SELECT id, name FROM SUBJECTS";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, name FROM SUBJECTS WHERE id=?";
-    private static final String UPDATE_QUERY = "UPDATE SUBJECTS SET id=?, name=? WHERE id=?";
+    private static final String UPDATE_QUERY = "UPDATE SUBJECTS SET name=? WHERE id=?";
     private static final String REMOVE_QUERY = "DELETE FROM SUBJECTS WHERE id=?";
 
     @Override
-    public void addObject(Subjects subject) {
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
+    public Subjects addObject(final Subjects subject) {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+            if (subject.getId() != 0) {
                 preparedStatement.setInt(1, subject.getId());
-                preparedStatement.setString(2, subject.getName());
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-        }
-    }
-
-    @Override
-    public List<Subjects> getAll() {
-        List<Subjects> subjectsList = new ArrayList<>();
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-                ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
-                while (resultSet.next()) {
-                    Subjects subject = new Subjects();
-                    subject.setId(resultSet.getInt("id"));
-                    subject.setName(resultSet.getString("name"));
-                    subjectsList.add(subject);
+            }
+            preparedStatement.setString(2, subject.getName());
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating subject failed, no rows affected.");
+            }
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    subject.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Creating subject failed, no ID obtained.");
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-        return subjectsList;
-    }
-
-    @Override
-    public Subjects getById(int id) {
-        Subjects subject = new Subjects();
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
-<<<<<<< HEAD
-=======
-            try {
->>>>>>> Change DAO & entity Subjects. Again.
-                preparedStatement.setInt(1, id);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                subject.setId(id);
-                subject.setName(resultSet.getString("name"));
-            } catch (SQLException e) {
-                e.printStackTrace();
-<<<<<<< HEAD
-=======
-            }
->>>>>>> Change DAO & entity Subjects. Again.
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return subject;
     }
 
     @Override
-    public void updateByObject(Subjects subject) {
-        try (Connection connection = getConnection();
+    public List<Subjects> getAll() {
+        ArrayList<Subjects> subjectsArrayList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
+            while (resultSet.next()) {
+                Subjects subject = new Subjects();
+                subject.setId(resultSet.getInt("id"));
+                subject.setName(resultSet.getString("name"));
+                subjectsArrayList.add(subject);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Getting all subjects failed. Subjects are not presented.");
+        }
+        return subjectsArrayList;
+    }
+
+    @Override
+    public Optional<Subjects> getById(final int id) {
+        Subjects subject = new Subjects();
+        subject.setId(id);
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) {
+                return Optional.empty();
+            }
+            subject.setName(resultSet.getString("name"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.of(subject);
+    }
+
+    @Override
+    public void updateByObject(final Subjects subject) {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
+            if (subject.getId() != 0) {
                 preparedStatement.setInt(1, subject.getId());
-                preparedStatement.setString(2, subject.getName());
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            }
+            preparedStatement.setString(2, subject.getName());
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new IllegalArgumentException("Update subject failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void removeByObject(Subjects subject) {
-        try (Connection connection = getConnection();
+    public void removeById(final int id) {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
-
-                preparedStatement.setInt(1, subject.getId());
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            preparedStatement.setInt(1, id);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Remove subject failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-<<<<<<< HEAD
-
-    @Override
-    public void removeById(int id) {
-        }
-=======
->>>>>>> Change DAO & entity Subjects. Again.
 }

@@ -6,15 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class Subjects {
-<<<<<<< HEAD
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-public class Subjects {
-=======
->>>>>>> Change DAO & entity Subjects. Again.
     private int id;
     private String name;
     private List<Tests> testsList;
@@ -73,8 +64,4 @@ public class Subjects {
                 ", testsList=" + testsList +
                 '}';
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Change DAO & entity Subjects. Again.
