@@ -48,6 +48,48 @@ public class AttemptsDAOTest {
     }
 
     @Test
+    public void testGetAttemptsListByTestId() {
+        Attempts attempt = createAttemptsObject();
+        attempt = ATTEMPTS_DAO.addObject(attempt);
+        List<Attempts> attemptsList = ATTEMPTS_DAO.getAttemptsListByTestId(2);
+        Assert.assertFalse(attemptsList.isEmpty());
+    }
+
+    @Test
+    public void testGetAttemptsListByTestAndUserId() {
+        Attempts attempt = createAttemptsObject();
+        attempt = ATTEMPTS_DAO.addObject(attempt);
+        List<Attempts> attemptsList = ATTEMPTS_DAO.getAttemptsListByTestAndUserId(2, 3);
+        Assert.assertFalse(attemptsList.isEmpty());
+    }
+
+    @Test
+    public void testGetAll() {
+        Attempts attempt = createAttemptsObject();
+        attempt = ATTEMPTS_DAO.addObject(attempt);
+        List<Attempts> attemptsList = ATTEMPTS_DAO.getAll();
+        Assert.assertFalse(attemptsList.isEmpty());
+    }
+
+    @Test
+    public void testGetById() {
+        boolean controlSum;
+        Attempts attempt = createAttemptsObject();
+        attempt = ATTEMPTS_DAO.addObject(attempt);
+        Optional<Attempts> attemptOptional = ATTEMPTS_DAO.getById(attempt.getId());
+        Attempts receivedAnswer = new Attempts();
+        if (attemptOptional.isPresent()) {
+            receivedAnswer = attemptOptional.get();
+        }
+        if (receivedAnswer.equals(attempt)) {
+            controlSum = Boolean.TRUE;
+        } else {
+            controlSum = Boolean.FALSE;
+        }
+        Assert.assertEquals(Boolean.TRUE, controlSum);
+    }
+
+    @Test
     public void testUpdateByObject() {
         boolean controlSum;
         Attempts attemptBeforeUpdate = createAttemptsObject();
@@ -78,31 +120,5 @@ public class AttemptsDAOTest {
         ATTEMPTS_DAO.removeById(id);
         controlSum = ATTEMPTS_DAO.getById(id).isPresent();
         Assert.assertEquals(Boolean.FALSE, controlSum);
-    }
-
-    @Test
-    public void testGetById() {
-        boolean controlSum;
-        Attempts attempt = createAttemptsObject();
-        attempt = ATTEMPTS_DAO.addObject(attempt);
-        Optional<Attempts> attemptOptional = ATTEMPTS_DAO.getById(attempt.getId());
-        Attempts receivedAnswer = new Attempts();
-        if (attemptOptional.isPresent()) {
-            receivedAnswer = attemptOptional.get();
-        }
-        if (receivedAnswer.equals(attempt)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testGetAll() {
-        Attempts attempt = createAttemptsObject();
-        attempt = ATTEMPTS_DAO.addObject(attempt);
-        List<Attempts> attemptsList = ATTEMPTS_DAO.getAll();
-        Assert.assertFalse(attemptsList.isEmpty());
     }
 }

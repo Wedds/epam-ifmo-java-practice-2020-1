@@ -48,6 +48,40 @@ public class QuestionsDAOTest {
     }
 
     @Test
+    public void testGetQuestionsListByTestId() {
+        Questions question = createQuestionsObject();
+        question = QUESTIONS_DAO.addObject(question);
+        List<Questions> questionsList = QUESTIONS_DAO.getQuestionsListByTestId(2);
+        Assert.assertFalse(questionsList.isEmpty());
+    }
+
+    @Test
+    public void testGetAll() {
+        Questions question = createQuestionsObject();
+        question = QUESTIONS_DAO.addObject(question);
+        List<Questions> questionsList = QUESTIONS_DAO.getAll();
+        Assert.assertFalse(questionsList.isEmpty());
+    }
+
+    @Test
+    public void testGetById() {
+        boolean controlSum;
+        Questions question = createQuestionsObject();
+        question = QUESTIONS_DAO.addObject(question);
+        Optional<Questions> questionOptional = QUESTIONS_DAO.getById(question.getId());
+        Questions receivedQuestion = new Questions();
+        if (questionOptional.isPresent()) {
+            receivedQuestion = questionOptional.get();
+        }
+        if (receivedQuestion.equals(question)) {
+            controlSum = Boolean.TRUE;
+        } else {
+            controlSum = Boolean.FALSE;
+        }
+        Assert.assertEquals(Boolean.TRUE, controlSum);
+    }
+
+    @Test
     public void testUpdateByObject() {
         boolean controlSum;
         Questions questionBeforeUpdate = createQuestionsObject();
@@ -78,31 +112,5 @@ public class QuestionsDAOTest {
         QUESTIONS_DAO.removeById(id);
         controlSum = QUESTIONS_DAO.getById(id).isPresent();
         Assert.assertEquals(Boolean.FALSE, controlSum);
-    }
-
-    @Test
-    public void testGetById() {
-        boolean controlSum;
-        Questions question = createQuestionsObject();
-        question = QUESTIONS_DAO.addObject(question);
-        Optional<Questions> questionOptional = QUESTIONS_DAO.getById(question.getId());
-        Questions receivedQuestion = new Questions();
-        if (questionOptional.isPresent()) {
-            receivedQuestion = questionOptional.get();
-        }
-        if (receivedQuestion.equals(question)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testGetAll() {
-        Questions question = createQuestionsObject();
-        question = QUESTIONS_DAO.addObject(question);
-        List<Questions> questionsList = QUESTIONS_DAO.getAll();
-        Assert.assertFalse(questionsList.isEmpty());
     }
 }
