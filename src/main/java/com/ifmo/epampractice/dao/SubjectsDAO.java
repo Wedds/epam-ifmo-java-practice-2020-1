@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class SubjectsDAO implements DAO<Subjects> {
-    private static final String INSERT_QUERY = "INSERT INTO SUBJECTS(name) VALUES(?)";
+    private static final String INSERT_QUERY = "INSERT INTO SUBJECTS(name) VALUES(?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, name FROM SUBJECTS";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, name FROM SUBJECTS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE SUBJECTS SET name=? WHERE id=?";
@@ -25,19 +25,17 @@ public class SubjectsDAO implements DAO<Subjects> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-            if (subject.getId() != 0) {
-                preparedStatement.setInt(1, subject.getId());
-            }
+            preparedStatement.setInt(1, subject.getId());
             preparedStatement.setString(2, subject.getName());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating subject failed, no rows affected.");
+                throw new IllegalArgumentException("Creating subject failed, no rows affected.");
             }
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     subject.setId(generatedKeys.getInt(1));
                 } else {
-                    throw new SQLException("Creating subject failed, no ID obtained.");
+                    throw new IllegalArgumentException("Creating subject failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
