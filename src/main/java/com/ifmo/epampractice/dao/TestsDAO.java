@@ -97,7 +97,7 @@ public class TestsDAO implements DAO<Tests> {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TEST_BY_TEST_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()){
+            if (!resultSet.next()) {
                 return Optional.empty();
             }
             fillGeneralTestObjectFromResultSet(test, resultSet);
@@ -107,7 +107,7 @@ public class TestsDAO implements DAO<Tests> {
         return Optional.of(test);
     }
 
-    public List<Tests>  getAllGroupsTestsByTestId(final int id) {
+    public List<Tests> getAllGroupsTestsByTestId(final int id) {
         List<Tests> groupsTestsList = new ArrayList<>();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement =
@@ -135,14 +135,14 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatementTest.setInt(1, testId);
             System.out.println(preparedStatementTest);
             ResultSet resultSetTest = preparedStatementTest.executeQuery();
-            if (!resultSetTest.next()){
+            if (!resultSetTest.next()) {
                 return Optional.empty();
             }
             fillGeneralTestObjectFromResultSet(test, resultSetTest);
             preparedStatementGroup.setInt(1, testId);
             preparedStatementGroup.setInt(2, groupId);
             ResultSet resultSetGroup = preparedStatementGroup.executeQuery();
-            if (!resultSetGroup.next()){
+            if (!resultSetGroup.next()) {
                 return Optional.empty();
             }
             fillTestForGroupObjectFromResultSet(test, resultSetGroup);

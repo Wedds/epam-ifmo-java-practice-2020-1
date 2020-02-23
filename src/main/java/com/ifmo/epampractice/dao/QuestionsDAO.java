@@ -19,6 +19,8 @@ public class QuestionsDAO implements DAO<Questions> {
             "title, image, question_text) VALUES(?::types,?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, question_type, test_id, " +
             "title, image, question_text FROM QUESTIONS";
+    private static final String SELECT_ALL_BY_TEST_ID_QUERY = "SELECT id, question_type, test_id, " +
+            "title, image, question_text FROM QUESTIONS WHERE test_id=?";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, question_type, test_id, " +
             "title, image, question_text FROM QUESTIONS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE QUESTIONS SET question_type=?::types, " +
@@ -48,13 +50,29 @@ public class QuestionsDAO implements DAO<Questions> {
         return question;
     }
 
-
     @Override
     public List<Questions> getAll() {
         List<Questions> questionsList = new ArrayList<>();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
+            while (resultSet.next()) {
+                Questions question = new Questions();
+                fillQuestionObjectFromResultSet(question, resultSet);
+                questionsList.add(question);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return questionsList;
+    }
+
+    public List<Questions> getQuestionsListByTestId(final int testId) {
+        List<Questions> questionsList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_TEST_ID_QUERY)) {
+            preparedStatement.setInt(1, testId);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Questions question = new Questions();
                 fillQuestionObjectFromResultSet(question, resultSet);
@@ -73,7 +91,7 @@ public class QuestionsDAO implements DAO<Questions> {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()){
+            if (!resultSet.next()) {
                 return Optional.empty();
             }
             fillQuestionObjectFromResultSet(question, resultSet);
