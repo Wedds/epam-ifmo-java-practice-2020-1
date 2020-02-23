@@ -11,28 +11,37 @@ import java.util.Optional;
 
 public class AnswersDAOTest {
     private static final AnswersDAO ANSWERS_DAO = new AnswersDAO();
+    private static final String ANSWER_TEXT = "It is train answer";
+    private static final int QUESTION_ID = 2;
+    private static final boolean IS_CORRECT = Boolean.TRUE;
+    private static final int POINTS = 2;
+    private static final String ANSWER_TEXT_UPDATE = "It is really train answer";
+    private static final int QUESTION_ID_UPDATE  = 3;
+    private static final boolean IS_CORRECT_UPDATE  = Boolean.FALSE;
+    private static final int POINTS_UPDATE  = -2;
+
 
     public Answers createAnswersObject() {
         Answers answer = new Answers();
-        answer.setAnswerText("It is train answer");
-        answer.setQuestionId(2);
-        answer.setIsCorrect(Boolean.TRUE);
-        answer.setPoints(2);
+        answer.setAnswerText(ANSWER_TEXT);
+        answer.setQuestionId(QUESTION_ID);
+        answer.setIsCorrect(IS_CORRECT);
+        answer.setPoints(POINTS);
         return answer;
     }
 
     public Answers createAnswersObjectForUpdate() {
         Answers answer = new Answers();
-        answer.setAnswerText("It is really train answer");
-        answer.setQuestionId(3);
-        answer.setIsCorrect(Boolean.FALSE);
-        answer.setPoints(-2);
+        answer.setAnswerText(ANSWER_TEXT_UPDATE);
+        answer.setQuestionId(QUESTION_ID_UPDATE);
+        answer.setIsCorrect(IS_CORRECT_UPDATE);
+        answer.setPoints(POINTS_UPDATE);
         return answer;
     }
 
     @Test
-    public void addObject() {
-        Boolean controlSum;
+    public void testAddObject() {
+        boolean controlSum;
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
         controlSum = ANSWERS_DAO.getById(answer.getId()).isPresent();
@@ -40,8 +49,8 @@ public class AnswersDAOTest {
     }
 
     @Test
-    public void updateByObject() {
-        Boolean controlSum;
+    public void testUpdateByObject() {
+        boolean controlSum;
         Answers answerBeforeUpdate = createAnswersObject();
         answerBeforeUpdate = ANSWERS_DAO.addObject(answerBeforeUpdate);
         int id = answerBeforeUpdate.getId();
@@ -62,8 +71,8 @@ public class AnswersDAOTest {
     }
 
     @Test
-    public void removeById() {
-        Boolean controlSum;
+    public void testRemoveById() {
+        boolean controlSum;
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
         int id = answer.getId();
@@ -74,8 +83,8 @@ public class AnswersDAOTest {
     }
 
     @Test
-    public void getById() {
-        Boolean controlSum;
+    public void testGetById() {
+        boolean controlSum;
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
         Optional<Answers> answerOptional = ANSWERS_DAO.getById(answer.getId());
@@ -92,7 +101,7 @@ public class AnswersDAOTest {
     }
 
     @Test
-    public void getAll() {
+    public void testGetAll() {
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
         List<Answers> answersList = ANSWERS_DAO.getAll();
