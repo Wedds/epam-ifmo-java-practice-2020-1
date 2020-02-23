@@ -24,7 +24,7 @@ public class TestsDAO implements DAO<Tests> {
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE id=?";
     private static final String SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY = "SELECT test_id, group_id, " +
             "is_necessary, max_attempts, deadline, time_limit FROM GROUPS_TESTS WHERE test_id=? AND group_id=?";
-    private static final String SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY = "SELECT group_id, is_necessary," +
+    private static final String SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY = "SELECT test_id, group_id, is_necessary," +
             "max_attempts, deadline, time_limit FROM GROUPS_TESTS WHERE test_id=?";
     private static final String UPDATE_TESTS_QUERY = "UPDATE TESTS SET title=?, description=?, " +
             "subject_id=?, is_random=?, created_at=?, max_points = ?, creator_id=? WHERE id=?";
@@ -65,7 +65,7 @@ public class TestsDAO implements DAO<Tests> {
             fillGroupsTestsQueryFromObject(test, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating record in GroupsTests failed, no rows affected.");
+                throw new IllegalArgumentException("Creating record in GroupsTests failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -141,7 +141,7 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatementGroup.setInt(1, testId);
             preparedStatementGroup.setInt(2, groupId);
             ResultSet resultSetGroup = preparedStatementGroup.executeQuery();
-            if (!resultSetTest.next()){
+            if (!resultSetGroup.next()){
                 return Optional.empty();
             }
             fillTestForGroupObjectFromResultSet(test, resultSetGroup);
@@ -174,7 +174,7 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatement.setInt(8, test.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Update test failed, no rows affected.");
+                throw new IllegalArgumentException("Update test failed, no rows affected.");
             }
             if (test.getGroupId() != 0) {
                 updateGroupsTests(test);
@@ -195,7 +195,7 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatement.setInt(6, test.getGroupId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Update groups_tests failed, no rows affected.");
+                throw new IllegalArgumentException("Update groups_tests failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -213,7 +213,7 @@ public class TestsDAO implements DAO<Tests> {
             }
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Remove test failed, no rows affected.");
+                throw new IllegalArgumentException("Remove test failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -226,7 +226,7 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Remove groups_tests failed, no rows affected.");
+                throw new IllegalArgumentException("Remove groups_tests failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -237,13 +237,13 @@ public class TestsDAO implements DAO<Tests> {
             throws SQLException {
         int affectedRows = preparedStatement.executeUpdate();
         if (affectedRows == 0) {
-            throw new SQLException("Creating test failed, no rows affected.");
+            throw new IllegalArgumentException("Creating test failed, no rows affected.");
         }
         try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 test.setId(generatedKeys.getInt(1));
             } else {
-                throw new SQLException("Creating test failed, no ID obtained.");
+                throw new IllegalArgumentException("Creating test failed, no ID obtained.");
             }
         }
     }
