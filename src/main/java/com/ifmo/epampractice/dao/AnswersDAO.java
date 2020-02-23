@@ -71,6 +71,7 @@ public class AnswersDAO implements DAO<Answers> {
         Answers answer = new Answers();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()){
                 return Optional.empty();
