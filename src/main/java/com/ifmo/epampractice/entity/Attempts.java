@@ -59,11 +59,11 @@ public class Attempts {
             return false;
         }
         Attempts attempts = (Attempts) o;
-        return id == attempts.id &&
-                testId == attempts.testId &&
-                userId == attempts.userId &&
-                score.equals(attempts.score) &&
-                passingDate.equals(attempts.passingDate);
+        return id == attempts.id
+                && testId == attempts.testId
+                && userId == attempts.userId
+                && score.equals(attempts.score)
+                && passingDate.equals(attempts.passingDate);
     }
 
     @Override
@@ -73,12 +73,12 @@ public class Attempts {
 
     @Override
     public String toString() {
-        return "Attempts{" +
-                "id=" + id +
-                ", testId=" + testId +
-                ", userId=" + userId +
-                ", score=" + score +
-                ", passingDate=" + passingDate +
-                '}';
+        return "Attempts{"
+                + "id=" + id
+                + ", testId=" + testId
+                + ", userId=" + userId
+                + ", score=" + score
+                + ", passingDate=" + passingDate
+                + '}';
     }
 }

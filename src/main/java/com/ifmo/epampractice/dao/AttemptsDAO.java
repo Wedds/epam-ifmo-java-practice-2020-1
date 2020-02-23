@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
+public class AttemptsDAO implements DAO<Attempts> {
     private static final String INSERT_QUERY = "INSERT INTO ATTEMPTS(user_id, " +
             "test_id, score, passing_date) VALUES(?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, user_id, test_id, " +
@@ -27,19 +27,19 @@ public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
 
     @Override
     public Attempts addObject(final Attempts attempt) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillQueryFromObject(attempt, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Creating attempt failed, no rows affected.");
+                throw new SQLException("Creating attempt failed, no rows affected.");
             }
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     attempt.setId(generatedKeys.getInt(1));
                 } else {
-                    throw new IllegalArgumentException("Creating attempt failed, no ID obtained.");
+                    throw new SQLException("Creating attempt failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
     @Override
     public List<Attempts> getAll() {
         List<Attempts> testAttemptsList = new ArrayList<>();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
             while (resultSet.next()) {
@@ -69,7 +69,7 @@ public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
     @Override
     public Optional<Attempts> getById(final int id) {
         Attempts attempt = new Attempts();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -85,13 +85,13 @@ public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
 
     @Override
     public void updateByObject(final Attempts attempt) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             fillQueryFromObject(attempt, preparedStatement);
             preparedStatement.setInt(5, attempt.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Update attempt failed, no rows affected.");
+                throw new SQLException("Update attempt failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,12 +100,12 @@ public class AttemptsDAO extends DatabaseSource implements DAO<Attempts> {
 
     @Override
     public void removeById(final int id) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Remove attempt failed, no rows affected.");
+                throw new SQLException("Remove attempt failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();

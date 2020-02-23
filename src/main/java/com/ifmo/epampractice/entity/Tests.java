@@ -166,22 +166,22 @@ public class Tests {
             return false;
         }
         Tests tests = (Tests) o;
-        return id == tests.id &&
-                subjectId == tests.subjectId &&
-                maxAttempts == tests.maxAttempts &&
-                timeLimit == tests.timeLimit &&
-                Objects.equals(title, tests.title) &&
-                Objects.equals(description, tests.description) &&
-                Objects.equals(isRandom, tests.isRandom) &&
-                Objects.equals(createdAt, tests.createdAt) &&
-                Objects.equals(maxPoints, tests.maxPoints) &&
-                Objects.equals(creatorId, tests.creatorId) &&
-                Objects.equals(attemptsList, tests.attemptsList) &&
-                Objects.equals(questionsList, tests.questionsList) &&
-                Objects.equals(groupsList, tests.groupsList) &&
-                Objects.equals(groupId, tests.groupId) &&
-                Objects.equals(isNecessary, tests.isNecessary) &&
-                Objects.equals(deadline, tests.deadline);
+        return id == tests.id
+                && subjectId == tests.subjectId
+                && maxAttempts == tests.maxAttempts
+                && timeLimit == tests.timeLimit
+                && Objects.equals(title, tests.title)
+                && Objects.equals(description, tests.description)
+                && Objects.equals(isRandom, tests.isRandom)
+                && Objects.equals(createdAt, tests.createdAt)
+                && Objects.equals(maxPoints, tests.maxPoints)
+                && Objects.equals(creatorId, tests.creatorId)
+                && Objects.equals(attemptsList, tests.attemptsList)
+                && Objects.equals(questionsList, tests.questionsList)
+                && Objects.equals(groupsList, tests.groupsList)
+                && Objects.equals(groupId, tests.groupId)
+                && Objects.equals(isNecessary, tests.isNecessary)
+                && Objects.equals(deadline, tests.deadline);
     }
 
     @Override
@@ -193,23 +193,23 @@ public class Tests {
 
     @Override
     public String toString() {
-        return "Tests{" +
-                "id=" + id +
-                ", subjectId=" + subjectId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", isRandom=" + isRandom +
-                ", createdAt=" + createdAt +
-                ", maxPoints=" + maxPoints +
-                ", creatorId=" + creatorId +
-                ", attemptsList=" + attemptsList +
-                ", questionsList=" + questionsList +
-                ", groupsList=" + groupsList +
-                ", groupId=" + groupId +
-                ", isNecessary=" + isNecessary +
-                ", maxAttempts=" + maxAttempts +
-                ", deadline=" + deadline +
-                ", timeLimit=" + timeLimit +
-                '}';
+        return "Tests{"
+                + "id=" + id
+                + ", subjectId=" + subjectId
+                + ", title='" + title + '\''
+                + ", description='" + description
+                + '\'' + ", isRandom=" + isRandom
+                + ", createdAt=" + createdAt
+                + ", maxPoints=" + maxPoints
+                + ", creatorId=" + creatorId
+                + ", attemptsList=" + attemptsList
+                + ", questionsList=" + questionsList
+                + ", groupsList=" + groupsList
+                + ", groupId=" + groupId
+                + ", isNecessary=" + isNecessary
+                + ", maxAttempts=" + maxAttempts
+                + ", deadline=" + deadline
+                + ", timeLimit=" + timeLimit
+                + '}';
     }
 }

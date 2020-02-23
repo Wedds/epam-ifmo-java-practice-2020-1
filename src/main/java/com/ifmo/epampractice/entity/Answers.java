@@ -67,12 +67,12 @@ public class Answers {
             return false;
         }
         Answers answers = (Answers) o;
-        return id == answers.id &&
-                questionId == answers.questionId &&
-                Objects.equals(image, answers.image) &&
-                Objects.equals(answerText, answers.answerText) &&
-                Objects.equals(isCorrect, answers.isCorrect) &&
-                Objects.equals(points, answers.points);
+        return id == answers.id
+                && questionId == answers.questionId
+                && Objects.equals(image, answers.image)
+                && Objects.equals(answerText, answers.answerText)
+                && Objects.equals(isCorrect, answers.isCorrect)
+                && Objects.equals(points, answers.points);
     }
 
     @Override
@@ -82,13 +82,13 @@ public class Answers {
 
     @Override
     public String toString() {
-        return "Answers{" +
-                "id=" + id +
-                ", questionId=" + questionId +
-                ", image='" + image + '\'' +
-                ", answerText='" + answerText + '\'' +
-                ", isCorrect=" + isCorrect +
-                ", points=" + points +
-                '}';
+        return "Answers{"
+                + "id=" + id
+                + ", questionId=" + questionId
+                + ", image='" + image + '\''
+                + ", answerText='" + answerText + '\''
+                + ", isCorrect=" + isCorrect
+                + ", points=" + points
+                + '}';
     }
 }

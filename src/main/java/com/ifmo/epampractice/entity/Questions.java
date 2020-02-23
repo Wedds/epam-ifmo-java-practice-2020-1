@@ -84,13 +84,13 @@ public class Questions {
             return false;
         }
         Questions questions = (Questions) o;
-        return id == questions.id &&
-                testId == questions.testId &&
-                questionType == questions.questionType &&
-                Objects.equals(title, questions.title) &&
-                Objects.equals(image, questions.image) &&
-                Objects.equals(questionText, questions.questionText) &&
-                Objects.equals(answersList, questions.answersList);
+        return id == questions.id
+                && testId == questions.testId
+                && questionType == questions.questionType
+                && Objects.equals(title, questions.title)
+                && Objects.equals(image, questions.image)
+                && Objects.equals(questionText, questions.questionText)
+                && Objects.equals(answersList, questions.answersList);
     }
 
     @Override
@@ -100,14 +100,14 @@ public class Questions {
 
     @Override
     public String toString() {
-        return "Questions{" +
-                "id=" + id +
-                ", questionType=" + questionType +
-                ", title='" + title + '\'' +
-                ", image='" + image + '\'' +
-                ", questionText='" + questionText + '\'' +
-                ", testId=" + testId +
-                ", answersList=" + answersList +
-                '}';
+        return "Questions{"
+                + "id=" + id
+                + ", questionType=" + questionType
+                + ", title='" + title + '\''
+                + ", image='" + image + '\''
+                + ", questionText='" + questionText + '\''
+                + ", testId=" + testId
+                + ", answersList=" + answersList
+                + '}';
     }
 }

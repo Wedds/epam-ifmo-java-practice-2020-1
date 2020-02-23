@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TestsDAO extends DatabaseSource implements DAO<Tests> {
+public class TestsDAO implements DAO<Tests> {
     private static final String INSERT_TESTS_QUERY = "INSERT INTO TESTS(title, description," +
             "subject_id, is_random, created_at, max_points, creator_id) VALUES(?,?,?,?,?,?,?) RETURNING id";
     private static final String INSERT_GROUPS_TESTS_QUERY = "INSERT INTO GROUPS_TESTS(test_id, group_id," +
@@ -24,7 +24,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE id=?";
     private static final String SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY = "SELECT test_id, group_id, " +
             "is_necessary, max_attempts, deadline, time_limit FROM GROUPS_TESTS WHERE test_id=? AND group_id=?";
-    private static final String SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY = "SELECT test_id, group_id, is_necessary," +
+    private static final String SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY = "SELECT group_id, is_necessary," +
             "max_attempts, deadline, time_limit FROM GROUPS_TESTS WHERE test_id=?";
     private static final String UPDATE_TESTS_QUERY = "UPDATE TESTS SET title=?, description=?, " +
             "subject_id=?, is_random=?, created_at=?, max_points = ?, creator_id=? WHERE id=?";
@@ -35,7 +35,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
 
     @Override
     public Tests addObject(final Tests test) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_TESTS_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillTestsQueryFromObject(test, preparedStatement);
@@ -48,7 +48,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
 
     public Tests addTestsWithGroupsTests(final Tests test) {
         this.addObject(test);
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillGroupsTestsQueryFromObject(test, preparedStatement);
@@ -60,12 +60,12 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
     }
 
     public Tests addGroupsTests(final Tests test) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY)) {
             fillGroupsTestsQueryFromObject(test, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Creating record in GroupsTests failed, no rows affected.");
+                throw new SQLException("Creating record in GroupsTests failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
     @Override
     public List<Tests> getAll() {
         List<Tests> testsList = new ArrayList<>();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
             while (resultSet.next()) {
@@ -93,7 +93,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
     @Override
     public Optional<Tests> getById(final int id) {
         Tests test = new Tests();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TEST_BY_TEST_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -109,7 +109,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
 
     public List<Tests>  getAllGroupsTestsByTestId(final int id) {
         List<Tests> groupsTestsList = new ArrayList<>();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -128,7 +128,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
 
     public Optional<Tests> getObjectByTestAndGroupId(final int testId, final int groupId) {
         Tests test = new Tests();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatementTest = connection.prepareStatement(SELECT_TEST_BY_TEST_ID_QUERY);
              PreparedStatement preparedStatementGroup =
                      connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
@@ -141,7 +141,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
             preparedStatementGroup.setInt(1, testId);
             preparedStatementGroup.setInt(2, groupId);
             ResultSet resultSetGroup = preparedStatementGroup.executeQuery();
-            if (!resultSetGroup.next()){
+            if (!resultSetTest.next()){
                 return Optional.empty();
             }
             fillTestForGroupObjectFromResultSet(test, resultSetGroup);
@@ -152,7 +152,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
     }
 
     public Tests fillObjectByGroupId(final Tests test, final int groupId) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
             preparedStatement.setInt(1, test.getId());
@@ -168,13 +168,13 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
 
     @Override
     public void updateByObject(final Tests test) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TESTS_QUERY)) {
             fillTestsQueryFromObject(test, preparedStatement);
             preparedStatement.setInt(8, test.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Update test failed, no rows affected.");
+                throw new SQLException("Update test failed, no rows affected.");
             }
             if (test.getGroupId() != 0) {
                 updateGroupsTests(test);
@@ -185,7 +185,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
     }
 
     public void updateGroupsTests(final Tests test) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_GROUPS_TESTS_QUERY)) {
             preparedStatement.setBoolean(1, test.getIsNecessary());
             preparedStatement.setInt(2, test.getMaxAttempts());
@@ -195,7 +195,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
             preparedStatement.setInt(6, test.getGroupId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Update groups_tests failed, no rows affected.");
+                throw new SQLException("Update groups_tests failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -204,7 +204,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
 
     @Override
     public void removeById(final int id) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
             List<Tests> groupsTestsList = getAllGroupsTestsByTestId(id);
@@ -213,7 +213,7 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
             }
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Remove test failed, no rows affected.");
+                throw new SQLException("Remove test failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -221,12 +221,12 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
     }
 
     public void removeGroupsTestsById(final int id) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_GROUPS_TESTS_QUERY)) {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Remove groups_tests failed, no rows affected.");
+                throw new SQLException("Remove groups_tests failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -237,13 +237,13 @@ public class TestsDAO extends DatabaseSource implements DAO<Tests> {
             throws SQLException {
         int affectedRows = preparedStatement.executeUpdate();
         if (affectedRows == 0) {
-            throw new IllegalArgumentException("Creating test failed, no rows affected.");
+            throw new SQLException("Creating test failed, no rows affected.");
         }
         try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 test.setId(generatedKeys.getInt(1));
             } else {
-                throw new IllegalArgumentException("Creating test failed, no ID obtained.");
+                throw new SQLException("Creating test failed, no ID obtained.");
             }
         }
     }

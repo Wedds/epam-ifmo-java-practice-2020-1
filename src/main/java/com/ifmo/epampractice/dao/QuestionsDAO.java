@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class QuestionsDAO extends DatabaseSource implements DAO<Questions> {
+public class QuestionsDAO implements DAO<Questions> {
     private static final String INSERT_QUERY = "INSERT INTO QUESTIONS(question_type, test_id, " +
             "title, image, question_text) VALUES(?::types,?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, question_type, test_id, " +
@@ -27,19 +27,19 @@ public class QuestionsDAO extends DatabaseSource implements DAO<Questions> {
 
     @Override
     public Questions addObject(final Questions question) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             fillQueryFromObject(question, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Creating question failed, no rows affected.");
+                throw new SQLException("Creating question failed, no rows affected.");
             }
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     question.setId(generatedKeys.getInt(1));
                 } else {
-                    throw new IllegalArgumentException("Creating question failed, no ID obtained.");
+                    throw new SQLException("Creating question failed, no ID obtained.");
                 }
             }
         } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class QuestionsDAO extends DatabaseSource implements DAO<Questions> {
     @Override
     public List<Questions> getAll() {
         List<Questions> questionsList = new ArrayList<>();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
             while (resultSet.next()) {
@@ -69,7 +69,7 @@ public class QuestionsDAO extends DatabaseSource implements DAO<Questions> {
     @Override
     public Optional<Questions> getById(final int id) {
         Questions question = new Questions();
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -85,13 +85,13 @@ public class QuestionsDAO extends DatabaseSource implements DAO<Questions> {
 
     @Override
     public void updateByObject(final Questions question) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             fillQueryFromObject(question, preparedStatement);
             preparedStatement.setInt(6, question.getId());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Update question failed, no rows affected.");
+                throw new SQLException("Update question failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,12 +100,12 @@ public class QuestionsDAO extends DatabaseSource implements DAO<Questions> {
 
     @Override
     public void removeById(final int id) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new IllegalArgumentException("Remove question failed, no rows affected.");
+                throw new SQLException("Remove question failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
