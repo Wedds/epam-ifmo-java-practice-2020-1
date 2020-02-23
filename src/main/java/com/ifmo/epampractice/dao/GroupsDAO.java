@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
+public class GroupsDAO implements DAO<Groups> {
     private static final String ADD_QUERY = "INSERT INTO groups(name, created_at) VALUES(?,?) RETURNING id";
     private static final String GET_ALL_QUERY = "SELECT id, name, created_at FROM groups";
     private static final String GET_BY_ID_QUERY = "SELECT name, created_at FROM groups WHERE id=?";
@@ -23,7 +23,7 @@ public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
 
     @Override
     public Groups addObject(final Groups group) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(ADD_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
@@ -48,7 +48,8 @@ public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
     public List<Groups> getAll() {
         List<Groups> groupsList = new ArrayList<>();
 
-        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+                Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_ALL_QUERY);
 
             while (resultSet.next()) {
@@ -69,7 +70,7 @@ public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
     public Optional<Groups> getById(final int id) {
         Groups group = new Groups();
 
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -87,7 +88,7 @@ public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
 
     @Override
     public void updateByObject(final Groups group) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
@@ -100,7 +101,7 @@ public class GroupsDAO extends DatabaseSource implements DAO<Groups> {
 
     @Override
     public void removeById(final int id) {
-        try (Connection connection = getConnection();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();

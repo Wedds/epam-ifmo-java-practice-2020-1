@@ -7,29 +7,26 @@ import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class GroupsDAOTest {
+public class testCRUD {
     @Test
     public void main() throws Exception{
-        /* Initialization */
+        /* Initialization & Setting expected values*/
         Groups expectedGroup1 = new Groups();
+        expectedGroup1.setId(1);
+        expectedGroup1.setName("K3120");
+        expectedGroup1.setCreatedAt(new Date(1578009600000L));
         Groups expectedGroup2 = new Groups();
+        expectedGroup2.setName("AAA");
+        expectedGroup2.setCreatedAt(new Date(1507593600000L));
         Groups realGroup1 = null;
         Groups realGroup2 = null;
         GroupsDAO groupDao = new GroupsDAO();
         List<Groups> listGroups = null;
 
-        /* Setting expected values */
-        expectedGroup1.setId(1);
-        expectedGroup1.setName("K3120");
-        expectedGroup1.setCreatedAt(new Date(1578009600000L));
-        expectedGroup2.setName("AAA");
-        expectedGroup2.setCreatedAt(new Date(1507593600000L));
-
         /* Checking getById */
         Optional<Groups> groupOptional = groupDao.getById(1);
-        if (groupOptional.isPresent()) {
-            realGroup1 = groupOptional.get();
-        }
+        Assert.assertTrue(groupOptional.isPresent());
+        realGroup1 = groupOptional.get();
         Assert.assertEquals(expectedGroup1, realGroup1);
 
         /* Checking addObject */
