@@ -1,6 +1,5 @@
 package com.ifmo.epampractice.entity;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +17,7 @@ public class Subjects {
         return testsList;
     }
 
-    public void setTestsList(List<Tests> testsList) {
+    public void setTestsList(final List<Tests> testsList) {
         this.testsList = testsList;
     }
 
@@ -26,7 +25,7 @@ public class Subjects {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -34,12 +33,12 @@ public class Subjects {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
