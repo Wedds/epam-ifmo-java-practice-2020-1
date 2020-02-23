@@ -159,21 +159,21 @@ public class Users {
             return false;
         }
         Users users = (Users) o;
-        return id == users.id &&
-                groupId == users.groupId &&
-                roleType.equals(users.roleType) &&
-                email.equals(users.email) &&
-                hash.equals(users.hash) &&
-                salt.equals(users.salt) &&
-                firstName.equals(users.firstName) &&
-                lastName.equals(users.lastName) &&
-                middleName.equals(users.middleName) &&
-                birthDate.equals(users.birthDate) &&
-                workTitle.equals(users.workTitle) &&
-                createdAt.equals(users.createdAt) &&
-                avatar.equals(users.avatar) &&
-                testsList.equals(users.testsList) &&
-                attemptsList.equals(users.attemptsList);
+        return id == users.id 
+            && groupId == users.groupId 
+            && roleType.equals(users.roleType) 
+            && email.equals(users.email) 
+            && hash.equals(users.hash) 
+            && salt.equals(users.salt) 
+            && firstName.equals(users.firstName) 
+            && lastName.equals(users.lastName) 
+            && middleName.equals(users.middleName) 
+            && birthDate.equals(users.birthDate) 
+            && workTitle.equals(users.workTitle) 
+            && createdAt.equals(users.createdAt) 
+            && avatar.equals(users.avatar) 
+            && testsList.equals(users.testsList) 
+            && attemptsList.equals(users.attemptsList);
     }
 
     @Override
@@ -199,22 +199,22 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", roleType=" + roleType +
-                ", email='" + email + '\'' +
-                ", hash='" + hash + '\'' +
-                ", salt='" + salt + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                ", birthDate=" + birthDate +
-                ", workTitle='" + workTitle + '\'' +
-                ", createdAt=" + createdAt +
-                ", avatar='" + avatar + '\'' +
-                ", groupId=" + groupId +
-                ", testsList=" + testsList +
-                ", attemptsList=" + attemptsList +
-                '}';
+        return "Users{" 
+            + "id=" + id 
+            + ", roleType=" + roleType 
+            + ", email='" + email + '\'' 
+            + ", hash='" + hash + '\'' 
+            + ", salt='" + salt + '\'' 
+            + ", firstName='" + firstName + '\'' 
+            + ", lastName='" + lastName + '\'' 
+            + ", middleName='" + middleName + '\'' 
+            + ", birthDate=" + birthDate 
+            + ", workTitle='" + workTitle + '\'' 
+            + ", createdAt=" + createdAt 
+            + ", avatar='" + avatar + '\'' 
+            + ", groupId=" + groupId 
+            + ", testsList=" + testsList 
+            + ", attemptsList=" + attemptsList 
+            + '}';
     }
 }
