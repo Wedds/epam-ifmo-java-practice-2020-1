@@ -110,6 +110,34 @@ public class TestsDAOTest {
     }
 
     @Test
+    public void testGetById() {
+        boolean controlSum;
+        Tests test = createTestsObject();
+        test = TEST_DAO.addObject(test);
+        Optional<Tests> testOptional = TEST_DAO.getById(test.getId());
+        Tests receivedTest = new Tests();
+        if (testOptional.isPresent()) {
+            receivedTest = testOptional.get();
+        }
+        System.out.println(receivedTest);
+        System.out.println(test);
+        if (receivedTest.equals(test)) {
+            controlSum = Boolean.TRUE;
+        } else {
+            controlSum = Boolean.FALSE;
+        }
+        Assert.assertEquals(Boolean.TRUE, controlSum);
+    }
+
+    @Test
+    public void testGetAll() {
+        Tests test = createTestsObject();
+        test = TEST_DAO.addObject(test);
+        List<Tests> testsList = TEST_DAO.getAll();
+        Assert.assertFalse(testsList.isEmpty());
+    }
+
+    @Test
     public void testUpdateByObject() {
         boolean controlSum;
         Tests testBeforeUpdate = createGroupsTestsObject();
@@ -161,33 +189,6 @@ public class TestsDAOTest {
             controlSum = Boolean.FALSE;
         }
         Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testGetById() {
-        boolean controlSum;
-        Tests test = createTestsObject();
-        test = TEST_DAO.addObject(test);
-        Optional<Tests> testOptional = TEST_DAO.getById(test.getId());
-        Tests receivedTest = new Tests();
-        if (testOptional.isPresent()) {
-            receivedTest = testOptional.get();
-        }
-        if (receivedTest.equals(test)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-
-    @Test
-    public void testGetAll() {
-        Tests test = createTestsObject();
-        test = TEST_DAO.addObject(test);
-        List<Tests> testsList = TEST_DAO.getAll();
-        Assert.assertFalse(testsList.isEmpty());
     }
 }
 
