@@ -7,7 +7,7 @@ public class Attempts {
     private int id;
     private int testId;
     private int userId;
-    private Integer score;
+    private int score;
     private Date passingDate;
 
     public int getTestId() {
@@ -62,7 +62,7 @@ public class Attempts {
         return id == attempts.id
                 && testId == attempts.testId
                 && userId == attempts.userId
-                && score.equals(attempts.score)
+                && score == attempts.score
                 && passingDate.toLocalDate().equals(attempts.passingDate.toLocalDate());
     }
 
