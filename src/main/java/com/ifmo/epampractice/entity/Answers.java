@@ -8,7 +8,7 @@ public class Answers {
     private String image;
     private String answerText;
     private Boolean isCorrect;
-    private Integer points;
+    private int points;
 
     public int getQuestionId() {
         return questionId;

@@ -12,8 +12,8 @@ public class Tests {
     private String description;
     private Boolean isRandom;
     private Date createdAt;
-    private Integer maxPoints;
-    private Integer creatorId;
+    private int maxPoints;
+    private int creatorId;
     private List<Attempts> attemptsList;
     private List<Questions> questionsList;
     private List<Groups> groupsList;
