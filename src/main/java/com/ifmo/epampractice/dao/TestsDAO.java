@@ -133,6 +133,7 @@ public class TestsDAO implements DAO<Tests> {
              PreparedStatement preparedStatementGroup =
                      connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
             preparedStatementTest.setInt(1, testId);
+            System.out.println(preparedStatementTest);
             ResultSet resultSetTest = preparedStatementTest.executeQuery();
             if (!resultSetTest.next()){
                 return Optional.empty();
