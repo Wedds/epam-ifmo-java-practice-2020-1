@@ -11,28 +11,36 @@ import java.util.Optional;
 
 public class QuestionsDAOTest {
     private static final QuestionsDAO QUESTIONS_DAO = new QuestionsDAO();
+    private static final QuestionType QUESTION_TYPE = QuestionType.CHECKBOX;
+    private static final String QUESTION_TITLE = "The best question!!!";
+    private static final String QUESTION_TEXT = "Android or IOS?";
+    private static final int TEST_ID = 2;
+    private static final QuestionType QUESTION_TYPE_UPDATE = QuestionType.RADIOBUTTON;
+    private static final String QUESTION_TITLE_UPDATE = "The worst question((()))";
+    private static final String QUESTION_TEXT_UPDATE = "Cats or dogs?";
+    private static final int TEST_ID_UPDATE = 1;
 
     public Questions createQuestionsObject() {
         Questions question = new Questions();
-        question.setQuestionType(QuestionType.CHECKBOX);
-        question.setTitle("The best question!!!");
-        question.setQuestionText("Android or IOS?");
-        question.setTestId(2);
+        question.setQuestionType(QUESTION_TYPE);
+        question.setTitle(QUESTION_TITLE);
+        question.setQuestionText(QUESTION_TEXT);
+        question.setTestId(TEST_ID);
         return question;
     }
 
     public Questions createQuestionsObjectForUpdate() {
         Questions question = new Questions();
-        question.setQuestionType(QuestionType.RADIOBUTTON);
-        question.setTitle("The worst question((()))");
-        question.setQuestionText("Cats or dogs?");
-        question.setTestId(1);
+        question.setQuestionType(QUESTION_TYPE_UPDATE);
+        question.setTitle(QUESTION_TITLE_UPDATE);
+        question.setQuestionText(QUESTION_TEXT_UPDATE);
+        question.setTestId(TEST_ID_UPDATE);
         return question;
     }
 
     @Test
-    public void addObject() {
-        Boolean controlSum;
+    public void testAddObject() {
+        boolean controlSum;
         Questions question = createQuestionsObject();
         question = QUESTIONS_DAO.addObject(question);
         controlSum = QUESTIONS_DAO.getById(question.getId()).isPresent();
@@ -40,8 +48,8 @@ public class QuestionsDAOTest {
     }
 
     @Test
-    public void updateByObject() {
-        Boolean controlSum;
+    public void testUpdateByObject() {
+        boolean controlSum;
         Questions questionBeforeUpdate = createQuestionsObject();
         questionBeforeUpdate = QUESTIONS_DAO.addObject(questionBeforeUpdate);
         int id = questionBeforeUpdate.getId();
@@ -62,8 +70,8 @@ public class QuestionsDAOTest {
     }
 
     @Test
-    public void removeById() {
-        Boolean controlSum;
+    public void testRemoveById() {
+        boolean controlSum;
         Questions question = createQuestionsObject();
         question = QUESTIONS_DAO.addObject(question);
         int id = question.getId();
@@ -73,8 +81,8 @@ public class QuestionsDAOTest {
     }
 
     @Test
-    public void getById() {
-        Boolean controlSum;
+    public void testGetById() {
+        boolean controlSum;
         Questions question = createQuestionsObject();
         question = QUESTIONS_DAO.addObject(question);
         Optional<Questions> questionOptional = QUESTIONS_DAO.getById(question.getId());
@@ -91,7 +99,7 @@ public class QuestionsDAOTest {
     }
 
     @Test
-    public void getAll() {
+    public void testGetAll() {
         Questions question = createQuestionsObject();
         question = QUESTIONS_DAO.addObject(question);
         List<Questions> questionsList = QUESTIONS_DAO.getAll();
