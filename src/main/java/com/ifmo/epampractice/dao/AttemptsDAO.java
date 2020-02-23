@@ -18,6 +18,10 @@ public class AttemptsDAO implements DAO<Attempts> {
             "test_id, score, passing_date) VALUES(?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, user_id, test_id, " +
             "score, passing_date FROM ATTEMPTS";
+    private static final String SELECT_ALL_BY_TEST_ID_QUERY = "SELECT id, user_id, test_id, " +
+            "score, passing_date FROM ATTEMPTS WHERE test_id=?";
+    private static final String SELECT_ALL_BY_TEST_AND_USER_ID_QUERY = "SELECT id, user_id, test_id, " +
+            "score, passing_date FROM ATTEMPTS WHERE test_id=? AND user_id=?";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, user_id, test_id, " +
             "score, passing_date FROM ATTEMPTS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE ATTEMPTS SET " +
@@ -48,13 +52,47 @@ public class AttemptsDAO implements DAO<Attempts> {
         return attempt;
     }
 
-
     @Override
     public List<Attempts> getAll() {
         List<Attempts> testAttemptsList = new ArrayList<>();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
+            while (resultSet.next()) {
+                Attempts attempt = new Attempts();
+                fillAttemptObjectFromResultSet(attempt, resultSet);
+                testAttemptsList.add(attempt);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return testAttemptsList;
+    }
+
+    public List<Attempts> getAttemptsListByTestId(final int testId) {
+        List<Attempts> testAttemptsList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_TEST_ID_QUERY)) {
+            preparedStatement.setInt(1, testId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Attempts attempt = new Attempts();
+                fillAttemptObjectFromResultSet(attempt, resultSet);
+                testAttemptsList.add(attempt);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return testAttemptsList;
+    }
+
+    public List<Attempts> getAttemptsListByTestAndUserId(final int testId, final int userId) {
+        List<Attempts> testAttemptsList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_TEST_AND_USER_ID_QUERY)) {
+            preparedStatement.setInt(1, testId);
+            preparedStatement.setInt(2, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Attempts attempt = new Attempts();
                 fillAttemptObjectFromResultSet(attempt, resultSet);
@@ -73,7 +111,7 @@ public class AttemptsDAO implements DAO<Attempts> {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()){
+            if (!resultSet.next()) {
                 return Optional.empty();
             }
             fillAttemptObjectFromResultSet(attempt, resultSet);

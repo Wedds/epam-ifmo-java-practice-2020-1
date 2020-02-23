@@ -19,6 +19,8 @@ public class AnswersDAO implements DAO<Answers> {
             "question_id, is_correct, points) VALUES(?,?,?,?,?) RETURNING id";
     private static final String SELECT_ALL_QUERY = "SELECT id, image, answer_text, " +
             "question_id, is_correct, points FROM ANSWERS";
+    private static final String SELECT_ALL_BY_QUESTION_ID_QUERY = "SELECT id, image, answer_text, " +
+            "question_id, is_correct, points FROM ANSWERS WHERE question_id=?";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, image, answer_text, " +
             "question_id, is_correct, points FROM ANSWERS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE ANSWERS SET image=?, answer_text=?, " +
@@ -55,6 +57,23 @@ public class AnswersDAO implements DAO<Answers> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
+            while (resultSet.next()) {
+                Answers answer = new Answers();
+                fillAnswerObjectFromResultSet(answer, resultSet);
+                answersList.add(answer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return answersList;
+    }
+
+    public List<Answers> getAnswersListByQuestionId(final int questionId) {
+        List<Answers> answersList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_QUESTION_ID_QUERY)) {
+            preparedStatement.setInt(1, questionId);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Answers answer = new Answers();
                 fillAnswerObjectFromResultSet(answer, resultSet);
