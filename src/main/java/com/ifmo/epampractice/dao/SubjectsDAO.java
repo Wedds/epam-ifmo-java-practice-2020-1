@@ -25,8 +25,8 @@ public class SubjectsDAO implements DAO<Subjects> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setInt(1, subject.getId());
-            preparedStatement.setString(2, subject.getName());
+            //preparedStatement.setInt(1, subject.getId());
+            preparedStatement.setString(1, subject.getName());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new IllegalArgumentException("Creating subject failed, no rows affected.");
@@ -102,10 +102,10 @@ public class SubjectsDAO implements DAO<Subjects> {
     public void removeById(final int id) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
-            preparedStatement.setInt(1, id);
+            //preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Remove subject failed, no rows affected.");
+                throw new IllegalArgumentException("Remove subject failed, no rows affected.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
