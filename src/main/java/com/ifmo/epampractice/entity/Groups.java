@@ -67,11 +67,11 @@ public class Groups {
             return false;
         }
         Groups groups = (Groups) o;
-        return id == groups.id &&
-                name.equals(groups.name) &&
-                createdAt.equals(groups.createdAt) &&
-                Objects.equals(usersList, groups.usersList) &&
-                Objects.equals(testsList, groups.testsList);
+        return id == groups.id
+                && name.equals(groups.name)
+                && createdAt.toLocalDate().equals(groups.createdAt.toLocalDate())
+                && Objects.equals(usersList, groups.usersList)
+                && Objects.equals(testsList, groups.testsList);
     }
 
     @Override
@@ -81,12 +81,12 @@ public class Groups {
 
     @Override
     public String toString() {
-        return "Groups{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", createdAt=" + createdAt +
-                ", usersList=" + usersList +
-                ", testsList=" + testsList +
-                '}';
+        return "Groups{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", createdAt=" + createdAt
+                + ", usersList=" + usersList
+                + ", testsList=" + testsList
+                + '}';
     }
 }
