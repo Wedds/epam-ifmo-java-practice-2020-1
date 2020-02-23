@@ -4,6 +4,7 @@ import com.ifmo.epampractice.dao.GroupsDAO;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,15 +12,13 @@ public class testCRUD {
     @Test
     public void main() throws Exception{
         /* Initialization & Setting expected values*/
-        final long date20200301 = 1578009600000L;
-        final long date20171010 = 1507593600000L;
         Groups expectedGroup1 = new Groups();
         expectedGroup1.setId(1);
         expectedGroup1.setName("K3120");
-        expectedGroup1.setCreatedAt(new Date(date20200301));
+        expectedGroup1.setCreatedAt(Date.valueOf(LocalDate.of(2020, 1, 3)));
         Groups expectedGroup2 = new Groups();
         expectedGroup2.setName("AAA");
-        expectedGroup2.setCreatedAt(new Date(date20171010));
+        expectedGroup2.setCreatedAt(Date.valueOf(LocalDate.of(2017, 10, 10)));
         Groups realGroup1 = null;
         Groups realGroup2 = null;
         GroupsDAO groupDao = new GroupsDAO();
