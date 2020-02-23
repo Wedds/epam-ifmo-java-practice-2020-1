@@ -63,7 +63,7 @@ public class Attempts {
                 && testId == attempts.testId
                 && userId == attempts.userId
                 && score.equals(attempts.score)
-                && passingDate.equals(attempts.passingDate);
+                && passingDate.toLocalDate().equals(attempts.passingDate.toLocalDate());
     }
 
     @Override

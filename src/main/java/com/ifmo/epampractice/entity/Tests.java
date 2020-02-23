@@ -173,7 +173,7 @@ public class Tests {
                 && Objects.equals(title, tests.title)
                 && Objects.equals(description, tests.description)
                 && Objects.equals(isRandom, tests.isRandom)
-                && Objects.equals(createdAt, tests.createdAt)
+                && Objects.equals(createdAt.toLocalDate(), tests.createdAt.toLocalDate())
                 && Objects.equals(maxPoints, tests.maxPoints)
                 && Objects.equals(creatorId, tests.creatorId)
                 && Objects.equals(attemptsList, tests.attemptsList)
@@ -181,7 +181,7 @@ public class Tests {
                 && Objects.equals(groupsList, tests.groupsList)
                 && Objects.equals(groupId, tests.groupId)
                 && Objects.equals(isNecessary, tests.isNecessary)
-                && Objects.equals(deadline, tests.deadline);
+                && Objects.equals(deadline.toLocalDate(), tests.deadline.toLocalDate());
     }
 
     @Override
