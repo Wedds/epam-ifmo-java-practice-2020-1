@@ -19,7 +19,6 @@ public final class DatabaseSource {
     private DatabaseSource() {
         this.dataSource = getDataSource();
     }
-
     public static DatabaseSource getInstance() {
         if (instance != null) {
             return instance;

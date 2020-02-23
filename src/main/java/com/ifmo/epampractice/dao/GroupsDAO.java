@@ -24,7 +24,8 @@ public class GroupsDAO implements DAO<Groups> {
     @Override
     public Groups addObject(final Groups group) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(ADD_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(ADD_QUERY,
+                        Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, group.getName());
             preparedStatement.setDate(2, group.getCreatedAt());
             int affectedRows = preparedStatement.executeUpdate();
@@ -75,7 +76,7 @@ public class GroupsDAO implements DAO<Groups> {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
-                Optional<Groups> groupsOptional = Optional.empty();
+                return Optional.empty();
             }
             group.setId(id);
             group.setName(resultSet.getString("name"));

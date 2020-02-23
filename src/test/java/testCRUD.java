@@ -11,13 +11,15 @@ public class testCRUD {
     @Test
     public void main() throws Exception{
         /* Initialization & Setting expected values*/
+        final long date20200301 = 1578009600000L;
+        final long date20171010 = 1507593600000L;
         Groups expectedGroup1 = new Groups();
         expectedGroup1.setId(1);
         expectedGroup1.setName("K3120");
-        expectedGroup1.setCreatedAt(new Date(1578009600000L));
+        expectedGroup1.setCreatedAt(new Date(date20200301));
         Groups expectedGroup2 = new Groups();
         expectedGroup2.setName("AAA");
-        expectedGroup2.setCreatedAt(new Date(1507593600000L));
+        expectedGroup2.setCreatedAt(new Date(date20171010));
         Groups realGroup1 = null;
         Groups realGroup2 = null;
         GroupsDAO groupDao = new GroupsDAO();
