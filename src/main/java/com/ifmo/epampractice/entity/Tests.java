@@ -166,22 +166,41 @@ public class Tests {
             return false;
         }
         Tests tests = (Tests) o;
-        return id == tests.id
-                && subjectId == tests.subjectId
-                && maxAttempts == tests.maxAttempts
-                && timeLimit == tests.timeLimit
-                && Objects.equals(title, tests.title)
-                && Objects.equals(description, tests.description)
-                && Objects.equals(isRandom, tests.isRandom)
-                && Objects.equals(createdAt, tests.createdAt)
-                && Objects.equals(maxPoints, tests.maxPoints)
-                && Objects.equals(creatorId, tests.creatorId)
-                && Objects.equals(attemptsList, tests.attemptsList)
-                && Objects.equals(questionsList, tests.questionsList)
-                && Objects.equals(groupsList, tests.groupsList)
-                && Objects.equals(groupId, tests.groupId)
-                && Objects.equals(isNecessary, tests.isNecessary)
-                && Objects.equals(deadline, tests.deadline);
+        if (deadline == null) {
+            return id == tests.id
+                    && subjectId == tests.subjectId
+                    && maxAttempts == tests.maxAttempts
+                    && timeLimit == tests.timeLimit
+                    && Objects.equals(title, tests.title)
+                    && Objects.equals(description, tests.description)
+                    && Objects.equals(isRandom, tests.isRandom)
+                    && Objects.equals(createdAt.toLocalDate(), tests.createdAt.toLocalDate())
+                    && Objects.equals(maxPoints, tests.maxPoints)
+                    && Objects.equals(creatorId, tests.creatorId)
+                    && Objects.equals(attemptsList, tests.attemptsList)
+                    && Objects.equals(questionsList, tests.questionsList)
+                    && Objects.equals(groupsList, tests.groupsList)
+                    && Objects.equals(groupId, tests.groupId)
+                    && Objects.equals(isNecessary, tests.isNecessary)
+                    && Objects.equals(deadline, tests.deadline);
+        } else {
+            return id == tests.id
+                    && subjectId == tests.subjectId
+                    && maxAttempts == tests.maxAttempts
+                    && timeLimit == tests.timeLimit
+                    && Objects.equals(title, tests.title)
+                    && Objects.equals(description, tests.description)
+                    && Objects.equals(isRandom, tests.isRandom)
+                    && Objects.equals(createdAt.toLocalDate(), tests.createdAt.toLocalDate())
+                    && Objects.equals(maxPoints, tests.maxPoints)
+                    && Objects.equals(creatorId, tests.creatorId)
+                    && Objects.equals(attemptsList, tests.attemptsList)
+                    && Objects.equals(questionsList, tests.questionsList)
+                    && Objects.equals(groupsList, tests.groupsList)
+                    && Objects.equals(groupId, tests.groupId)
+                    && Objects.equals(isNecessary, tests.isNecessary)
+                    && Objects.equals(deadline.toLocalDate(), tests.deadline.toLocalDate());
+        }
     }
 
     @Override
