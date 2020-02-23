@@ -170,7 +170,7 @@ public class Users {
             && middleName.equals(users.middleName) 
             && birthDate.equals(users.birthDate) 
             && workTitle.equals(users.workTitle) 
-            && createdAt.equals(users.createdAt) 
+            && createdAt.toLocalDate().equals(users.createdAt.toLocalDate())
             && avatar.equals(users.avatar) 
             && testsList.equals(users.testsList) 
             && attemptsList.equals(users.attemptsList);
