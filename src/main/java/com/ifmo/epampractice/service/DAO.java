@@ -15,3 +15,4 @@ public interface DAO<T> {
 
     void removeById(int id);
 }
+
