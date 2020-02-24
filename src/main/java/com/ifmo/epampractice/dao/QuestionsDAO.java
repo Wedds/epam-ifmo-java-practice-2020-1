@@ -2,7 +2,6 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Questions;
 import com.ifmo.epampractice.enums.QuestionType;
-import com.ifmo.epampractice.service.DAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
 import java.sql.Connection;

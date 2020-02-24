@@ -1,4 +1,4 @@
-package com.ifmo.epampractice.service;
+package com.ifmo.epampractice.dao;
 
 import java.util.List;
 import java.util.Optional;

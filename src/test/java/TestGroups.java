@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class TestGroups {
     @Test
-    public void TestCRUD() throws Exception{
+    public void testCRUD() throws Exception{
         /* Initialization & Setting expected values*/
         final int year2017 = 2017;
         final int year2020 = 2020;
