@@ -6,7 +6,6 @@ import com.ifmo.epampractice.enums.QuestionType;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 public class QuestionsDAOTest {
@@ -19,6 +18,75 @@ public class QuestionsDAOTest {
     private static final String QUESTION_TITLE_UPDATE = "The worst question((()))";
     private static final String QUESTION_TEXT_UPDATE = "Cats or dogs?";
     private static final int TEST_ID_UPDATE = 1;
+
+    @Test
+    public void testAddObject() {
+        boolean controlSum;
+        Questions question = createQuestionsObject();
+        question = QUESTIONS_DAO.addObject(question);
+        controlSum = QUESTIONS_DAO.getById(question.getId()).isPresent();
+        Assert.assertEquals(Boolean.TRUE, controlSum);
+        QUESTIONS_DAO.removeById(question.getId());
+    }
+
+    @Test
+    public void testGetQuestionsListByTestId() {
+        int wasElements = QUESTIONS_DAO.getQuestionsListByTestId(2).size();
+        Questions question = createQuestionsObject();
+        question = QUESTIONS_DAO.addObject(question);
+        Assert.assertEquals(wasElements+1, QUESTIONS_DAO.getQuestionsListByTestId(2).size());
+        QUESTIONS_DAO.removeById(question.getId());
+    }
+
+    @Test
+    public void testGetAll() {
+        int wasElements = QUESTIONS_DAO.getAll().size();
+        Questions question = createQuestionsObject();
+        question = QUESTIONS_DAO.addObject(question);
+        Assert.assertEquals(wasElements+1, QUESTIONS_DAO.getAll().size());
+        QUESTIONS_DAO.removeById(question.getId());
+    }
+
+    @Test
+    public void testGetById() {
+        Questions question = createQuestionsObject();
+        question = QUESTIONS_DAO.addObject(question);
+        Optional<Questions> questionOptional = QUESTIONS_DAO.getById(question.getId());
+        Questions receivedQuestion = new Questions();
+        if (questionOptional.isPresent()) {
+            receivedQuestion = questionOptional.get();
+        }
+        Assert.assertEquals(Boolean.TRUE, receivedQuestion.equals(question));
+        QUESTIONS_DAO.removeById(question.getId());
+    }
+
+    @Test
+    public void testUpdateByObject() {
+        Questions questionBeforeUpdate = createQuestionsObject();
+        questionBeforeUpdate = QUESTIONS_DAO.addObject(questionBeforeUpdate);
+        int id = questionBeforeUpdate.getId();
+        Questions questionForUpdate = createQuestionsObjectForUpdate();
+        questionForUpdate.setId(id);
+        QUESTIONS_DAO.updateByObject(questionForUpdate);
+        Optional<Questions> questionOptional = QUESTIONS_DAO.getById(id);
+        Questions controlAttempt = new Questions();
+        if (questionOptional.isPresent()) {
+            controlAttempt = questionOptional.get();
+        }
+        Assert.assertEquals(Boolean.TRUE, controlAttempt.equals(questionForUpdate));
+        QUESTIONS_DAO.removeById(questionForUpdate.getId());
+    }
+
+    @Test
+    public void testRemoveById() {
+        boolean controlSum;
+        Questions question = createQuestionsObject();
+        question = QUESTIONS_DAO.addObject(question);
+        int id = question.getId();
+        QUESTIONS_DAO.removeById(id);
+        controlSum = QUESTIONS_DAO.getById(id).isPresent();
+        Assert.assertEquals(Boolean.FALSE, controlSum);
+    }
 
     public Questions createQuestionsObject() {
         Questions question = new Questions();
@@ -38,79 +106,4 @@ public class QuestionsDAOTest {
         return question;
     }
 
-    @Test
-    public void testAddObject() {
-        boolean controlSum;
-        Questions question = createQuestionsObject();
-        question = QUESTIONS_DAO.addObject(question);
-        controlSum = QUESTIONS_DAO.getById(question.getId()).isPresent();
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testGetQuestionsListByTestId() {
-        Questions question = createQuestionsObject();
-        question = QUESTIONS_DAO.addObject(question);
-        List<Questions> questionsList = QUESTIONS_DAO.getQuestionsListByTestId(2);
-        Assert.assertFalse(questionsList.isEmpty());
-    }
-
-    @Test
-    public void testGetAll() {
-        Questions question = createQuestionsObject();
-        question = QUESTIONS_DAO.addObject(question);
-        List<Questions> questionsList = QUESTIONS_DAO.getAll();
-        Assert.assertFalse(questionsList.isEmpty());
-    }
-
-    @Test
-    public void testGetById() {
-        boolean controlSum;
-        Questions question = createQuestionsObject();
-        question = QUESTIONS_DAO.addObject(question);
-        Optional<Questions> questionOptional = QUESTIONS_DAO.getById(question.getId());
-        Questions receivedQuestion = new Questions();
-        if (questionOptional.isPresent()) {
-            receivedQuestion = questionOptional.get();
-        }
-        if (receivedQuestion.equals(question)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testUpdateByObject() {
-        boolean controlSum;
-        Questions questionBeforeUpdate = createQuestionsObject();
-        questionBeforeUpdate = QUESTIONS_DAO.addObject(questionBeforeUpdate);
-        int id = questionBeforeUpdate.getId();
-        Questions questionForUpdate = createQuestionsObjectForUpdate();
-        questionForUpdate.setId(id);
-        QUESTIONS_DAO.updateByObject(questionForUpdate);
-        Optional<Questions> questionOptional = QUESTIONS_DAO.getById(id);
-        Questions controlAttempt = new Questions();
-        if (questionOptional.isPresent()) {
-            controlAttempt = questionOptional.get();
-        }
-        if (controlAttempt.equals(questionForUpdate)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testRemoveById() {
-        boolean controlSum;
-        Questions question = createQuestionsObject();
-        question = QUESTIONS_DAO.addObject(question);
-        int id = question.getId();
-        QUESTIONS_DAO.removeById(id);
-        controlSum = QUESTIONS_DAO.getById(id).isPresent();
-        Assert.assertEquals(Boolean.FALSE, controlSum);
-    }
 }

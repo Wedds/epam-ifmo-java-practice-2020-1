@@ -5,7 +5,6 @@ import com.ifmo.epampractice.entity.Tests;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Optional;
 import java.sql.Date;
 
@@ -35,7 +34,122 @@ public class TestsDAOTest {
     private static final int MAX_ATTEMPTS_UPDATE = 2;
     private static final Date DEADLINE_UPDATE = Date.valueOf("2021-04-01");
     private static final int TIME_LIMIT_UPDATE = 30;
+    private static final int GROUP_ID_UPDATE = 4;
 
+    @Test
+    public void testAddObject() {
+        boolean controlSum;
+        Tests test = createTestsObject();
+        test = TEST_DAO.addObject(test);
+        controlSum = TEST_DAO.getById(test.getId()).isPresent();
+        Assert.assertEquals(Boolean.TRUE, controlSum);
+        TEST_DAO.removeById(test.getId());
+    }
+
+    @Test
+    public void testAddTestsWithGroupsTests() {
+        Tests test = createTestForGroupObject();
+        test = TEST_DAO.addTestsWithGroupsTests(test);
+        Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(test.getId(), test.getGroupId());
+        Assert.assertEquals(Boolean.TRUE, testOptional.isPresent());
+        TEST_DAO.removeById(test.getId());
+    }
+
+    @Test
+    public void testAddGroupsTests() {
+        boolean controlSum;
+        Tests test = createTestForGroupObject();
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addGroupsTests(test);
+        controlSum = TEST_DAO.getObjectByTestAndGroupId(test.getId(), test.getGroupId()).isPresent();
+        Assert.assertEquals(Boolean.TRUE, controlSum);
+        TEST_DAO.removeById(test.getId());
+    }
+
+    @Test
+    public void testGetById() {
+        Tests test = createTestsObject();
+        test = TEST_DAO.addObject(test);
+        Optional<Tests> testOptional = TEST_DAO.getById(test.getId());
+        Tests receivedTest = new Tests();
+        if (testOptional.isPresent()) {
+            receivedTest = testOptional.get();
+        }
+        Assert.assertEquals(Boolean.TRUE, receivedTest.equals(test));
+        TEST_DAO.removeById(test.getId());
+    }
+
+    @Test
+    public void testGetAll() {
+        int wasElements = TEST_DAO.getAll().size();
+        Tests test = createTestsObject();
+        test = TEST_DAO.addObject(test);
+        Assert.assertEquals(wasElements+1, TEST_DAO.getAll().size());
+        TEST_DAO.removeById(test.getId());
+    }
+
+    @Test
+    public void testGetAllTestsForGroupsByGroupId() {
+        int wasElements = TEST_DAO.getAllTestsForGroupsByGroupId(1).size();
+        Tests test = createTestForGroupObject();
+        test = TEST_DAO.addTestsWithGroupsTests(test);
+        Assert.assertEquals(wasElements+1, TEST_DAO.getAllTestsForGroupsByGroupId(1).size());
+        TEST_DAO.removeById(test.getId());
+    }
+
+    @Test
+    public void testGetAllTestsForGroupsByTestId() {
+        Tests test = createTestForGroupObject();
+        test = TEST_DAO.addTestsWithGroupsTests(test);
+        Tests groupsTests = fillTestsForGroup(test);
+        int wasElements = TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size();
+        TEST_DAO.addGroupsTests(groupsTests);
+        Assert.assertEquals(wasElements+1, TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size());
+        TEST_DAO.removeById(test.getId());
+    }
+
+    @Test
+    public void testUpdateByObject() {
+        Tests testBeforeUpdate = createTestForGroupObject();
+        testBeforeUpdate = TEST_DAO.addTestsWithGroupsTests(testBeforeUpdate);
+        int testId = testBeforeUpdate.getId();
+        Tests testForUpdate = createGroupsTestsObjectForUpdate();
+        testForUpdate.setId(testId);
+        TEST_DAO.updateByObject(testForUpdate);
+        Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(testId, testBeforeUpdate.getGroupId());
+        Tests controlTest = new Tests();
+        if (testOptional.isPresent()) {
+            controlTest = testOptional.get();
+        }
+        Assert.assertEquals(Boolean.TRUE, controlTest.equals(testForUpdate));
+        TEST_DAO.removeById(testForUpdate.getId());
+    }
+
+    @Test
+    public void testRemoveById() {
+        boolean controlSum;
+        Tests test = createTestForGroupObject();
+        test = TEST_DAO.addTestsWithGroupsTests(test);
+        int id = test.getId();
+        TEST_DAO.removeById(id);
+        controlSum = TEST_DAO.getById(id).isPresent() | !(TEST_DAO.getAllTestsForGroupsByTestId(id).isEmpty());
+        Assert.assertEquals(Boolean.FALSE, controlSum);
+    }
+
+    @Test
+    public void testFillObjectByGroupId() {
+        Tests testForInsert = createGroupsTestsObjectForUpdate();
+        Tests testForCheck = TEST_DAO.addTestsWithGroupsTests(testForInsert);
+        testForCheck = TEST_DAO.fillObjectByGroupId(testForCheck, testForInsert.getGroupId());
+
+        Optional<Tests> controlTestOptional =
+                TEST_DAO.getObjectByTestAndGroupId(testForCheck.getId(), testForCheck.getGroupId());
+        Tests controlTest = new Tests();
+        if (controlTestOptional.isPresent()) {
+            controlTest = controlTestOptional.get();
+        }
+        Assert.assertEquals(Boolean.TRUE, controlTest.equals(testForCheck));
+    }
 
     public Tests createTestsObject() {
         Tests test = new Tests();
@@ -49,9 +163,18 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests createGroupsTestsObject() {
+    public Tests createTestForGroupObject() {
         Tests test = createTestsObject();
         test.setGroupId(GROUP_ID);
+        test.setIsNecessary(IS_NECESSARY);
+        test.setMaxAttempts(MAX_ATTEMPTS);
+        test.setDeadline(DEADLINE);
+        test.setTimeLimit(TIME_LIMIT);
+        return test;
+    }
+
+    public Tests fillTestsForGroup(final Tests test) {
+        test.setGroupId(GROUP_ID_UPDATE);
         test.setIsNecessary(IS_NECESSARY);
         test.setMaxAttempts(MAX_ATTEMPTS);
         test.setDeadline(DEADLINE);
@@ -74,121 +197,6 @@ public class TestsDAOTest {
         test.setDeadline(DEADLINE_UPDATE);
         test.setTimeLimit(TIME_LIMIT_UPDATE);
         return test;
-    }
-
-    @Test
-    public void testAddObject() {
-        boolean controlSum;
-        Tests test = createTestsObject();
-        test = TEST_DAO.addObject(test);
-        controlSum = TEST_DAO.getById(test.getId()).isPresent();
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testAddTestsWithGroupsTests() {
-        boolean controlSum;
-        Tests test = createGroupsTestsObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
-        Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(test.getId(), test.getGroupId());
-        if (testOptional.isPresent()) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testAddGroupsTests() {
-        boolean controlSum;
-        Tests test = createGroupsTestsObject();
-        test = TEST_DAO.addObject(test);
-        test = TEST_DAO.addGroupsTests(test);
-        controlSum = TEST_DAO.getObjectByTestAndGroupId(test.getId(), test.getGroupId()).isPresent();
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testGetById() {
-        boolean controlSum;
-        Tests test = createTestsObject();
-        test = TEST_DAO.addObject(test);
-        Optional<Tests> testOptional = TEST_DAO.getById(test.getId());
-        Tests receivedTest = new Tests();
-        if (testOptional.isPresent()) {
-            receivedTest = testOptional.get();
-        }
-        System.out.println(receivedTest);
-        System.out.println(test);
-        if (receivedTest.equals(test)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testGetAll() {
-        Tests test = createTestsObject();
-        test = TEST_DAO.addObject(test);
-        List<Tests> testsList = TEST_DAO.getAll();
-        Assert.assertFalse(testsList.isEmpty());
-    }
-
-    @Test
-    public void testUpdateByObject() {
-        boolean controlSum;
-        Tests testBeforeUpdate = createGroupsTestsObject();
-        testBeforeUpdate = TEST_DAO.addTestsWithGroupsTests(testBeforeUpdate);
-        int testId = testBeforeUpdate.getId();
-        Tests testForUpdate = createGroupsTestsObjectForUpdate();
-        testForUpdate.setId(testId);
-        TEST_DAO.updateByObject(testForUpdate);
-        Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(testId, testBeforeUpdate.getGroupId());
-        Tests controlTest = new Tests();
-        if (testOptional.isPresent()) {
-            controlTest = testOptional.get();
-        }
-        if (controlTest.equals(testForUpdate)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-    }
-
-    @Test
-    public void testRemoveById() {
-        boolean controlSum;
-        Tests test = createGroupsTestsObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
-        int id = test.getId();
-        TEST_DAO.removeById(id);
-        controlSum = TEST_DAO.getById(id).isPresent() | !(TEST_DAO.getAllGroupsTestsByTestId(id).isEmpty());
-        Assert.assertEquals(Boolean.FALSE, controlSum);
-    }
-
-    @Test
-    public void testFillObjectByGroupId() {
-        boolean controlSum;
-        Tests testForInsert = createGroupsTestsObjectForUpdate();
-        Tests testForCheck = TEST_DAO.addTestsWithGroupsTests(testForInsert);
-        testForCheck = TEST_DAO.fillObjectByGroupId(testForCheck, testForInsert.getGroupId());
-
-        Optional<Tests> controlTestOptional =
-                TEST_DAO.getObjectByTestAndGroupId(testForCheck.getId(), testForCheck.getGroupId());
-        Tests controlTest = new Tests();
-        if (controlTestOptional.isPresent()) {
-            controlTest = controlTestOptional.get();
-        }
-        if (controlTest.equals(testForCheck)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
     }
 }
 
