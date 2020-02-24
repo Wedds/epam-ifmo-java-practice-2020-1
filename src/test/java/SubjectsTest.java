@@ -1,7 +1,6 @@
 import com.ifmo.epampractice.entity.Subjects;
 import com.ifmo.epampractice.dao.SubjectsDAO;
 
-import java.util.List;
 import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Test;
