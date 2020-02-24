@@ -5,7 +5,6 @@ import com.ifmo.epampractice.entity.Answers;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -20,25 +19,6 @@ public class AnswersDAOTest {
     private static final boolean IS_CORRECT_UPDATE  = Boolean.FALSE;
     private static final int POINTS_UPDATE  = -2;
 
-
-    public Answers createAnswersObject() {
-        Answers answer = new Answers();
-        answer.setAnswerText(ANSWER_TEXT);
-        answer.setQuestionId(QUESTION_ID);
-        answer.setIsCorrect(IS_CORRECT);
-        answer.setPoints(POINTS);
-        return answer;
-    }
-
-    public Answers createAnswersObjectForUpdate() {
-        Answers answer = new Answers();
-        answer.setAnswerText(ANSWER_TEXT_UPDATE);
-        answer.setQuestionId(QUESTION_ID_UPDATE);
-        answer.setIsCorrect(IS_CORRECT_UPDATE);
-        answer.setPoints(POINTS_UPDATE);
-        return answer;
-    }
-
     @Test
     public void testAddObject() {
         boolean controlSum;
@@ -46,27 +26,29 @@ public class AnswersDAOTest {
         answer = ANSWERS_DAO.addObject(answer);
         controlSum = ANSWERS_DAO.getById(answer.getId()).isPresent();
         Assert.assertEquals(Boolean.TRUE, controlSum);
+        ANSWERS_DAO.removeById(answer.getId());
     }
 
     @Test
     public void testGetAnswersListByQuestionId() {
+        int wasElements = ANSWERS_DAO.getAnswersListByQuestionId(2).size();
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
-        List<Answers> answersList = ANSWERS_DAO.getAnswersListByQuestionId(2);
-        Assert.assertFalse(answersList.isEmpty());
+        Assert.assertEquals(wasElements+1, ANSWERS_DAO.getAnswersListByQuestionId(2).size());
+        ANSWERS_DAO.removeById(answer.getId());
     }
 
     @Test
     public void testGetAll() {
+        int wasElements = ANSWERS_DAO.getAll().size();
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
-        List<Answers> answersList = ANSWERS_DAO.getAll();
-        Assert.assertFalse(answersList.isEmpty());
+        Assert.assertEquals(wasElements+1, ANSWERS_DAO.getAll().size());
+        ANSWERS_DAO.removeById(answer.getId());
     }
 
     @Test
     public void testGetById() {
-        boolean controlSum;
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
         Optional<Answers> answerOptional = ANSWERS_DAO.getById(answer.getId());
@@ -74,17 +56,12 @@ public class AnswersDAOTest {
         if (answerOptional.isPresent()) {
             receivedAnswer = answerOptional.get();
         }
-        if (receivedAnswer.equals(answer)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
+        Assert.assertEquals(Boolean.TRUE, receivedAnswer.equals(answer));
+        ANSWERS_DAO.removeById(answer.getId());
     }
 
     @Test
     public void testUpdateByObject() {
-        boolean controlSum;
         Answers answerBeforeUpdate = createAnswersObject();
         answerBeforeUpdate = ANSWERS_DAO.addObject(answerBeforeUpdate);
         int id = answerBeforeUpdate.getId();
@@ -96,12 +73,8 @@ public class AnswersDAOTest {
         if (answerOptional.isPresent()) {
             controlAnswer = answerOptional.get();
         }
-        if (controlAnswer.equals(answerForUpdate)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
+        Assert.assertEquals(Boolean.TRUE, controlAnswer.equals(answerForUpdate));
+        ANSWERS_DAO.removeById(answerForUpdate.getId());
     }
 
     @Test
@@ -114,5 +87,23 @@ public class AnswersDAOTest {
         controlSum = ANSWERS_DAO.getById(id).isPresent();
         Assert.assertEquals(Boolean.FALSE, controlSum);
         System.out.println();
+    }
+
+    private Answers createAnswersObject() {
+        Answers answer = new Answers();
+        answer.setAnswerText(ANSWER_TEXT);
+        answer.setQuestionId(QUESTION_ID);
+        answer.setIsCorrect(IS_CORRECT);
+        answer.setPoints(POINTS);
+        return answer;
+    }
+
+    private Answers createAnswersObjectForUpdate() {
+        Answers answer = new Answers();
+        answer.setAnswerText(ANSWER_TEXT_UPDATE);
+        answer.setQuestionId(QUESTION_ID_UPDATE);
+        answer.setIsCorrect(IS_CORRECT_UPDATE);
+        answer.setPoints(POINTS_UPDATE);
+        return answer;
     }
 }
