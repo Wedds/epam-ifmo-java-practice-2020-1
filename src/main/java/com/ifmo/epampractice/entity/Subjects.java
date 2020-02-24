@@ -46,8 +46,8 @@ public class Subjects {
             return false;
         }
         Subjects subjects = (Subjects) o;
-        return id == subjects.id &&
-                name.equals(subjects.name);
+        return id == subjects.id
+                && name.equals(subjects.name);
     }
 
     @Override
@@ -57,10 +57,10 @@ public class Subjects {
 
     @Override
     public String toString() {
-        return "Subjects{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", testsList=" + testsList +
-                '}';
+        return "Subjects{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", testsList=" + testsList
+                + '}';
     }
 }

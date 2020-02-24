@@ -31,8 +31,7 @@ public class SubjectsTest {
         subject = SUBJECTS_DAO.addObject(subject);
         controlSum = SUBJECTS_DAO.getById(subject.getId()).isPresent();
         Assert.assertEquals(Boolean.TRUE, controlSum);
-        int id = subject.getId();
-        SUBJECTS_DAO.removeById(id);
+        SUBJECTS_DAO.removeById(subject.getId());
     }
 
     @Test
@@ -79,23 +78,16 @@ public class SubjectsTest {
         if (subjectOptional.isPresent()) {
             receivedAnswer = subjectOptional.get();
         }
-        if (receivedAnswer.equals(subject)) {
-            controlSum = Boolean.TRUE;
-        } else {
-            controlSum = Boolean.FALSE;
-        }
-        Assert.assertEquals(Boolean.TRUE, controlSum);
-        int id = subject.getId();
-        SUBJECTS_DAO.removeById(id);
+        Assert.assertEquals(Boolean.TRUE, receivedAnswer.equals(subject));
+        SUBJECTS_DAO.removeById(subject.getId());
     }
 
     @Test
     public void testGetAll() {
+        int wasElements = SUBJECTS_DAO.getAll().size();
         Subjects subject = createSubjectsObject();
         subject = SUBJECTS_DAO.addObject(subject);
-        List<Subjects> subjectsList = SUBJECTS_DAO.getAll();
-        Assert.assertFalse(subjectsList.isEmpty());
-        int id = subject.getId();
-        SUBJECTS_DAO.removeById(id);
+        Assert.assertEquals(wasElements+1, SUBJECTS_DAO.getAll().size());
+        SUBJECTS_DAO.removeById(subject.getId());
     }
 }
