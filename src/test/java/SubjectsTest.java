@@ -31,6 +31,8 @@ public class SubjectsTest {
         subject = SUBJECTS_DAO.addObject(subject);
         controlSum = SUBJECTS_DAO.getById(subject.getId()).isPresent();
         Assert.assertEquals(Boolean.TRUE, controlSum);
+        int id = subject.getId();
+        SUBJECTS_DAO.removeById(id);
     }
 
     @Test
@@ -53,6 +55,7 @@ public class SubjectsTest {
             controlSum = Boolean.FALSE;
         }
         Assert.assertEquals(Boolean.TRUE, controlSum);
+        SUBJECTS_DAO.removeById(id);
     }
 
     @Test
@@ -82,6 +85,8 @@ public class SubjectsTest {
             controlSum = Boolean.FALSE;
         }
         Assert.assertEquals(Boolean.TRUE, controlSum);
+        int id = subject.getId();
+        SUBJECTS_DAO.removeById(id);
     }
 
     @Test
@@ -90,5 +95,7 @@ public class SubjectsTest {
         subject = SUBJECTS_DAO.addObject(subject);
         List<Subjects> subjectsList = SUBJECTS_DAO.getAll();
         Assert.assertFalse(subjectsList.isEmpty());
+        int id = subject.getId();
+        SUBJECTS_DAO.removeById(id);
     }
 }

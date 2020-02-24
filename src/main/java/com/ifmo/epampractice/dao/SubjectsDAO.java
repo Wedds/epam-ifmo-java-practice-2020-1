@@ -25,7 +25,6 @@ public class SubjectsDAO implements DAO<Subjects> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
-            //preparedStatement.setInt(1, subject.getId());
             preparedStatement.setString(1, subject.getName());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -66,7 +65,6 @@ public class SubjectsDAO implements DAO<Subjects> {
     @Override
     public Optional<Subjects> getById(final int id) {
         Subjects subject = new Subjects();
-        subject.setId(id);
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -74,6 +72,7 @@ public class SubjectsDAO implements DAO<Subjects> {
             if (!resultSet.next()) {
                 return Optional.empty();
             }
+            subject.setId(id);
             subject.setName(resultSet.getString("name"));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,10 +84,10 @@ public class SubjectsDAO implements DAO<Subjects> {
     public void updateByObject(final Subjects subject) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
+            preparedStatement.setString(1, subject.getName());
             if (subject.getId() != 0) {
-                preparedStatement.setInt(1, subject.getId());
+                preparedStatement.setInt(2, subject.getId());
             }
-            preparedStatement.setString(2, subject.getName());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new IllegalArgumentException("Update subject failed, no rows affected.");
@@ -102,7 +101,7 @@ public class SubjectsDAO implements DAO<Subjects> {
     public void removeById(final int id) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
-            //preparedStatement.setInt(1, id);
+            preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new IllegalArgumentException("Remove subject failed, no rows affected.");
