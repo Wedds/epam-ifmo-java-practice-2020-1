@@ -25,6 +25,7 @@ public class TestsService {
         //createdAt надо ли проверять на null? Или ее отдельно с сообщением вынести? Зависит ведь не от пользователя
         if (nullableSubjectId == null || nullableTitle == null || nullableIsRandom == null
                 || nullableMaxPoints == null || nullableCreatorId == null || nullableCreatedAt == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
 
@@ -42,6 +43,7 @@ public class TestsService {
             }
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of some parameters");
+            throw new IllegalArgumentException("Incorrect format of parameters");
         }
 
         return new Tests();
@@ -59,6 +61,7 @@ public class TestsService {
 
         if (nullableGroupId == null || nullableIsNecessary == null || nullableMaxAttempts == null
                 || nullableDeadline == null || nullableTimeLimit == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
 
@@ -70,6 +73,7 @@ public class TestsService {
             test.setTimeLimit(Integer.parseInt(nullableTimeLimit));
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of some parameters");
+            throw new IllegalArgumentException("Incorrect format of parameters");
         }
 
         return new Tests();
@@ -101,17 +105,20 @@ public class TestsService {
         final String nullableTestId = request.getParameter("testId");
         List<Tests> testsList = new ArrayList<>();
         if (nullableTestId == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
 
         try {
             int testId = Integer.parseInt(nullableTestId);
             if (!TESTS_DAO.getById(testId).isPresent()) {
+                System.err.println("Test doesn't exist");
                 throw new IllegalArgumentException("This test doesn't exist");
             }
             testsList = TESTS_DAO.getAllTestsForGroupsByTestId(testId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of test id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
 
         return testsList;
@@ -121,6 +128,7 @@ public class TestsService {
         final String nullableTestId = request.getParameter("groupId");
         List<Tests> testsList = new ArrayList<>();
         if (nullableTestId == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
 
@@ -132,6 +140,7 @@ public class TestsService {
             testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of group id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
 
         return testsList;
@@ -141,6 +150,7 @@ public class TestsService {
         final String nullableTestId = request.getParameter("testId");
         Tests test = new Tests();
         if (nullableTestId == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
 
@@ -148,11 +158,13 @@ public class TestsService {
             int testId = Integer.parseInt(nullableTestId);
             Optional<Tests> testsOptional = TESTS_DAO.getById(testId);
             if (!testsOptional.isPresent()) {
+                System.err.println("Test doesn't exist");
                 throw new IllegalArgumentException("This test doesn't exist");
             }
             test = testsOptional.get();
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of test id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
         return test;
     }
@@ -162,6 +174,7 @@ public class TestsService {
         final String nullableGroupId = request.getParameter("groupId");
         Tests test = new Tests();
         if (nullableTestId == null || nullableGroupId == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
 
@@ -171,11 +184,13 @@ public class TestsService {
             Optional<Tests> testsOptional = TESTS_DAO.getObjectByTestAndGroupId(testId, groupId);
             // Пороверяем по тесту и по группе
             if (!testsOptional.isPresent()) {
+                System.err.println("Test doesn't exist");
                 throw new IllegalArgumentException("This test doesn't exist");
             }
             test = testsOptional.get();
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
         return test;
     }
@@ -191,19 +206,22 @@ public class TestsService {
     }
 
     public void removeTestById(final HttpServletRequest request) {
-        final String nullableTestId = request.getParameter("testId");
+        final String nullableTestId = request.getParameter("id");
 
         if (nullableTestId == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
         try {
             int testId = Integer.parseInt(nullableTestId);
             if (!TESTS_DAO.getById(testId).isPresent()) {
+                System.err.println("Test doesn't exist");
                 throw new IllegalArgumentException("This test doesn't exist");
             }
             TESTS_DAO.removeById(testId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of test id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
     }
 
@@ -211,17 +229,20 @@ public class TestsService {
         final String nullableTestId = request.getParameter("testId");
 
         if (nullableTestId == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
         try {
             int testId = Integer.parseInt(nullableTestId);
             //Проверяем на группу и тест
             if (!TESTS_DAO.getById(testId).isPresent()) {
+                System.err.println("Test doesn't exist");
                 throw new IllegalArgumentException("This test doesn't exist");
             }
             TESTS_DAO.removeGroupsTestsByTestId(testId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of test id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
     }
 
@@ -229,6 +250,7 @@ public class TestsService {
         final String nullableGroupId = request.getParameter("groupId");
 
         if (nullableGroupId == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
         try {
@@ -237,6 +259,7 @@ public class TestsService {
             TESTS_DAO.removeGroupsTestsByTestId(groupId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of group id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
     }
 
@@ -245,6 +268,7 @@ public class TestsService {
         final String nullableGroupId = request.getParameter("groupId");
 
         if (nullableGroupId == null || nullableTestId == null) {
+            System.err.println("Test parameter is missing");
             throw new IllegalArgumentException("Parameter is missing");
         }
         try {
@@ -252,12 +276,31 @@ public class TestsService {
             int testId = Integer.parseInt(nullableTestId);
             //Проверяем на группу и тест
             if (!TESTS_DAO.getById(testId).isPresent()) {
+                System.err.println("Test doesn't exist");
                 throw new IllegalArgumentException("This test doesn't exist");
             }
             TESTS_DAO.removeGroupsTestsByTestAndGroupId(testId, groupId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
     }
 
+    public Boolean ifTestObjectExist(final HttpServletRequest request) {
+        final String nullableId = request.getParameter("id");
+        if (nullableId == null) {
+            System.err.println("Test parameter is missing");
+            throw new IllegalArgumentException("Parameter is missing");
+        }
+
+        try {
+            if (TESTS_DAO.getById(Integer.parseInt(nullableId)).isPresent()) {
+                return Boolean.TRUE;
+            }
+            return Boolean.FALSE;
+        } catch (NumberFormatException e) {
+            System.err.println("Incorrect format of test id");
+            throw new IllegalArgumentException("Incorrect format of id");
+        }
+    }
 }
