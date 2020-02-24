@@ -8,17 +8,19 @@ import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class testCRUD {
+public class TestGroups {
     @Test
-    public void main() throws Exception{
+    public void TestCRUD() throws Exception{
         /* Initialization & Setting expected values*/
+        final int year2017 = 2017;
+        final int year2020 = 2020;
         Groups expectedGroup1 = new Groups();
         expectedGroup1.setId(1);
         expectedGroup1.setName("K3120");
-        expectedGroup1.setCreatedAt(Date.valueOf(LocalDate.of(2020, 1, 3)));
+        expectedGroup1.setCreatedAt(Date.valueOf(LocalDate.of(year2020, 1, 3)));
         Groups expectedGroup2 = new Groups();
         expectedGroup2.setName("AAA");
-        expectedGroup2.setCreatedAt(Date.valueOf(LocalDate.of(2017, 10, 10)));
+        expectedGroup2.setCreatedAt(Date.valueOf(LocalDate.of(year2017, 10, 10)));
         Groups realGroup1 = null;
         Groups realGroup2 = null;
         GroupsDAO groupDao = new GroupsDAO();
