@@ -33,7 +33,10 @@ public class TestsDAO implements DAO<Tests> {
     private static final String UPDATE_GROUPS_TESTS_QUERY = "UPDATE GROUPS_TESTS SET is_necessary=?, " +
             "max_attempts=?, deadline=?, time_limit = ? WHERE test_id=? AND group_id=?";
     private static final String REMOVE_QUERY = "DELETE FROM TESTS WHERE id=?";
-    private static final String REMOVE_GROUPS_TESTS_QUERY = "DELETE FROM GROUPS_TESTS WHERE test_id=?";
+    private static final String REMOVE_GROUPS_TESTS_BY_TEST_ID_QUERY = "DELETE FROM GROUPS_TESTS WHERE test_id=?";
+    private static final String REMOVE_GROUPS_TESTS_BY_GROUP_ID_QUERY = "DELETE FROM GROUPS_TESTS WHERE group_id=?";
+    private static final String REMOVE_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY = "DELETE FROM GROUPS_TESTS " +
+            "WHERE test_id=? AND group_id=?";
 
     @Override
     public Tests addObject(final Tests test) {
@@ -237,7 +240,7 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatement.setInt(1, id);
             List<Tests> groupsTestsList = getAllTestsForGroupsByTestId(id);
             if (!groupsTestsList.isEmpty()) {
-                removeGroupsTestsById(id);
+                removeGroupsTestsByTestId(id);
             }
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -248,9 +251,32 @@ public class TestsDAO implements DAO<Tests> {
         }
     }
 
-    public void removeGroupsTestsById(final int id) {
+    public void removeGroupsTestsByTestId(final int id) {
+        removeGroupsTests(id, REMOVE_GROUPS_TESTS_BY_TEST_ID_QUERY);
+    }
+
+    public void removeGroupsTestsByGroupId(final int id) {
+        removeGroupsTests(id, REMOVE_GROUPS_TESTS_BY_GROUP_ID_QUERY);
+    }
+
+    public void removeGroupsTestsByTestAndGroupId(final int testId, final int groupId) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_GROUPS_TESTS_QUERY)) {
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(REMOVE_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
+            preparedStatement.setInt(1, testId);
+            preparedStatement.setInt(2, groupId);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new IllegalArgumentException("Remove groups_tests failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void removeGroupsTests(final int id, final String query) {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, id);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
