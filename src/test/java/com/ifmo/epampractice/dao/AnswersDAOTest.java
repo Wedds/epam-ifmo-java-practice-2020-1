@@ -86,7 +86,6 @@ public class AnswersDAOTest {
         ANSWERS_DAO.removeById(id);
         controlSum = ANSWERS_DAO.getById(id).isPresent();
         Assert.assertEquals(Boolean.FALSE, controlSum);
-        System.out.println();
     }
 
     private Answers createAnswersObject() {
