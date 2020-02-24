@@ -26,6 +26,8 @@ public class TestsDAO implements DAO<Tests> {
             "is_necessary, max_attempts, deadline, time_limit FROM GROUPS_TESTS WHERE test_id=? AND group_id=?";
     private static final String SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY = "SELECT test_id, group_id, is_necessary," +
             "max_attempts, deadline, time_limit FROM GROUPS_TESTS WHERE test_id=?";
+    private static final String SELECT_ALL_GROUPS_TESTS_BY_GROUP_ID_QUERY = "SELECT test_id, group_id, is_necessary," +
+            "max_attempts, deadline, time_limit FROM GROUPS_TESTS WHERE group_id=?";
     private static final String UPDATE_TESTS_QUERY = "UPDATE TESTS SET title=?, description=?, " +
             "subject_id=?, is_random=?, created_at=?, max_points = ?, creator_id=? WHERE id=?";
     private static final String UPDATE_GROUPS_TESTS_QUERY = "UPDATE GROUPS_TESTS SET is_necessary=?, " +
@@ -90,6 +92,51 @@ public class TestsDAO implements DAO<Tests> {
         return testsList;
     }
 
+    public List<Tests> getAllTestsForGroupsByTestId(final int testId) {
+        List<Tests> groupsTestsList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY)) {
+            preparedStatement.setInt(1, testId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Optional<Tests> testOptional = getById(testId);
+                Tests test = new Tests();
+                if (testOptional.isPresent()) {
+                    test = testOptional.get();
+                }
+                fillTestForGroupObjectFromResultSet(test, resultSet);
+                groupsTestsList.add(test);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return groupsTestsList;
+    }
+
+    public List<Tests> getAllTestsForGroupsByGroupId(final int groupId) {
+        List<Tests> groupsTestsList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(SELECT_ALL_GROUPS_TESTS_BY_GROUP_ID_QUERY)) {
+            preparedStatement.setInt(1, groupId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int testId = resultSet.getInt("test_id");
+                Optional<Tests> testOptional = getById(testId);
+                Tests test = new Tests();
+                if (testOptional.isPresent()) {
+                    test = testOptional.get();
+                }
+                fillTestForGroupObjectFromResultSet(test, resultSet);
+                groupsTestsList.add(test);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return groupsTestsList;
+    }
+
     @Override
     public Optional<Tests> getById(final int id) {
         Tests test = new Tests();
@@ -107,25 +154,6 @@ public class TestsDAO implements DAO<Tests> {
         return Optional.of(test);
     }
 
-    public List<Tests> getAllGroupsTestsByTestId(final int id) {
-        List<Tests> groupsTestsList = new ArrayList<>();
-        try (Connection connection = DatabaseSource.getInstance().getConnection();
-             PreparedStatement preparedStatement =
-                     connection.prepareStatement(SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY)) {
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Tests test = new Tests();
-                fillTestForGroupObjectFromResultSet(test, resultSet);
-                groupsTestsList.add(test);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return groupsTestsList;
-    }
-
-
     public Optional<Tests> getObjectByTestAndGroupId(final int testId, final int groupId) {
         Tests test = new Tests();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
@@ -133,7 +161,6 @@ public class TestsDAO implements DAO<Tests> {
              PreparedStatement preparedStatementGroup =
                      connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
             preparedStatementTest.setInt(1, testId);
-            System.out.println(preparedStatementTest);
             ResultSet resultSetTest = preparedStatementTest.executeQuery();
             if (!resultSetTest.next()) {
                 return Optional.empty();
@@ -208,7 +235,7 @@ public class TestsDAO implements DAO<Tests> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
-            List<Tests> groupsTestsList = getAllGroupsTestsByTestId(id);
+            List<Tests> groupsTestsList = getAllTestsForGroupsByTestId(id);
             if (!groupsTestsList.isEmpty()) {
                 removeGroupsTestsById(id);
             }
