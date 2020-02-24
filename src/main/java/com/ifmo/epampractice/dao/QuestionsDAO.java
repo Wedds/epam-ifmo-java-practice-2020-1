@@ -157,7 +157,7 @@ public class QuestionsDAO implements DAO<Questions> {
         }
     }
 
-    private QuestionType getQuestionTypeFromString(final String questionTypeString) {
+    public QuestionType getQuestionTypeFromString(final String questionTypeString) {
         if (questionTypeString.equals("checkbox")) {
             return QuestionType.CHECKBOX;
         } else {
