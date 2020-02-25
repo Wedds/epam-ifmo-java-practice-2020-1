@@ -1,39 +1,5 @@
-DROP DATABASE IF EXISTS testing_system_db_test;
-CREATE DATABASE testing_system_db_test;
-
-DO
-$$
-    BEGIN
-        IF EXISTS(SELECT FROM pg_user WHERE usename = 'evangelion') THEN
-            RAISE NOTICE 'User evangelion already exists';
-        ELSE
-            CREATE USER evangelion WITH encrypted PASSWORD '12345';
-            GRANT all privileges ON DATABASE testing_system_db TO evangelion;
-            ALTER USER evangelion WITH SUPERUSER;
-        END IF;
-    END
-$$;
-
-
-\c testing_system_db_test;
-
-DO
-$$
-    BEGIN
-        IF NOT EXISTS(SELECT 1 FROM pg_type WHERE typname = 'roles') THEN
-            create type roles AS ENUM ('admin', 'moderator', 'teacher', 'student');
-        ELSE
-            RAISE NOTICE 'Type roles already exists';
-        END IF;
-
-        IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'types') THEN
-            create type types AS ENUM ('checkbox', 'radiobutton');
-        ELSE
-            RAISE NOTICE 'Type types already exists';
-        END IF;
-    END
-$$;
-
+create type roles AS ENUM ('admin', 'moderator', 'teacher', 'student');
+create type types AS ENUM ('checkbox', 'radiobutton');
 
 CREATE TABLE IF NOT EXISTS "subjects"
 (
