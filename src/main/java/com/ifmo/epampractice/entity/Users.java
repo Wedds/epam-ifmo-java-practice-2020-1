@@ -3,6 +3,7 @@ package com.ifmo.epampractice.entity;
 import com.ifmo.epampractice.enums.Roles;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +19,7 @@ public class Users {
     private String middleName;
     private Date birthDate;
     private String workTitle;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private String avatar;
     private int groupId;
     private List<Tests> testsList;
@@ -125,11 +126,11 @@ public class Users {
         this.workTitle = workTitle;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(final Date createdAt) {
+    public void setCreatedAt(final LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -159,21 +160,21 @@ public class Users {
             return false;
         }
         Users users = (Users) o;
-        return id == users.id 
-            && groupId == users.groupId 
-            && roleType.equals(users.roleType) 
-            && email.equals(users.email) 
-            && hash.equals(users.hash) 
-            && salt.equals(users.salt) 
-            && firstName.equals(users.firstName) 
-            && lastName.equals(users.lastName) 
-            && middleName.equals(users.middleName) 
-            && birthDate.equals(users.birthDate) 
-            && workTitle.equals(users.workTitle) 
-            && createdAt.toLocalDate().equals(users.createdAt.toLocalDate())
-            && avatar.equals(users.avatar) 
-            && testsList.equals(users.testsList) 
-            && attemptsList.equals(users.attemptsList);
+        return id == users.id
+                && groupId == users.groupId
+                && roleType.equals(users.roleType)
+                && email.equals(users.email)
+                && hash.equals(users.hash)
+                && salt.equals(users.salt)
+                && firstName.equals(users.firstName)
+                && lastName.equals(users.lastName)
+                && middleName.equals(users.middleName)
+                && birthDate.equals(users.birthDate)
+                && workTitle.equals(users.workTitle)
+                && createdAt.equals(users.createdAt)
+                && avatar.equals(users.avatar)
+                && testsList.equals(users.testsList)
+                && attemptsList.equals(users.attemptsList);
     }
 
     @Override
@@ -199,22 +200,22 @@ public class Users {
 
     @Override
     public String toString() {
-        return "Users{" 
-            + "id=" + id 
-            + ", roleType=" + roleType 
-            + ", email='" + email + '\'' 
-            + ", hash='" + hash + '\'' 
-            + ", salt='" + salt + '\'' 
-            + ", firstName='" + firstName + '\'' 
-            + ", lastName='" + lastName + '\'' 
-            + ", middleName='" + middleName + '\'' 
-            + ", birthDate=" + birthDate 
-            + ", workTitle='" + workTitle + '\'' 
-            + ", createdAt=" + createdAt 
-            + ", avatar='" + avatar + '\'' 
-            + ", groupId=" + groupId 
-            + ", testsList=" + testsList 
-            + ", attemptsList=" + attemptsList 
-            + '}';
+        return "Users{"
+                + "id=" + id
+                + ", roleType=" + roleType
+                + ", email='" + email + '\''
+                + ", hash='" + hash + '\''
+                + ", salt='" + salt + '\''
+                + ", firstName='" + firstName + '\''
+                + ", lastName='" + lastName + '\''
+                + ", middleName='" + middleName + '\''
+                + ", birthDate=" + birthDate
+                + ", workTitle='" + workTitle + '\''
+                + ", createdAt=" + createdAt
+                + ", avatar='" + avatar + '\''
+                + ", groupId=" + groupId
+                + ", testsList=" + testsList
+                + ", attemptsList=" + attemptsList
+                + '}';
     }
 }

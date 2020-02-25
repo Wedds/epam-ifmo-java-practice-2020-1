@@ -1,6 +1,6 @@
 package com.ifmo.epampractice.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Groups {
     private int id;
     private String name;
-    private Date createdAt;
+    private LocalDateTime createdAt;
     private List<Users> usersList;
     private List<Tests> testsList;
 
@@ -34,11 +34,11 @@ public class Groups {
         this.name = name;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(final Date createdAt) {
+    public void setCreatedAt(final LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -69,7 +69,7 @@ public class Groups {
         Groups groups = (Groups) o;
         return id == groups.id
                 && name.equals(groups.name)
-                && createdAt.toLocalDate().equals(groups.createdAt.toLocalDate())
+                && createdAt.equals(groups.createdAt)
                 && Objects.equals(usersList, groups.usersList)
                 && Objects.equals(testsList, groups.testsList);
     }

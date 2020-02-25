@@ -1,26 +1,33 @@
-import com.ifmo.epampractice.entity.Groups;
-import com.ifmo.epampractice.dao.GroupsDAO;
+package com.ifmo.epampractice.dao;
 
-import java.sql.Date;
+import com.ifmo.epampractice.entity.Groups;
+
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
-import java.time.LocalDate;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestGroups {
+public class GroupsDAOTest {
     @Test
-    public void testCRUD() throws Exception{
+    public void testCRUD() throws Exception {
         /* Initialization & Setting expected values*/
         final int year2017 = 2017;
         final int year2020 = 2020;
+        final int day19 = 19;
+        final int day17 = 17;
+        final int hour13 = 13;
+        final int minute10 = 10;
+        final int seconds50 = 50;
         Groups expectedGroup1 = new Groups();
         expectedGroup1.setId(1);
         expectedGroup1.setName("K3120");
-        expectedGroup1.setCreatedAt(Date.valueOf(LocalDate.of(year2020, 1, 3)));
+        expectedGroup1.setCreatedAt(LocalDateTime.of(year2020, Month.DECEMBER, day19, hour13, minute10, seconds50));
         Groups expectedGroup2 = new Groups();
         expectedGroup2.setName("AAA");
-        expectedGroup2.setCreatedAt(Date.valueOf(LocalDate.of(year2017, 10, 10)));
+        expectedGroup2.setCreatedAt(LocalDateTime.of(year2017, Month.NOVEMBER, day17, hour13, minute10, seconds50));
         Groups realGroup1 = null;
         Groups realGroup2 = null;
         GroupsDAO groupDao = new GroupsDAO();

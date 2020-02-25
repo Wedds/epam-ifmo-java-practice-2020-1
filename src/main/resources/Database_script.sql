@@ -42,29 +42,29 @@ $$;
 CREATE TABLE IF NOT EXISTS "subjects"
 (
     "id"   SERIAL PRIMARY KEY,
-    "name" varchar UNIQUE
+    "name" varchar UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "groups"
 (
     "id"         SERIAL PRIMARY KEY,
-    "name"       varchar UNIQUE,
-    "created_at" Date
+    "name"       varchar UNIQUE  NOT NULL,
+    "created_at" timestamp NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "users"
 (
     "id"          SERIAL PRIMARY KEY,
-    "role_type"   roles,
-    "email"       varchar,
-    "hash"        varchar,
-    "salt"        varchar,
-    "first_name"  varchar,
-    "last_name"   varchar,
+    "role_type"   roles NOT NULL ,
+    "email"       varchar NOT NULL ,
+    "hash"        varchar NOT NULL ,
+    "salt"        varchar NOT NULL ,
+    "first_name"  varchar NOT NULL ,
+    "last_name"   varchar NOT NULL ,
     "middle_name" varchar,
-    "birth_date"  date,
+    "birth_date"  date NOT NULL ,
     "work_title"  varchar,
-    "created_at"  Date,
+    "created_at"  timestamp NOT NULL ,
     "avatar"      varchar,
     "group_id"    int REFERENCES "groups" ("id")
 );
@@ -74,22 +74,22 @@ CREATE TABLE IF NOT EXISTS "users"
 CREATE TABLE IF NOT EXISTS "tests"
 (
     "id"          SERIAL PRIMARY KEY,
-    "title"       varchar,
+    "title"       varchar NOT NULL ,
     "description" varchar,
-    "subject_id"  int REFERENCES "subjects" ("id"),
-    "is_random"   boolean,
-    "created_at"  Date,
-    "max_points"  int,
-    "creator_id"  int
+    "subject_id"  int REFERENCES "subjects" ("id") NOT NULL ,
+    "is_random"   boolean NOT NULL ,
+    "created_at"  timestamp NOT NULL ,
+    "max_points"  int NOT NULL ,
+    "creator_id"  int NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "groups_tests"
 (
-    "test_id"      int REFERENCES "tests" ("id"),
-    "group_id"     int REFERENCES "groups" ("id"),
-    "is_necessary" boolean,
-    "max_attempts" int DEFAULT 3,
-    "deadline"     Date,
+    "test_id"      int REFERENCES "tests" ("id") NOT NULL ,
+    "group_id"     int REFERENCES "groups" ("id") NOT NULL ,
+    "is_necessary" boolean NOT NULL ,
+    "max_attempts" int,
+    "deadline"     timestamp,
     "time_limit"   int,
     PRIMARY KEY ("test_id", "group_id")
 );
@@ -97,28 +97,28 @@ CREATE TABLE IF NOT EXISTS "groups_tests"
 CREATE TABLE IF NOT EXISTS "questions"
 (
     "id"            SERIAL PRIMARY KEY,
-    "question_type" types,
+    "question_type" types NOT NULL ,
     "title"         varchar,
     "image"         varchar,
-    "question_text" varchar,
-    "test_id"       int REFERENCES "tests" ("id")
+    "question_text" varchar NOT NULL ,
+    "test_id"       int REFERENCES "tests" ("id") NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "answers"
 (
     "id"          SERIAL PRIMARY KEY,
     "image"       varchar,
-    "answer_text" varchar,
-    "question_id" int REFERENCES "questions" ("id"),
-    "is_correct"  boolean,
-    "points"      int
+    "answer_text" varchar NOT NULL ,
+    "question_id" int REFERENCES "questions" ("id") NOT NULL ,
+    "is_correct"  boolean NOT NULL ,
+    "points"      int NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "attempts"
 (
     "id"           SERIAL PRIMARY KEY,
-    "test_id"      int REFERENCES "tests" ("id"),
-    "user_id"      int REFERENCES "users" ("id"),
-    "score"        int,
-    "passing_date" Date
+    "test_id"      int REFERENCES "tests" ("id") NOT NULL ,
+    "user_id"      int REFERENCES "users" ("id") NOT NULL ,
+    "score"        int NOT NULL ,
+    "passing_date" timestamp NOT NULL
 );

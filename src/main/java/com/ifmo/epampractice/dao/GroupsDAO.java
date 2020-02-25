@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +24,10 @@ public class GroupsDAO implements DAO<Groups> {
     @Override
     public Groups addObject(final Groups group) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(ADD_QUERY,
-                        Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_QUERY,
+                     Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, group.getName());
-            preparedStatement.setDate(2, group.getCreatedAt());
+            preparedStatement.setObject(2, group.getCreatedAt());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new RuntimeException("No group has been added");
@@ -49,7 +50,7 @@ public class GroupsDAO implements DAO<Groups> {
         List<Groups> groupsList = new ArrayList<>();
 
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-                Statement statement = connection.createStatement()) {
+             Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(GET_ALL_QUERY);
 
             while (resultSet.next()) {
@@ -57,7 +58,7 @@ public class GroupsDAO implements DAO<Groups> {
 
                 group.setId(resultSet.getInt("id"));
                 group.setName(resultSet.getString("name"));
-                group.setCreatedAt(resultSet.getDate("created_at"));
+                group.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
                 groupsList.add(group);
             }
         } catch (SQLException e) {
@@ -71,7 +72,7 @@ public class GroupsDAO implements DAO<Groups> {
         Groups group = new Groups();
 
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
@@ -79,7 +80,7 @@ public class GroupsDAO implements DAO<Groups> {
             }
             group.setId(id);
             group.setName(resultSet.getString("name"));
-            group.setCreatedAt(resultSet.getDate("created_at"));
+            group.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -89,9 +90,9 @@ public class GroupsDAO implements DAO<Groups> {
     @Override
     public void updateByObject(final Groups group) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             preparedStatement.setString(1, group.getName());
-            preparedStatement.setDate(2, group.getCreatedAt());
+            preparedStatement.setObject(2, group.getCreatedAt());
             preparedStatement.setInt(3, group.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -102,7 +103,7 @@ public class GroupsDAO implements DAO<Groups> {
     @Override
     public void removeById(final int id) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_QUERY)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

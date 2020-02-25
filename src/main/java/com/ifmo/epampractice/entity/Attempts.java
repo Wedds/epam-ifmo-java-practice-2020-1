@@ -1,6 +1,6 @@
 package com.ifmo.epampractice.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Attempts {
@@ -8,7 +8,7 @@ public class Attempts {
     private int testId;
     private int userId;
     private int score;
-    private Date passingDate;
+    private LocalDateTime passingDate;
 
     public int getTestId() {
         return testId;
@@ -42,11 +42,11 @@ public class Attempts {
         this.score = score;
     }
 
-    public Date getPassingDate() {
+    public LocalDateTime getPassingDate() {
         return passingDate;
     }
 
-    public void setPassingDate(final Date passingDate) {
+    public void setPassingDate(final LocalDateTime passingDate) {
         this.passingDate = passingDate;
     }
 
@@ -63,7 +63,7 @@ public class Attempts {
                 && testId == attempts.testId
                 && userId == attempts.userId
                 && score == attempts.score
-                && passingDate.toLocalDate().equals(attempts.passingDate.toLocalDate());
+                && passingDate.equals(attempts.passingDate);
     }
 
     @Override
