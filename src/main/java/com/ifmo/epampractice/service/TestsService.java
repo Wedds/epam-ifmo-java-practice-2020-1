@@ -30,6 +30,8 @@ public class TestsService {
         }
 
         try {
+
+            // проверка на Subject и Creator
             test.setTitle(nullableTitle.trim());
             test.setDescription(nullableDescription.trim());
             test.setCreatedAt(Date.valueOf(nullableCreatedAt));
@@ -52,6 +54,8 @@ public class TestsService {
     public Tests getTestForGroupFromRequest(final HttpServletRequest request) {
 
         Tests test = getTestFromRequest(request);
+
+        // Проверка на Group
         final String nullableGroupId = request.getParameter("groupId");
         final String nullableIsNecessary = request.getParameter("isNecessary");
         final String nullableMaxAttempts = request.getParameter("maxAttempts");

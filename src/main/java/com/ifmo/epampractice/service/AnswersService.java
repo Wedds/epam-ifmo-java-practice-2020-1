@@ -27,6 +27,12 @@ public class AnswersService {
         }
 
         try {
+
+            if (!QUESTIONS_SERVICE.ifQuestionObjectExist(request)) {
+                System.err.println("Question doesn't exist");
+                throw new IllegalArgumentException("This question doesn't exist");
+            }
+
             answer.setQuestionId(Integer.parseInt(nullableQuestionId));
             answer.setImage(nullableImage.trim());
             answer.setAnswerText(nullableAnswerText.trim());
@@ -63,11 +69,6 @@ public class AnswersService {
 
         try {
             int questionId = Integer.parseInt(nullableQuestionId);
-
-            if (!QUESTIONS_SERVICE.ifQuestionObjectExist(request)) {
-                System.err.println("Answer doesn't exist");
-                throw new IllegalArgumentException("This answer doesn't exist");
-            }
             answersList = ANSWERS_DAO.getAnswersListByQuestionId(questionId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of question id");
@@ -88,7 +89,7 @@ public class AnswersService {
         try {
             int answerId = Integer.parseInt(nullableTestId);
             Optional<Answers> answersOptional = ANSWERS_DAO.getById(answerId);
-            if (!answersOptional.isPresent()) {
+            if (answersOptional.isPresent()) {
                 System.err.println("Answer doesn't exist");
                 throw new IllegalArgumentException("This answer doesn't exist");
             }

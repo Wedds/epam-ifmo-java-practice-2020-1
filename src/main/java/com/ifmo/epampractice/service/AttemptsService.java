@@ -28,6 +28,13 @@ public class AttemptsService {
         }
 
         try {
+
+            // Добавить проверку на User
+
+            if (TESTS_SERVICE.ifTestObjectExist(request)) {
+                System.err.println("This test doesn't exist");
+                throw new IllegalArgumentException("This test doesn't exist");
+            }
             attempt.setTestId(Integer.parseInt(nullableTestId));
             attempt.setUserId(Integer.parseInt(nullableUserId));
             attempt.setScore(Integer.parseInt(nullableScore));
@@ -63,10 +70,6 @@ public class AttemptsService {
 
         try {
             int testId = Integer.parseInt(nullableTestId);
-            if (TESTS_SERVICE.ifTestObjectExist(request)) {
-                System.err.println("This test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
-            }
             attemptsList = ATTEMPTS_DAO.getAttemptsListByTestId(testId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of question id");
@@ -88,14 +91,6 @@ public class AttemptsService {
         try {
             int testId = Integer.parseInt(nullableTestId);
             int userId = Integer.parseInt(nullableUserId);
-
-            // Добавить проверку на User
-
-            if (TESTS_SERVICE.ifTestObjectExist(request)) {
-                System.err.println("This question doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
-            }
-
             attemptsList = ATTEMPTS_DAO.getAttemptsListByTestAndUserId(testId, userId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of question id");
@@ -117,6 +112,7 @@ public class AttemptsService {
             int attemptId = Integer.parseInt(nullableTestId);
             Optional<Attempts> attemptsOptional = ATTEMPTS_DAO.getById(attemptId);
             if (!attemptsOptional.isPresent()) {
+                System.err.println("This attempt doesn't exist");
                 throw new IllegalArgumentException("This attempt doesn't exist");
             }
             attempt = attemptsOptional.get();

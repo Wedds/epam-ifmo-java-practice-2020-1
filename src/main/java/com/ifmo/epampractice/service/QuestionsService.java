@@ -28,6 +28,10 @@ public class QuestionsService {
         }
 
         try {
+            if (TESTS_SERVICE.ifTestObjectExist(request)) {
+                System.err.println("This test doesn't exist");
+                throw new IllegalArgumentException("This test doesn't exist");
+            }
             question.setQuestionType(QUESTIONS_DAO.getQuestionTypeFromString(nullableQuestionType.trim()));
             question.setTitle(nullableTitle.trim());
             question.setImage(nullableImage.trim());
@@ -64,10 +68,6 @@ public class QuestionsService {
 
         try {
             int testId = Integer.parseInt(nullableTestId);
-            if (TESTS_SERVICE.ifTestObjectExist(request)) {
-                System.err.println("This question doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
-            }
             questionsList = QUESTIONS_DAO.getQuestionsListByTestId(testId);
         } catch (NumberFormatException e) {
             System.err.println("Incorrect format of question id");
