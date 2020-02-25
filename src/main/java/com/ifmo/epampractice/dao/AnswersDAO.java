@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class AnswersDAO implements DAO<Answers> {
     private static final String INSERT_QUERY = "INSERT INTO ANSWERS(image, answer_text, " +
-            "question_id, is_correct, points) VALUES(?,?,?,?,?) RETURNING id";
+            "question_id, is_correct, points) VALUES(?,?,?,?,?)";
     private static final String SELECT_ALL_QUERY = "SELECT id, image, answer_text, " +
             "question_id, is_correct, points FROM ANSWERS";
     private static final String SELECT_ALL_BY_QUESTION_ID_QUERY = "SELECT id, image, answer_text, " +

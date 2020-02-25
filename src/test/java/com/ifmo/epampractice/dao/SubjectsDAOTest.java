@@ -2,16 +2,36 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Subjects;
 
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
+import com.ifmo.epampractice.service.DatabaseSource;
+import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+
 
 public class SubjectsDAOTest {
 
     private static final SubjectsDAO SUBJECTS_DAO = new SubjectsDAO();
     private static final String NAME = "Math";
     private static final String NAME_UPDATE = "History";
+
+    @BeforeClass
+    public static void initTestDb() {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+        ) {
+            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Database_script_test.sql"), statement);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Unable to create a test database.", e);
+        }
+    }
 
     public Subjects createSubjectsObject() {
         Subjects subject = new Subjects();

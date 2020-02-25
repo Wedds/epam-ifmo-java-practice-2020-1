@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class QuestionsDAO implements DAO<Questions> {
     private static final String INSERT_QUERY = "INSERT INTO QUESTIONS(question_type, test_id, " +
-            "title, image, question_text) VALUES(?::types,?,?,?,?) RETURNING id";
+            "title, image, question_text) VALUES(?::types,?,?,?,?)";
     private static final String SELECT_ALL_QUERY = "SELECT id, question_type, test_id, " +
             "title, image, question_text FROM QUESTIONS";
     private static final String SELECT_ALL_BY_TEST_ID_QUERY = "SELECT id, question_type, test_id, " +

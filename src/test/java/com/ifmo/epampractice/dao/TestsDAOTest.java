@@ -2,9 +2,17 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Tests;
 
+import com.ifmo.epampractice.service.DatabaseSource;
+import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
@@ -36,6 +44,19 @@ public class TestsDAOTest {
     private static final LocalDateTime DEADLINE_UPDATE = LocalDateTime.of(2022, Month.JULY, 2, 12, 6, 22);
     private static final int TIME_LIMIT_UPDATE = 30;
     private static final int GROUP_ID_UPDATE = 4;
+
+    @BeforeClass
+    public static void initTestDb() {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+        ) {
+            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Insert_test_script_H2.sql"), statement);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Unable to create a test database.", e);
+        }
+    }
+
 
     @Test
     public void testAddObject() {

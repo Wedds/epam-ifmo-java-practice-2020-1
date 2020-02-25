@@ -2,12 +2,21 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Attempts;
 
+import com.ifmo.epampractice.service.DatabaseSource;
+import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
+
 
 public class AttemptsDAOTest {
     private static final AttemptsDAO ATTEMPTS_DAO = new AttemptsDAO();
@@ -19,6 +28,18 @@ public class AttemptsDAOTest {
     private static final int USER_ID_UPDATE = 2;
     private static final int SCORE_UPDATE = 5;
     private static final LocalDateTime PASSING_DATE_UPDATE = LocalDateTime.of(2020, Month.JANUARY, 10, 11, 3, 22);
+
+    @BeforeClass
+    public static void initTestDb() {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+        ) {
+            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Insert_test_script_H2.sql"), statement);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Unable to create a test database.", e);
+        }
+    }
 
     @Test
     public void testAddObject() {
