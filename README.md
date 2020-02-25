@@ -37,7 +37,7 @@ Skype: 243771@niuitmo.ru
 
 
 
-##License
+## License
 MIT License
 
 Copyright (c) [2020] [SSTS]
