@@ -2,98 +2,122 @@ package com.ifmo.epampractice.service;
 
 import com.ifmo.epampractice.dao.GroupsDAO;
 import com.ifmo.epampractice.entity.Groups;
+import com.ifmo.epampractice.entity.Tests;
+import com.ifmo.epampractice.entity.Users;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.time.LocalDateTime;
 
 public class GroupsService {
-    private static final int[] LETTER_CHAR_BOUNDARIES = {'A', 'z'};
-    private static final int[] DIGIT_CHAR_BOUNDARIES = {'0', '9'};
-    private static final int MAX_LENGTH = 25;
-    private static final String APPROVED_CHARS = " _-";
-    private static final GroupsDAO GROUPS_DAO = new GroupsDAO();
-    private static final TestsService TESTS_SERVICE;
-    private static final UsersService USERS_SERVICE;
+    private static final GroupsDAO Groups_DAO = new GroupsDAO();
 
-    public Groups addObject(final Groups group) {
-        checkFields(group);
-        return GROUPS_DAO.addObject(group);
+    public Groups getGroupFromRequest(final HttpServletRequest request) {
+        Groups group = new Groups();
+        final String nullableId = request.getParameter("id");
+        final String nullableName = request.getParameter("name");
+        final String nullableCreatedAt = request.getParameter("createdAt");
+
+        if (nullableName == null || nullableCreatedAt == null) {
+            System.err.println("Group parameter is missing");
+            throw new IllegalArgumentException("Parameter is missing");
+        }
+
+        try {
+            group.setName(nullableName.trim());
+            group.setCreatedAt(LocalDateTime.parse(nullableCreatedAt.trim()));
+            if (nullableId != null) {
+                group.setId(Integer.parseInt(nullableId.trim()));
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Incorrect format of some parameters");
+            throw new IllegalArgumentException("Incorrect format of parameters");
+        }
+
+        return group;
+    }
+
+    public Groups addObject(final HttpServletRequest request) {
+        Groups test = getGroupFromRequest(request);
+        return Groups_DAO.addObject(test);
+
     }
 
     public List<Groups> getAll() {
-        return GROUPS_DAO.getAll();
+        return Groups_DAO.getAll();
     }
 
-    public Groups getById(final int id) {
+    /* empty method */
+    public List<Users> getAllUsersByGroupId(final HttpServletRequest request) {
+        return new ArrayList<>();
+    }
+
+    /* empty method */
+    public List<Groups> getAllGroupsForGroupsByGroupId(final HttpServletRequest request) {
+        return new ArrayList<>();
+    }
+
+    public Groups getById(final HttpServletRequest request) {
+        final String nullableId = request.getParameter("id");
         Groups group;
-        Optional<Groups> groupsOptional = GROUPS_DAO.getById(id);
-        if (!groupsOptional.isPresent()) {
-            System.err.println("No such group has been found");
-            throw new IllegalArgumentException("No group with such id has been found");
+        
+        if (nullableId == null) {
+            System.err.println("Id parameter is missing");
+            throw new IllegalArgumentException("Parameter is missing");
         }
-        group = groupsOptional.get();
-        return group;
-    }
-
-    public void updateGroupByObject(final Groups group) {
-        checkFields(group);
-        GROUPS_DAO.updateByObject(group);
-    }
-
-    public void removeTestById(final int id) {
-        if (!ifGroupsObjectExists(id)) {
-            System.err.println("No such group has been found");
-            throw new IllegalArgumentException("No group with such id has been found");
-        }
-        GROUPS_DAO.removeById(id);
-    }
-
-    public Groups getGroupWithTestsById(final int id) {
-        Groups group;
-        if (!ifGroupsObjectExists(id)) {
-            System.err.println("No such group has been found");
-            throw new IllegalArgumentException("No group with such id has been found");
-        }
-        group = getById(id);
-        group.setTestsList(TESTS_SERVICE.getAllTestsForGroupsByGroupId(id));
-        return group;
-    }
-
-    public Groups getGroupWithUsersById(final int id) {
-        Groups group;
-        if (!ifGroupsObjectExists(id)) {
-            System.err.println("No such group has been found");
-            throw new IllegalArgumentException("No group with such id has been found");
-        }
-        group = getById(id);
-        group.setUsersList(USERS_SERVICE.getAllByGroupId(id));
-        return group;
-    }
-
-    public Boolean ifGroupsObjectExists(final int id) {
-        return GROUPS_DAO.getById(id).isPresent();
-    }
-
-    private void checkFields(final Groups group) {
-        LocalDateTime currentLocalDateTime = LocalDateTime.now();
-        LocalDateTime groupLocalDateTime = group.getCreatedAt();
-        final String name = group.getName();
-
-        for (int i = 0; i < name.length(); i++) {
-            if ((name.charAt(i) < LETTER_CHAR_BOUNDARIES[0] && name.charAt(i) > LETTER_CHAR_BOUNDARIES[1])
-                    && (name.charAt(i) < DIGIT_CHAR_BOUNDARIES[0] && name.charAt(i) > DIGIT_CHAR_BOUNDARIES[1])
-                    && (APPROVED_CHARS.contains(String.valueOf(name.charAt(i))))) {
-                System.err.println("Wrong Name parameter: unsupported chars have been found");
-                throw new IllegalArgumentException("Wrong name parameter: unsupported chars have been found");
-            } else if (name.length() > MAX_LENGTH) {
-                System.err.println("Wrong Name parameter: length more than 25");
-                throw new IllegalArgumentException("Wrong name parameter: length more than 25");
+        try {
+            int id = Integer.parseInt(nullableId);
+            Optional<Groups> GroupsOptional = Groups_DAO.getById(id);
+            if (!GroupsOptional.isPresent()) {
+                System.err.println("No such group has been found");
+                throw new IllegalArgumentException("No such group has been found");
             }
+            group = GroupsOptional.get();
+        } catch (NumberFormatException e) {
+            System.err.println("Incorrect format of group id");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
-        if (currentLocalDateTime.isBefore(groupLocalDateTime)) {
-            System.err.println("Wrong DateTime parameter: the moment wasn't achieved yet");
-            throw new IllegalArgumentException("Wrong DateTime parameter: the moment wasn't achieved yet");
+        return group;
+    }
+    
+    public void updateTestByObject(final HttpServletRequest request) {
+        Groups test = getGroupFromRequest(request);
+        Groups_DAO.updateByObject(test);
+    }
+
+    public void removeTestById(final HttpServletRequest request) {
+        final String nullableId = request.getParameter("id");
+
+        if (nullableId == null) {
+            System.err.println("Id parameter is missing");
+            throw new IllegalArgumentException("Parameter is missing");
+        }
+        try {
+            int id = Integer.parseInt(nullableId);
+            if (!Groups_DAO.getById(id).isPresent()) {
+                System.err.println("No such group has been found");
+                throw new IllegalArgumentException("No such group has been found");
+            }
+            Groups_DAO.removeById(id);
+        } catch (NumberFormatException e) {
+            System.err.println("Incorrect format of group id");
+            throw new IllegalArgumentException("Incorrect format of id");
+        }
+    }
+
+    public Boolean ifTestObjectExist(final HttpServletRequest request) {
+        final String nullableId = request.getParameter("id");
+        if (nullableId == null) {
+            System.err.println("Group parameter is missing");
+            throw new IllegalArgumentException("Parameter is missing");
+        }
+        try {
+            return Groups_DAO.getById(Integer.parseInt(nullableId)).isPresent();
+        } catch (NumberFormatException e) {
+            System.err.println("No group with such id exists");
+            throw new IllegalArgumentException("Incorrect format of id");
         }
     }
 }
