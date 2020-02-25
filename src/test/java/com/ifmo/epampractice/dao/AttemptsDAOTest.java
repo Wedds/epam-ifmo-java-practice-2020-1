@@ -5,24 +5,25 @@ import com.ifmo.epampractice.entity.Attempts;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.Timestamp;
 import java.util.Optional;
-import java.sql.Date;
 
 public class AttemptsDAOTest {
     private static final AttemptsDAO ATTEMPTS_DAO = new AttemptsDAO();
     private static final int TEST_ID = 2;
     private static final int USER_ID = 3;
     private static final int SCORE = 10;
-    private static final Date PASSING_DATE = Date.valueOf("2020-01-03");
+    private static final Timestamp PASSING_DATE = Timestamp.valueOf("2020-01-03 20:03:20");
     private static final int TEST_ID_UPDATE = 3;
     private static final int USER_ID_UPDATE = 2;
     private static final int SCORE_UPDATE = 5;
-    private static final Date PASSING_DATE_UPDATE = Date.valueOf("2020-02-01");
+    private static final Timestamp PASSING_DATE_UPDATE = Timestamp.valueOf("2020-02-01 10:03:20");
 
     @Test
     public void testAddObject() {
         boolean controlSum;
         Attempts attempt = createAttemptsObject();
+        System.out.println(attempt.getPassingDate());
         attempt = ATTEMPTS_DAO.addObject(attempt);
         controlSum = ATTEMPTS_DAO.getById(attempt.getId()).isPresent();
         Assert.assertEquals(Boolean.TRUE, controlSum);

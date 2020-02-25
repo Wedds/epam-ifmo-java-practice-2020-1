@@ -155,7 +155,7 @@ public class AttemptsDAO implements DAO<Attempts> {
             attempt.setUserId(resultSet.getInt("user_id"));
             attempt.setTestId(resultSet.getInt("test_id"));
             attempt.setScore(resultSet.getInt("score"));
-            attempt.setPassingDate(resultSet.getDate("passing_date"));
+            attempt.setPassingDate(resultSet.getTimestamp("passing_date"));
         } catch (SQLException e) {
             System.err.println("Error with fill group object from result set");
             e.printStackTrace();
@@ -167,7 +167,7 @@ public class AttemptsDAO implements DAO<Attempts> {
             preparedStatement.setInt(1, attempt.getUserId());
             preparedStatement.setInt(2, attempt.getTestId());
             preparedStatement.setInt(3, attempt.getScore());
-            preparedStatement.setDate(4, attempt.getPassingDate());
+            preparedStatement.setTimestamp(4, attempt.getPassingDate());
         } catch (SQLException e) {
             System.err.println("Error with fill query");
             e.printStackTrace();

@@ -3,6 +3,7 @@ package com.ifmo.epampractice.entity;
 import com.ifmo.epampractice.enums.Roles;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +19,7 @@ public class Users {
     private String middleName;
     private Date birthDate;
     private String workTitle;
-    private Date createdAt;
+    private Timestamp createdAt;
     private String avatar;
     private int groupId;
     private List<Tests> testsList;
@@ -125,11 +126,11 @@ public class Users {
         this.workTitle = workTitle;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(final Date createdAt) {
+    public void setCreatedAt(final Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -170,7 +171,7 @@ public class Users {
             && middleName.equals(users.middleName) 
             && birthDate.equals(users.birthDate) 
             && workTitle.equals(users.workTitle) 
-            && createdAt.toLocalDate().equals(users.createdAt.toLocalDate())
+            && createdAt.toLocalDateTime().equals(users.createdAt.toLocalDateTime())
             && avatar.equals(users.avatar) 
             && testsList.equals(users.testsList) 
             && attemptsList.equals(users.attemptsList);

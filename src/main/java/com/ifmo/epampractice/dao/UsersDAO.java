@@ -128,7 +128,7 @@ public class UsersDAO implements DAO<Users> {
         ps.setString(7, user.getMiddleName());
         ps.setDate(8, user.getBirthDate());
         ps.setString(9, user.getWorkTitle());
-        ps.setDate(10, user.getCreatedAt());
+        ps.setTimestamp(10, user.getCreatedAt());
         ps.setString(avatarPosition, user.getAvatar());
         ps.setInt(groupIdPosition, user.getGroupId());
 
@@ -169,7 +169,7 @@ public class UsersDAO implements DAO<Users> {
         user.setMiddleName(rs.getString("middle_name"));
         user.setBirthDate(rs.getDate("birth_date"));
         user.setWorkTitle(rs.getString("work_title"));
-        user.setCreatedAt(rs.getDate("created_at"));
+        user.setCreatedAt(rs.getTimestamp("created_at"));
         user.setAvatar(rs.getString("avatar"));
         user.setGroupId(rs.getInt("group_id"));
 

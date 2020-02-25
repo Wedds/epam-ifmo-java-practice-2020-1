@@ -1,10 +1,9 @@
 import com.ifmo.epampractice.entity.Groups;
 import com.ifmo.epampractice.dao.GroupsDAO;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
-import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,10 +16,10 @@ public class TestGroups {
         Groups expectedGroup1 = new Groups();
         expectedGroup1.setId(1);
         expectedGroup1.setName("K3120");
-        expectedGroup1.setCreatedAt(Date.valueOf(LocalDate.of(year2020, 1, 3)));
+        expectedGroup1.setCreatedAt(Timestamp.valueOf("2020-02-10 10:56:20"));
         Groups expectedGroup2 = new Groups();
         expectedGroup2.setName("AAA");
-        expectedGroup2.setCreatedAt(Date.valueOf(LocalDate.of(year2017, 10, 10)));
+        expectedGroup2.setCreatedAt(Timestamp.valueOf("2020-03-02 13:13:20"));
         Groups realGroup1 = null;
         Groups realGroup2 = null;
         GroupsDAO groupDao = new GroupsDAO();

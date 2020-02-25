@@ -1,6 +1,6 @@
 package com.ifmo.epampractice.entity;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +11,7 @@ public class Tests {
     private String title;
     private String description;
     private Boolean isRandom;
-    private Date createdAt;
+    private Timestamp createdAt;
     private int maxPoints;
     private int creatorId;
     private List<Attempts> attemptsList;
@@ -20,7 +20,7 @@ public class Tests {
     private int groupId;
     private Boolean isNecessary;
     private int maxAttempts;
-    private Date deadline;
+    private Timestamp deadline;
     private int timeLimit;
 
     public Tests() {
@@ -85,11 +85,11 @@ public class Tests {
         isRandom = random;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(final Date createdAt) {
+    public void setCreatedAt(final Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -141,11 +141,11 @@ public class Tests {
         this.maxAttempts = maxAttempts;
     }
 
-    public Date getDeadline() {
+    public Timestamp getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(final Date deadline) {
+    public void setDeadline(final Timestamp deadline) {
         this.deadline = deadline;
     }
 
@@ -171,7 +171,7 @@ public class Tests {
         Tests tests = (Tests) o;
         boolean deadlineComparison = (deadline == null)
                 ? Objects.isNull(tests.deadline)
-                : Objects.equals(deadline.toLocalDate(), tests.deadline.toLocalDate());
+                : Objects.equals(deadline.toLocalDateTime(), tests.deadline.toLocalDateTime());
         return deadlineComparison
                 && id == tests.id
                 && subjectId == tests.subjectId
@@ -180,7 +180,7 @@ public class Tests {
                 && Objects.equals(title, tests.title)
                 && Objects.equals(description, tests.description)
                 && Objects.equals(isRandom, tests.isRandom)
-                && Objects.equals(createdAt.toLocalDate(), tests.createdAt.toLocalDate())
+                && Objects.equals(createdAt.toLocalDateTime(), tests.createdAt.toLocalDateTime())
                 && Objects.equals(maxPoints, tests.maxPoints)
                 && Objects.equals(creatorId, tests.creatorId)
                 && Objects.equals(attemptsList, tests.attemptsList)

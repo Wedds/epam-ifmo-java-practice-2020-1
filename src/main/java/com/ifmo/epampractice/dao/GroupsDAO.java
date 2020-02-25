@@ -26,7 +26,7 @@ public class GroupsDAO implements DAO<Groups> {
                 PreparedStatement preparedStatement = connection.prepareStatement(ADD_QUERY,
                         Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, group.getName());
-            preparedStatement.setDate(2, group.getCreatedAt());
+            preparedStatement.setTimestamp(2, group.getCreatedAt());
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
                 throw new RuntimeException("No group has been added");
@@ -57,7 +57,7 @@ public class GroupsDAO implements DAO<Groups> {
 
                 group.setId(resultSet.getInt("id"));
                 group.setName(resultSet.getString("name"));
-                group.setCreatedAt(resultSet.getDate("created_at"));
+                group.setCreatedAt(resultSet.getTimestamp("created_at"));
                 groupsList.add(group);
             }
         } catch (SQLException e) {
@@ -79,7 +79,7 @@ public class GroupsDAO implements DAO<Groups> {
             }
             group.setId(id);
             group.setName(resultSet.getString("name"));
-            group.setCreatedAt(resultSet.getDate("created_at"));
+            group.setCreatedAt(resultSet.getTimestamp("created_at"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,7 +91,7 @@ public class GroupsDAO implements DAO<Groups> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
             preparedStatement.setString(1, group.getName());
-            preparedStatement.setDate(2, group.getCreatedAt());
+            preparedStatement.setTimestamp(2, group.getCreatedAt());
             preparedStatement.setInt(3, group.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
