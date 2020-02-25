@@ -47,12 +47,13 @@ public class SubjectsDAO implements DAO<Subjects> {
         ArrayList<Subjects> subjectsArrayList = new ArrayList<>();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
-            while (resultSet.next()) {
-                Subjects subject = new Subjects();
-                subject.setId(resultSet.getInt("id"));
-                subject.setName(resultSet.getString("name"));
-                subjectsArrayList.add(subject);
+            try (ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY)) {
+                while (resultSet.next()) {
+                    Subjects subject = new Subjects();
+                    subject.setId(resultSet.getInt("id"));
+                    subject.setName(resultSet.getString("name"));
+                    subjectsArrayList.add(subject);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,12 +68,13 @@ public class SubjectsDAO implements DAO<Subjects> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-                return Optional.empty();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (!resultSet.next()) {
+                    return Optional.empty();
+                }
+                subject.setId(id);
+                subject.setName(resultSet.getString("name"));
             }
-            subject.setId(id);
-            subject.setName(resultSet.getString("name"));
         } catch (SQLException e) {
             e.printStackTrace();
         }

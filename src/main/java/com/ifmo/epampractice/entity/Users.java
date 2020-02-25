@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class Users {
     private int id;
-    private Enum<Roles> roleType;
+    private Roles roleType;
     private String email;
     private String hash;
     private String salt;
@@ -54,11 +54,11 @@ public class Users {
         this.id = id;
     }
 
-    public Enum<Roles> getRoleType() {
+    public Roles getRoleType() {
         return roleType;
     }
 
-    public void setRoleType(final Enum<Roles> roleType) {
+    public void setRoleType(final Roles roleType) {
         this.roleType = roleType;
     }
 

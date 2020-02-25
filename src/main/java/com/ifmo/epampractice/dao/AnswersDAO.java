@@ -55,11 +55,12 @@ public class AnswersDAO implements DAO<Answers> {
         List<Answers> answersList = new ArrayList<>();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
-            while (resultSet.next()) {
-                Answers answer = new Answers();
-                fillAnswerObjectFromResultSet(answer, resultSet);
-                answersList.add(answer);
+            try (ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY)) {
+                while (resultSet.next()) {
+                    Answers answer = new Answers();
+                    fillAnswerObjectFromResultSet(answer, resultSet);
+                    answersList.add(answer);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -72,11 +73,12 @@ public class AnswersDAO implements DAO<Answers> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_BY_QUESTION_ID_QUERY)) {
             preparedStatement.setInt(1, questionId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Answers answer = new Answers();
-                fillAnswerObjectFromResultSet(answer, resultSet);
-                answersList.add(answer);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Answers answer = new Answers();
+                    fillAnswerObjectFromResultSet(answer, resultSet);
+                    answersList.add(answer);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,11 +92,12 @@ public class AnswersDAO implements DAO<Answers> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-                return Optional.empty();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (!resultSet.next()) {
+                    return Optional.empty();
+                }
+                fillAnswerObjectFromResultSet(answer, resultSet);
             }
-            fillAnswerObjectFromResultSet(answer, resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
