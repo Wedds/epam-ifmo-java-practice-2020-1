@@ -22,6 +22,8 @@ public class UsersDAO implements DAO<Users> {
             "last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, role_type, email, hash, salt, first_name," +
             " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE id=?";
+    private static final String SELECT_BY_EMAIL_QUERY = "SELECT id, role_type, email, hash, salt, first_name," +
+            " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE email=?";
     private static final String UPDATE_QUERY = "UPDATE users SET role_type=?::roles, email=?, hash=?, salt=?," +
             " first_name=?, last_name=?, middle_name=?, birth_date=?, work_title=?, created_at=?, avatar=?," +
             " group_id=? WHERE id=?";
@@ -83,7 +85,24 @@ public class UsersDAO implements DAO<Users> {
                 user = this.convertFieldsToObject(rs);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Cannot to get a user from database.", e);
+        }
+        return Optional.of(user);
+    }
+
+    public Optional<Users> getByEmail(final String email) {
+        Users user;
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_EMAIL_QUERY)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (!rs.next()) {
+                    return Optional.empty();
+                }
+                user = this.convertFieldsToObject(rs);
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Cannot to get a user from database.", e);
         }
         return Optional.of(user);
     }
