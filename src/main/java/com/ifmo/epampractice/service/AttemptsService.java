@@ -32,14 +32,14 @@ public class AttemptsService {
 
             // Добавить проверку на User
 
-            if (TESTS_SERVICE.ifTestObjectExist(request)) {
-                System.err.println("This test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
-            }
             attempt.setTestId(Integer.parseInt(nullableTestId));
             attempt.setUserId(Integer.parseInt(nullableUserId));
             attempt.setScore(Integer.parseInt(nullableScore));
             attempt.setPassingDate(LocalDateTime.parse(nullablePassingDate, FORMATTER));
+            if (TESTS_SERVICE.ifTestObjectExist(attempt.getTestId())) {
+                System.err.println("This test doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
+            }
             if (nullableId != null) {
                 attempt.setId(Integer.parseInt(nullableId));
             }
@@ -113,7 +113,7 @@ public class AttemptsService {
             Optional<Attempts> attemptsOptional = ATTEMPTS_DAO.getById(attemptId);
             if (!attemptsOptional.isPresent()) {
                 System.err.println("This attempt doesn't exist");
-                throw new IllegalArgumentException("This attempt doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             attempt = attemptsOptional.get();
         } catch (NumberFormatException e) {
@@ -139,7 +139,7 @@ public class AttemptsService {
             int attemptId = Integer.parseInt(nullableTestId);
             if (!ATTEMPTS_DAO.getById(attemptId).isPresent()) {
                 System.err.println("This test attempt't exist");
-                throw new IllegalArgumentException("This attempt doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             ATTEMPTS_DAO.removeById(attemptId);
         } catch (NumberFormatException e) {
@@ -148,21 +148,10 @@ public class AttemptsService {
         }
     }
 
-    public Boolean ifAttemptObjectExist(final HttpServletRequest request) {
-        final String nullableId = request.getParameter("id");
-        if (nullableId == null) {
-            System.err.println("Attempt parameter is missing");
-            throw new IllegalArgumentException("Parameter is missing");
+    public Boolean ifAttemptObjectExist(final int id) {
+        if (ATTEMPTS_DAO.getById(id).isPresent()) {
+            return Boolean.TRUE;
         }
-
-        try {
-            if (ATTEMPTS_DAO.getById(Integer.parseInt(nullableId)).isPresent()) {
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        } catch (NumberFormatException e) {
-            System.err.println("Incorrect format of attempt id");
-            throw new IllegalArgumentException("Incorrect format of id");
-        }
+        return Boolean.FALSE;
     }
 }

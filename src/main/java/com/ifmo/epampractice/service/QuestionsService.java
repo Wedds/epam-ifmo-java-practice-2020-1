@@ -3,14 +3,17 @@ package com.ifmo.epampractice.service;
 import com.ifmo.epampractice.dao.QuestionsDAO;
 import com.ifmo.epampractice.entity.Questions;
 import com.ifmo.epampractice.enums.QuestionType;
+import sun.security.x509.FreshestCRLExtension;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class QuestionsService {
     private static final QuestionsDAO QUESTIONS_DAO = new QuestionsDAO();
     private static final TestsService TESTS_SERVICE = new TestsService();
+    private static final AnswersService ANSWERS_SERVICE = new AnswersService();
 
     public Questions getQuestionFromRequest(final HttpServletRequest request) {
         Questions question = new Questions();
@@ -28,15 +31,16 @@ public class QuestionsService {
         }
 
         try {
-            if (TESTS_SERVICE.ifTestObjectExist(request)) {
-                System.err.println("This test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
-            }
             question.setQuestionType(QuestionType.valueOf(nullableQuestionType.trim().toUpperCase()));
             question.setTitle(nullableTitle.trim());
             question.setImage(nullableImage.trim());
             question.setQuestionText(nullableQuestionText.trim());
             question.setTestId(Integer.parseInt(nullableTestId));
+
+            if (TESTS_SERVICE.ifTestObjectExist(question.getTestId())) {
+                System.err.println("This test doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
+            }
 
             if (nullableId != null) {
                 question.setId(Integer.parseInt(nullableId));
@@ -89,7 +93,7 @@ public class QuestionsService {
             Optional<Questions> questionsOptional = QUESTIONS_DAO.getById(questionId);
             if (!questionsOptional.isPresent()) {
                 System.err.println("This question doesn't exist");
-                throw new IllegalArgumentException("This question doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             question = questionsOptional.get();
         } catch (NumberFormatException e) {
@@ -115,7 +119,7 @@ public class QuestionsService {
             int questionId = Integer.parseInt(nullableTestId);
             if (!QUESTIONS_DAO.getById(questionId).isPresent()) {
                 System.err.println("This question doesn't exist");
-                throw new IllegalArgumentException("This question doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             QUESTIONS_DAO.removeById(questionId);
         } catch (NumberFormatException e) {
@@ -124,22 +128,30 @@ public class QuestionsService {
         }
     }
 
-    public Boolean ifQuestionObjectExist(final HttpServletRequest request) {
-        final String nullableId = request.getParameter("id");
-        if (nullableId == null) {
-            System.err.println("Question parameter is missing");
-            throw new IllegalArgumentException("Parameter is missing");
-        }
+ //   public List<Questions> getQuestionsWithAnswersListByTestId(final int testId){
+ //       List<Questions> questionsList = new ArrayList<>();
+ //       Questions question = new Questions();
+ //       try {
+ //           if (!TESTS_SERVICE.ifTestObjectExist(testId)) {
+ //               System.err.println("This test doesn't exist");
+ //               throw new IllegalArgumentException("This object doesn't exist");
+ //           }
+ //           questionsList = QUESTIONS_DAO.getQuestionsListByTestId(testId);
+ //           for (Questions quest:questionsList){
+ //               question.setAnswersList(ANSWERS_SERVICE.getAnswersListByQuestionId(request));
+ //           }
+//
+ //       } catch (NumberFormatException e) {
+ //           System.err.println("Incorrect format of question id");
+ //           throw new IllegalArgumentException("Incorrect format of id");
+ //       }
+ //       return questionsList;
+ //   }
 
-        try {
-            if (QUESTIONS_DAO.getById(Integer.parseInt(nullableId)).isPresent()) {
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        } catch (NumberFormatException e) {
-            System.err.println("Incorrect format of question id");
-            throw new IllegalArgumentException("Incorrect format of id");
+    public Boolean ifQuestionObjectExist(final int id) {
+        if (QUESTIONS_DAO.getById(id).isPresent()) {
+            return Boolean.TRUE;
         }
+        return Boolean.FALSE;
     }
-
 }

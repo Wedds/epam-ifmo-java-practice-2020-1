@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public class TestsService {
     private static final TestsDAO TESTS_DAO = new TestsDAO();
+    private static final QuestionsService QUESTIONS_SERVICE = new QuestionsService();
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Tests getTestFromRequest(final HttpServletRequest request) {
@@ -110,9 +111,9 @@ public class TestsService {
 
         try {
             int testId = Integer.parseInt(nullableTestId);
-            if (!TESTS_DAO.getById(testId).isPresent()) {
+            if (!ifTestObjectExist(testId)) {
                 System.err.println("Test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             testsList = TESTS_DAO.getAllTestsForGroupsByTestId(testId);
         } catch (NumberFormatException e) {
@@ -158,7 +159,7 @@ public class TestsService {
             Optional<Tests> testsOptional = TESTS_DAO.getById(testId);
             if (!testsOptional.isPresent()) {
                 System.err.println("Test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             test = testsOptional.get();
         } catch (NumberFormatException e) {
@@ -184,7 +185,7 @@ public class TestsService {
             // Пороверяем по тесту и по группе
             if (!testsOptional.isPresent()) {
                 System.err.println("Test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             test = testsOptional.get();
         } catch (NumberFormatException e) {
@@ -213,9 +214,9 @@ public class TestsService {
         }
         try {
             int testId = Integer.parseInt(nullableTestId);
-            if (!TESTS_DAO.getById(testId).isPresent()) {
+            if (!ifTestObjectExist(testId)) {
                 System.err.println("Test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             TESTS_DAO.removeById(testId);
         } catch (NumberFormatException e) {
@@ -234,9 +235,9 @@ public class TestsService {
         try {
             int testId = Integer.parseInt(nullableTestId);
             //Проверяем на группу и тест
-            if (!TESTS_DAO.getById(testId).isPresent()) {
+            if (!ifTestObjectExist(testId)) {
                 System.err.println("Test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             TESTS_DAO.removeGroupsTestsByTestId(testId);
         } catch (NumberFormatException e) {
@@ -274,9 +275,9 @@ public class TestsService {
             int groupId = Integer.parseInt(nullableGroupId);
             int testId = Integer.parseInt(nullableTestId);
             //Проверяем на группу и тест
-            if (!TESTS_DAO.getById(testId).isPresent()) {
+            if (!ifTestObjectExist(testId)) {
                 System.err.println("Test doesn't exist");
-                throw new IllegalArgumentException("This test doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             TESTS_DAO.removeGroupsTestsByTestAndGroupId(testId, groupId);
         } catch (NumberFormatException e) {
@@ -285,21 +286,56 @@ public class TestsService {
         }
     }
 
-    public Boolean ifTestObjectExist(final HttpServletRequest request) {
-        final String nullableId = request.getParameter("id");
-        if (nullableId == null) {
-            System.err.println("Test parameter is missing");
-            throw new IllegalArgumentException("Parameter is missing");
-        }
+   // public Tests getTestWithQuestions(final HttpServletRequest request) {
+   //     final String nullableId = request.getParameter("id");
+   //     Tests test = new Tests();
+   //     if (nullableId == null) {
+   //         System.err.println("Test parameter is missing");
+   //         throw new IllegalArgumentException("Parameter is missing");
+   //     }
+   //     try {
+   //         int id = Integer.parseInt(nullableId);
+   //         if (!ifTestObjectExist(id)) {
+   //             System.err.println("Test doesn't exist");
+   //             throw new IllegalArgumentException("This object doesn't exist");
+   //         }
+   //         test = getById(request);
+   //         test.setQuestionsList(QUESTIONS_SERVICE.getQuestionsWithAnswersListByTestId(request));
+   //     } catch (NumberFormatException e) {
+   //         System.err.println("Incorrect format of group id");
+   //         throw new IllegalArgumentException("Incorrect format of id");
+   //     }
+   //     return test;
+   // }
 
-        try {
-            if (TESTS_DAO.getById(Integer.parseInt(nullableId)).isPresent()) {
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        } catch (NumberFormatException e) {
-            System.err.println("Incorrect format of test id");
-            throw new IllegalArgumentException("Incorrect format of id");
+  //  public Tests getTestForGroupWithQuestions(final HttpServletRequest request) {
+  //      final String nullableTestId = request.getParameter("testId");
+  //      final String nullableGroupId = request.getParameter("groupId");
+  //      Tests test = new Tests();
+  //      if (nullableTestId == null || nullableGroupId == null) {
+  //          System.err.println("Test parameter is missing");
+  //          throw new IllegalArgumentException("Parameter is missing");
+  //      }
+  //      try {
+  //          int testId = Integer.parseInt(nullableTestId);
+  //          int groupId = Integer.parseInt(nullableGroupId);
+  //          if (!ifTestObjectExist(testId)) {
+  //              System.err.println("Test doesn't exist");
+  //              throw new IllegalArgumentException("This object doesn't exist");
+  //          }
+  //          test = getObjectByTestAndGroupId(request);
+  //          test.setQuestionsList(QUESTIONS_SERVICE.getQuestionsWithAnswersListByTestId(request));
+  //      } catch (NumberFormatException e) {
+  //          System.err.println("Incorrect format of group id");
+  //          throw new IllegalArgumentException("Incorrect format of id");
+  //      }
+  //      return test;
+  //  }
+
+    public Boolean ifTestObjectExist(final int id) {
+        if (TESTS_DAO.getById(id).isPresent()) {
+            return Boolean.TRUE;
         }
+        return Boolean.FALSE;
     }
 }

@@ -27,17 +27,16 @@ public class AnswersService {
         }
 
         try {
-
-            if (!QUESTIONS_SERVICE.ifQuestionObjectExist(request)) {
-                System.err.println("Question doesn't exist");
-                throw new IllegalArgumentException("This question doesn't exist");
-            }
-
             answer.setQuestionId(Integer.parseInt(nullableQuestionId));
             answer.setImage(nullableImage.trim());
             answer.setAnswerText(nullableAnswerText.trim());
             answer.setIsCorrect(Boolean.parseBoolean(nullableIsCorrect));
             answer.setPoints(Integer.parseInt(nullablePoints));
+
+            if (!QUESTIONS_SERVICE.ifQuestionObjectExist(answer.getQuestionId())) {
+                System.err.println("Question doesn't exist");
+                throw new IllegalArgumentException("This question doesn't exist");
+            }
 
             if (nullableId != null) {
                 answer.setId(Integer.parseInt(nullableId));
@@ -91,7 +90,7 @@ public class AnswersService {
             Optional<Answers> answersOptional = ANSWERS_DAO.getById(answerId);
             if (!answersOptional.isPresent()) {
                 System.err.println("Answer doesn't exist");
-                throw new IllegalArgumentException("This answer doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             answer = answersOptional.get();
         } catch (NumberFormatException e) {
@@ -117,7 +116,7 @@ public class AnswersService {
             int answerId = Integer.parseInt(nullableTestId);
             if (!ANSWERS_DAO.getById(answerId).isPresent()) {
                 System.err.println("Answer doesn't exist");
-                throw new IllegalArgumentException("This answer doesn't exist");
+                throw new IllegalArgumentException("This object doesn't exist");
             }
             ANSWERS_DAO.removeById(answerId);
         } catch (NumberFormatException e) {
@@ -126,22 +125,10 @@ public class AnswersService {
         }
     }
 
-    public Boolean ifAnswerObjectExist(final HttpServletRequest request) {
-        final String nullableId = request.getParameter("id");
-        if (nullableId == null) {
-            System.err.println("Answer parameter is missing");
-            throw new IllegalArgumentException("Parameter is missing");
+    public Boolean ifAnswerObjectExist(final int id) {
+        if (ANSWERS_DAO.getById(id).isPresent()) {
+            return Boolean.TRUE;
         }
-
-        try {
-            if (ANSWERS_DAO.getById(Integer.parseInt(nullableId)).isPresent()) {
-                return Boolean.TRUE;
-            }
-            return Boolean.FALSE;
-        } catch (NumberFormatException e) {
-            System.err.println("Incorrect format of answer id");
-            throw new IllegalArgumentException("Incorrect format of id");
-        }
+        return Boolean.FALSE;
     }
-
 }
