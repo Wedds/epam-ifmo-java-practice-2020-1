@@ -3,7 +3,6 @@ package com.ifmo.epampractice.dao;
 import com.ifmo.epampractice.entity.Answers;
 import com.ifmo.epampractice.service.DatabaseSource;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

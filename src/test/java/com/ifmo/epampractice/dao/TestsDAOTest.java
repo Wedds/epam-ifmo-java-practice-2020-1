@@ -6,7 +6,6 @@ import com.ifmo.epampractice.service.DatabaseSource;
 import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -48,10 +47,10 @@ public class TestsDAOTest {
     @BeforeClass
     public static void initTestDb() {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-             Statement statement = connection.createStatement();
+             Statement statement = connection.createStatement()
         ) {
-            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Database_script_test.sql"), statement);
-            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Insert_test_script_H2.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Insert_test_script_H2.sql"), statement);
         } catch (SQLException e) {
             throw new IllegalArgumentException("Unable to create a test database.", e);
         }
@@ -106,7 +105,7 @@ public class TestsDAOTest {
         int wasElements = TEST_DAO.getAll().size();
         Tests test = createTestsObject();
         test = TEST_DAO.addObject(test);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAll().size());
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAll().size());
         TEST_DAO.removeById(test.getId());
     }
 
@@ -115,7 +114,7 @@ public class TestsDAOTest {
         int wasElements = TEST_DAO.getAllTestsForGroupsByGroupId(1).size();
         Tests test = createTestForGroupObject();
         test = TEST_DAO.addTestsWithGroupsTests(test);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAllTestsForGroupsByGroupId(1).size());
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAllTestsForGroupsByGroupId(1).size());
         TEST_DAO.removeById(test.getId());
     }
 
@@ -126,7 +125,7 @@ public class TestsDAOTest {
         Tests groupsTests = fillTestsForGroup(test);
         int wasElements = TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size();
         TEST_DAO.addGroupsTests(groupsTests);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size());
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size());
         TEST_DAO.removeById(test.getId());
     }
 
