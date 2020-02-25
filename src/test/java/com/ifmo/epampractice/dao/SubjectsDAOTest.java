@@ -1,7 +1,6 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Subjects;
-import com.ifmo.epampractice.dao.SubjectsDAO;
 
 import java.util.Optional;
 

@@ -1,7 +1,6 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Groups;
-import com.ifmo.epampractice.dao.GroupsDAO;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -17,13 +16,18 @@ public class GroupsDAOTest {
         /* Initialization & Setting expected values*/
         final int year2017 = 2017;
         final int year2020 = 2020;
+        final int day19 = 19;
+        final int day17 = 17;
+        final int hour13 = 13;
+        final int minute10 = 10;
+        final int seconds50 = 50;
         Groups expectedGroup1 = new Groups();
         expectedGroup1.setId(1);
         expectedGroup1.setName("K3120");
-        expectedGroup1.setCreatedAt(LocalDateTime.of(2020, Month.DECEMBER, 11, 11, 6, 22));
+        expectedGroup1.setCreatedAt(LocalDateTime.of(year2020, Month.DECEMBER, day19, hour13, minute10, seconds50));
         Groups expectedGroup2 = new Groups();
         expectedGroup2.setName("AAA");
-        expectedGroup2.setCreatedAt(LocalDateTime.of(2020, Month.NOVEMBER, 9, 12, 6, 22));
+        expectedGroup2.setCreatedAt(LocalDateTime.of(year2017, Month.NOVEMBER, day17, hour13, minute10, seconds50));
         Groups realGroup1 = null;
         Groups realGroup2 = null;
         GroupsDAO groupDao = new GroupsDAO();
