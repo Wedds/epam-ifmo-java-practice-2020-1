@@ -30,14 +30,14 @@ Skype: 243771@niuitmo.ru
 
 ## Database model
 
-[Link](https://dbdiagram.io/d/5e4586df9e76504e0ef16b30)
+[Link](https://dbdiagram.io/d/5e550b84ef8c251a06188b09)
 
-![Database model](https://user-images.githubusercontent.com/57772708/74524583-5d444080-4f30-11ea-8af7-a5d0009935b1.png)
-
-
+![Database model](https://user-images.githubusercontent.com/33461419/75246358-a6be4680-57e0-11ea-96ba-593edcd18888.png)
 
 
-##License
+
+
+## License
 MIT License
 
 Copyright (c) [2020] [SSTS]
