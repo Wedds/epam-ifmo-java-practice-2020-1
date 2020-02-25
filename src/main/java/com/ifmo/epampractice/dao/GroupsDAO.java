@@ -1,7 +1,6 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Groups;
-import com.ifmo.epampractice.service.DAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
 import java.sql.ResultSet;

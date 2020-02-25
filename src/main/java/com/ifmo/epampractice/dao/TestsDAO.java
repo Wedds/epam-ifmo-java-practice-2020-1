@@ -2,7 +2,6 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Tests;
 import com.ifmo.epampractice.service.DatabaseSource;
-import com.ifmo.epampractice.service.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -3,7 +3,6 @@ package com.ifmo.epampractice.dao;
 import com.ifmo.epampractice.entity.Users;
 import com.ifmo.epampractice.enums.Roles;
 import com.ifmo.epampractice.service.DatabaseSource;
-import com.ifmo.epampractice.service.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

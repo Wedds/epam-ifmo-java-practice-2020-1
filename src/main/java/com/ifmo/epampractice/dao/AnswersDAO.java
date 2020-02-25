@@ -1,7 +1,6 @@
 package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Answers;
-import com.ifmo.epampractice.service.DAO;
 import com.ifmo.epampractice.service.DatabaseSource;
 
 
