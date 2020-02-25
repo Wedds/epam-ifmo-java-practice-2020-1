@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class SubjectsDAO implements DAO<Subjects> {
-    private static final String INSERT_QUERY = "INSERT INTO SUBJECTS(name) VALUES(?) RETURNING id";
+    private static final String INSERT_QUERY = "INSERT INTO SUBJECTS(name) VALUES(?)";
     private static final String SELECT_ALL_QUERY = "SELECT id, name FROM SUBJECTS";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, name FROM SUBJECTS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE SUBJECTS SET name=? WHERE id=?";
