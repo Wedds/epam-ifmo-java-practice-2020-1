@@ -1,16 +1,16 @@
 package com.ifmo.epampractice.dao;
 
-import com.ifmo.epampractice.dao.UsersDAO;
 import com.ifmo.epampractice.entity.Users;
 import com.ifmo.epampractice.enums.Roles;
 import com.ifmo.epampractice.service.DatabaseSource;
 import com.ifmo.epampractice.utilities.TestUtilities;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class UsersDAOTest {
+    private static final String CREATE_GROUP_FOR_TEST = "INSERT INTO groups (name, created_at) " +
+            "VALUES ('K5148', '2012-09-17 18:47:52');";
     private static final int GROUP_ID = 1;
     private static final int USER_ID = 1;
     private static final String TEST_EMAIL = "test@email.com";
@@ -34,14 +36,13 @@ public class UsersDAOTest {
     private static final String AVATAR = "sdkfmslkdfmlskdfmlskdfm";
     private static final String WORK_TITLE = "Guru";
     private static final UsersDAO USERS_DAO = new UsersDAO();
-    public static final String CREATE_GROUP_FOR_TEST = "INSERT INTO groups (name, created_at) VALUES ('K5148', '2012-09-17 18:47:52');";
 
     @BeforeClass
     public static void initTestDb() {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-             Statement statement = connection.createStatement();
+             Statement statement = connection.createStatement()
         ) {
-            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Database_script_test.sql"), statement);
             statement.execute(CREATE_GROUP_FOR_TEST);
         } catch (SQLException e) {
             throw new IllegalArgumentException("Unable to create a test database.", e);

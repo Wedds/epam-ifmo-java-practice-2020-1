@@ -6,7 +6,6 @@ import com.ifmo.epampractice.service.DatabaseSource;
 import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -30,10 +29,10 @@ public class AnswersDAOTest {
     @BeforeClass
     public static void initTestDb() {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-             Statement statement = connection.createStatement();
+             Statement statement = connection.createStatement()
         ) {
-            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Database_script_test.sql"), statement);
-            TestUtilities.executeSqlFile(Paths.get("src","main", "resources", "Insert_test_script_H2.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Insert_test_script_H2.sql"), statement);
         } catch (SQLException e) {
             throw new IllegalArgumentException("Unable to create a test database.", e);
         }
