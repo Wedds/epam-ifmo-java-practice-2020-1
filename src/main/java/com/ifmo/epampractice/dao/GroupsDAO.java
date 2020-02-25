@@ -51,15 +51,16 @@ public class GroupsDAO implements DAO<Groups> {
 
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(GET_ALL_QUERY);
+            try (ResultSet resultSet = statement.executeQuery(GET_ALL_QUERY)) {
 
-            while (resultSet.next()) {
-                Groups group = new Groups();
+                while (resultSet.next()) {
+                    Groups group = new Groups();
 
-                group.setId(resultSet.getInt("id"));
-                group.setName(resultSet.getString("name"));
-                group.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
-                groupsList.add(group);
+                    group.setId(resultSet.getInt("id"));
+                    group.setName(resultSet.getString("name"));
+                    group.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
+                    groupsList.add(group);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,13 +75,14 @@ public class GroupsDAO implements DAO<Groups> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-                return Optional.empty();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (!resultSet.next()) {
+                    return Optional.empty();
+                }
+                group.setId(id);
+                group.setName(resultSet.getString("name"));
+                group.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
             }
-            group.setId(id);
-            group.setName(resultSet.getString("name"));
-            group.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
         } catch (SQLException e) {
             e.printStackTrace();
         }

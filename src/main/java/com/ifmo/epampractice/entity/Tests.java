@@ -167,11 +167,7 @@ public class Tests {
             return false;
         }
         Tests tests = (Tests) o;
-        boolean deadlineComparison = (deadline == null)
-                ? Objects.isNull(tests.deadline)
-                : Objects.equals(deadline, tests.deadline);
-        return deadlineComparison
-                && id == tests.id
+        return id == tests.id
                 && subjectId == tests.subjectId
                 && maxAttempts == tests.maxAttempts
                 && timeLimit == tests.timeLimit
@@ -180,6 +176,7 @@ public class Tests {
                 && Objects.equals(isRandom, tests.isRandom)
                 && Objects.equals(createdAt, tests.createdAt)
                 && Objects.equals(maxPoints, tests.maxPoints)
+                && Objects.equals(deadline, tests.deadline)
                 && Objects.equals(creatorId, tests.creatorId)
                 && Objects.equals(attemptsList, tests.attemptsList)
                 && Objects.equals(questionsList, tests.questionsList)

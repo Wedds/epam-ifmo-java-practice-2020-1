@@ -57,9 +57,10 @@ public class UsersDAO implements DAO<Users> {
         ArrayList<Users> usersArrayList = new ArrayList<>();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery(SELECT_ALL_QUERY);
-            while (rs.next()) {
-                usersArrayList.add(this.convertFieldsToObject(rs));
+            try (ResultSet rs = statement.executeQuery(SELECT_ALL_QUERY)) {
+                while (rs.next()) {
+                    usersArrayList.add(this.convertFieldsToObject(rs));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,11 +76,12 @@ public class UsersDAO implements DAO<Users> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
-            ResultSet rs = preparedStatement.executeQuery();
-            if (!rs.next()) {
-                return Optional.empty();
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (!rs.next()) {
+                    return Optional.empty();
+                }
+                user = this.convertFieldsToObject(rs);
             }
-            user = this.convertFieldsToObject(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -141,27 +143,7 @@ public class UsersDAO implements DAO<Users> {
     private Users convertFieldsToObject(final ResultSet rs) throws SQLException {
         Users user = new Users();
         user.setId(rs.getInt("id"));
-        switch (rs.getString("role_type")) {
-            case "admin": {
-                user.setRoleType(Roles.ADMIN);
-                break;
-            }
-            case "moderator": {
-                user.setRoleType(Roles.MODERATOR);
-                break;
-            }
-            case "teacher": {
-                user.setRoleType(Roles.TEACHER);
-                break;
-            }
-            case "student": {
-                user.setRoleType(Roles.STUDENT);
-                break;
-            }
-            default:
-                user.setRoleType(Roles.STUDENT);
-        }
-
+        user.setRoleType(Roles.getRoleFromString(rs.getString("role_type")));
         user.setEmail(rs.getString("email"));
         user.setHash(rs.getString("hash"));
         user.setSalt(rs.getString("salt"));

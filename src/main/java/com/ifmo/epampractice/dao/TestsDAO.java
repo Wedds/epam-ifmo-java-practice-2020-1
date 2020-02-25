@@ -61,6 +61,21 @@ public class TestsDAO implements DAO<Tests> {
         return test;
     }
 
+    private void executeStatementAndCheck(final Tests test, final PreparedStatement preparedStatement)
+            throws SQLException {
+        int affectedRows = preparedStatement.executeUpdate();
+        if (affectedRows == 0) {
+            throw new IllegalArgumentException("Creating test failed, no rows affected.");
+        }
+        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                test.setId(generatedKeys.getInt(1));
+            } else {
+                throw new IllegalArgumentException("Creating test failed, no ID obtained.");
+            }
+        }
+    }
+
     public Tests addGroupsTests(final Tests test) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GROUPS_TESTS_QUERY)) {
@@ -80,11 +95,12 @@ public class TestsDAO implements DAO<Tests> {
         List<Tests> testsList = new ArrayList<>();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY);
-            while (resultSet.next()) {
-                Tests test = new Tests();
-                fillGeneralTestObjectFromResultSet(test, resultSet);
-                testsList.add(test);
+            try (ResultSet resultSet = statement.executeQuery(SELECT_ALL_QUERY)) {
+                while (resultSet.next()) {
+                    Tests test = new Tests();
+                    fillGeneralTestObjectFromResultSet(test, resultSet);
+                    testsList.add(test);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,15 +114,16 @@ public class TestsDAO implements DAO<Tests> {
              PreparedStatement preparedStatement =
                      connection.prepareStatement(SELECT_ALL_GROUPS_TESTS_BY_TEST_ID_QUERY)) {
             preparedStatement.setInt(1, testId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Optional<Tests> testOptional = getById(testId);
-                Tests test = new Tests();
-                if (testOptional.isPresent()) {
-                    test = testOptional.get();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Optional<Tests> testOptional = getById(testId);
+                    Tests test = new Tests();
+                    if (testOptional.isPresent()) {
+                        test = testOptional.get();
+                    }
+                    fillTestForGroupObjectFromResultSet(test, resultSet);
+                    groupsTestsList.add(test);
                 }
-                fillTestForGroupObjectFromResultSet(test, resultSet);
-                groupsTestsList.add(test);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,16 +137,17 @@ public class TestsDAO implements DAO<Tests> {
              PreparedStatement preparedStatement =
                      connection.prepareStatement(SELECT_ALL_GROUPS_TESTS_BY_GROUP_ID_QUERY)) {
             preparedStatement.setInt(1, groupId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int testId = resultSet.getInt("test_id");
-                Optional<Tests> testOptional = getById(testId);
-                Tests test = new Tests();
-                if (testOptional.isPresent()) {
-                    test = testOptional.get();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    int testId = resultSet.getInt("test_id");
+                    Optional<Tests> testOptional = getById(testId);
+                    Tests test = new Tests();
+                    if (testOptional.isPresent()) {
+                        test = testOptional.get();
+                    }
+                    fillTestForGroupObjectFromResultSet(test, resultSet);
+                    groupsTestsList.add(test);
                 }
-                fillTestForGroupObjectFromResultSet(test, resultSet);
-                groupsTestsList.add(test);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,11 +161,12 @@ public class TestsDAO implements DAO<Tests> {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_TEST_BY_TEST_ID_QUERY)) {
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-                return Optional.empty();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (!resultSet.next()) {
+                    return Optional.empty();
+                }
+                fillGeneralTestObjectFromResultSet(test, resultSet);
             }
-            fillGeneralTestObjectFromResultSet(test, resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -161,18 +180,19 @@ public class TestsDAO implements DAO<Tests> {
              PreparedStatement preparedStatementGroup =
                      connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
             preparedStatementTest.setInt(1, testId);
-            ResultSet resultSetTest = preparedStatementTest.executeQuery();
-            if (!resultSetTest.next()) {
-                return Optional.empty();
+            try (ResultSet resultSetTest = preparedStatementTest.executeQuery()) {
+                if (!resultSetTest.next()) {
+                    return Optional.empty();
+                }
+                fillGeneralTestObjectFromResultSet(test, resultSetTest);
+                preparedStatementGroup.setInt(1, testId);
+                preparedStatementGroup.setInt(2, groupId);
+                ResultSet resultSetGroup = preparedStatementGroup.executeQuery();
+                if (!resultSetGroup.next()) {
+                    return Optional.empty();
+                }
+                fillTestForGroupObjectFromResultSet(test, resultSetGroup);
             }
-            fillGeneralTestObjectFromResultSet(test, resultSetTest);
-            preparedStatementGroup.setInt(1, testId);
-            preparedStatementGroup.setInt(2, groupId);
-            ResultSet resultSetGroup = preparedStatementGroup.executeQuery();
-            if (!resultSetGroup.next()) {
-                return Optional.empty();
-            }
-            fillTestForGroupObjectFromResultSet(test, resultSetGroup);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -185,9 +205,10 @@ public class TestsDAO implements DAO<Tests> {
                      connection.prepareStatement(SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY)) {
             preparedStatement.setInt(1, test.getId());
             preparedStatement.setInt(2, groupId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            fillTestForGroupObjectFromResultSet(test, resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                fillTestForGroupObjectFromResultSet(test, resultSet);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -258,21 +279,6 @@ public class TestsDAO implements DAO<Tests> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void executeStatementAndCheck(final Tests test, final PreparedStatement preparedStatement)
-            throws SQLException {
-        int affectedRows = preparedStatement.executeUpdate();
-        if (affectedRows == 0) {
-            throw new IllegalArgumentException("Creating test failed, no rows affected.");
-        }
-        try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-                test.setId(generatedKeys.getInt(1));
-            } else {
-                throw new IllegalArgumentException("Creating test failed, no ID obtained.");
-            }
         }
     }
 
