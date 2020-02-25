@@ -6,8 +6,11 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class TestUtilities {
-    public static void executeSqlFile(Path pathToFile, Statement statement) {
+public final class TestUtilities {
+    private TestUtilities() {
+    }
+
+    public static void executeSqlFile(final Path pathToFile, final Statement statement) {
         try {
             String[] querues = String.join("", Files.readAllLines(pathToFile)).split(";");
             for (String query : querues) {
