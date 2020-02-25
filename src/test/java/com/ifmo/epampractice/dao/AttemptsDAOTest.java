@@ -5,7 +5,8 @@ import com.ifmo.epampractice.entity.Attempts;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Optional;
 
 public class AttemptsDAOTest {
@@ -13,11 +14,11 @@ public class AttemptsDAOTest {
     private static final int TEST_ID = 2;
     private static final int USER_ID = 3;
     private static final int SCORE = 10;
-    private static final Timestamp PASSING_DATE = Timestamp.valueOf("2020-01-03 20:03:20");
+    private static final LocalDateTime PASSING_DATE = LocalDateTime.of(2020, Month.JULY, 9, 11, 6, 22);
     private static final int TEST_ID_UPDATE = 3;
     private static final int USER_ID_UPDATE = 2;
     private static final int SCORE_UPDATE = 5;
-    private static final Timestamp PASSING_DATE_UPDATE = Timestamp.valueOf("2020-02-01 10:03:20");
+    private static final LocalDateTime PASSING_DATE_UPDATE = LocalDateTime.of(2020, Month.JANUARY, 10, 11, 3, 22);
 
     @Test
     public void testAddObject() {
@@ -35,7 +36,7 @@ public class AttemptsDAOTest {
         int wasElements = ATTEMPTS_DAO.getAttemptsListByTestId(2).size();
         Attempts attempt = createAttemptsObject();
         attempt = ATTEMPTS_DAO.addObject(attempt);
-        Assert.assertEquals(wasElements+1, ATTEMPTS_DAO.getAttemptsListByTestId(2).size());
+        Assert.assertEquals(wasElements + 1, ATTEMPTS_DAO.getAttemptsListByTestId(2).size());
         ATTEMPTS_DAO.removeById(attempt.getId());
     }
 
@@ -44,7 +45,7 @@ public class AttemptsDAOTest {
         int wasElements = ATTEMPTS_DAO.getAttemptsListByTestAndUserId(2, 3).size();
         Attempts attempt = createAttemptsObject();
         attempt = ATTEMPTS_DAO.addObject(attempt);
-        Assert.assertEquals(wasElements+1, ATTEMPTS_DAO.getAttemptsListByTestAndUserId(2, 3).size());
+        Assert.assertEquals(wasElements + 1, ATTEMPTS_DAO.getAttemptsListByTestAndUserId(2, 3).size());
         ATTEMPTS_DAO.removeById(attempt.getId());
     }
 
@@ -53,7 +54,7 @@ public class AttemptsDAOTest {
         int wasElements = ATTEMPTS_DAO.getAll().size();
         Attempts attempt = createAttemptsObject();
         attempt = ATTEMPTS_DAO.addObject(attempt);
-        Assert.assertEquals(wasElements+1, ATTEMPTS_DAO.getAll().size());
+        Assert.assertEquals(wasElements + 1, ATTEMPTS_DAO.getAll().size());
         ATTEMPTS_DAO.removeById(attempt.getId());
     }
 

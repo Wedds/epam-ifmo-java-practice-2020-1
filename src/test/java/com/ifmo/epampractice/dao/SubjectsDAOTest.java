@@ -1,23 +1,26 @@
+package com.ifmo.epampractice.dao;
+
 import com.ifmo.epampractice.entity.Subjects;
 import com.ifmo.epampractice.dao.SubjectsDAO;
 
 import java.util.Optional;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SubjectsTest {
+public class SubjectsDAOTest {
 
     private static final SubjectsDAO SUBJECTS_DAO = new SubjectsDAO();
     private static final String NAME = "Math";
     private static final String NAME_UPDATE = "History";
 
-    public Subjects createSubjectsObject(){
+    public Subjects createSubjectsObject() {
         Subjects subject = new Subjects();
         subject.setName(NAME);
         return subject;
     }
 
-    public Subjects createSubjectsObjectForUpdate(){
+    public Subjects createSubjectsObjectForUpdate() {
         Subjects subject = new Subjects();
         subject.setName(NAME_UPDATE);
         return subject;
@@ -86,7 +89,7 @@ public class SubjectsTest {
         int wasElements = SUBJECTS_DAO.getAll().size();
         Subjects subject = createSubjectsObject();
         subject = SUBJECTS_DAO.addObject(subject);
-        Assert.assertEquals(wasElements+1, SUBJECTS_DAO.getAll().size());
+        Assert.assertEquals(wasElements + 1, SUBJECTS_DAO.getAll().size());
         SUBJECTS_DAO.removeById(subject.getId());
     }
 }

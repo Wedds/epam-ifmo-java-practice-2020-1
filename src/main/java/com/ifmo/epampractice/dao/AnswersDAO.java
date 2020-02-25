@@ -91,7 +91,7 @@ public class AnswersDAO implements DAO<Answers> {
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()){
+            if (!resultSet.next()) {
                 return Optional.empty();
             }
             fillAnswerObjectFromResultSet(answer, resultSet);

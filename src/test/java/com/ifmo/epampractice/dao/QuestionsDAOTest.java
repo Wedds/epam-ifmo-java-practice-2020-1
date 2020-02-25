@@ -34,7 +34,7 @@ public class QuestionsDAOTest {
         int wasElements = QUESTIONS_DAO.getQuestionsListByTestId(2).size();
         Questions question = createQuestionsObject();
         question = QUESTIONS_DAO.addObject(question);
-        Assert.assertEquals(wasElements+1, QUESTIONS_DAO.getQuestionsListByTestId(2).size());
+        Assert.assertEquals(wasElements + 1, QUESTIONS_DAO.getQuestionsListByTestId(2).size());
         QUESTIONS_DAO.removeById(question.getId());
     }
 
@@ -43,7 +43,7 @@ public class QuestionsDAOTest {
         int wasElements = QUESTIONS_DAO.getAll().size();
         Questions question = createQuestionsObject();
         question = QUESTIONS_DAO.addObject(question);
-        Assert.assertEquals(wasElements+1, QUESTIONS_DAO.getAll().size());
+        Assert.assertEquals(wasElements + 1, QUESTIONS_DAO.getAll().size());
         QUESTIONS_DAO.removeById(question.getId());
     }
 

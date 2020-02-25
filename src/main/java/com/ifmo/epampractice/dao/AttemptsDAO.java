@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -155,7 +156,7 @@ public class AttemptsDAO implements DAO<Attempts> {
             attempt.setUserId(resultSet.getInt("user_id"));
             attempt.setTestId(resultSet.getInt("test_id"));
             attempt.setScore(resultSet.getInt("score"));
-            attempt.setPassingDate(resultSet.getTimestamp("passing_date"));
+            attempt.setPassingDate(resultSet.getObject("passing_date", LocalDateTime.class));
         } catch (SQLException e) {
             System.err.println("Error with fill group object from result set");
             e.printStackTrace();
@@ -167,7 +168,7 @@ public class AttemptsDAO implements DAO<Attempts> {
             preparedStatement.setInt(1, attempt.getUserId());
             preparedStatement.setInt(2, attempt.getTestId());
             preparedStatement.setInt(3, attempt.getScore());
-            preparedStatement.setTimestamp(4, attempt.getPassingDate());
+            preparedStatement.setObject(4, attempt.getPassingDate());
         } catch (SQLException e) {
             System.err.println("Error with fill query");
             e.printStackTrace();

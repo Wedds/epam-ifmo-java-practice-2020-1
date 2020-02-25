@@ -15,9 +15,9 @@ public class AnswersDAOTest {
     private static final boolean IS_CORRECT = Boolean.TRUE;
     private static final int POINTS = 2;
     private static final String ANSWER_TEXT_UPDATE = "It is really train answer";
-    private static final int QUESTION_ID_UPDATE  = 3;
-    private static final boolean IS_CORRECT_UPDATE  = Boolean.FALSE;
-    private static final int POINTS_UPDATE  = -2;
+    private static final int QUESTION_ID_UPDATE = 3;
+    private static final boolean IS_CORRECT_UPDATE = Boolean.FALSE;
+    private static final int POINTS_UPDATE = -2;
 
     @Test
     public void testAddObject() {
@@ -34,7 +34,7 @@ public class AnswersDAOTest {
         int wasElements = ANSWERS_DAO.getAnswersListByQuestionId(2).size();
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
-        Assert.assertEquals(wasElements+1, ANSWERS_DAO.getAnswersListByQuestionId(2).size());
+        Assert.assertEquals(wasElements + 1, ANSWERS_DAO.getAnswersListByQuestionId(2).size());
         ANSWERS_DAO.removeById(answer.getId());
     }
 
@@ -43,7 +43,7 @@ public class AnswersDAOTest {
         int wasElements = ANSWERS_DAO.getAll().size();
         Answers answer = createAnswersObject();
         answer = ANSWERS_DAO.addObject(answer);
-        Assert.assertEquals(wasElements+1, ANSWERS_DAO.getAll().size());
+        Assert.assertEquals(wasElements + 1, ANSWERS_DAO.getAll().size());
         ANSWERS_DAO.removeById(answer.getId());
     }
 

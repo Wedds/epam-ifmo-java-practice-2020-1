@@ -5,8 +5,9 @@ import com.ifmo.epampractice.entity.Tests;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Optional;
-import java.sql.Timestamp;
 
 
 public class TestsDAOTest {
@@ -15,24 +16,24 @@ public class TestsDAOTest {
     private static final String TEST_DESCRIPTION = "First test test";
     private static final int SUBJECT_ID = 2;
     private static final boolean IS_RANDOM = Boolean.FALSE;
-    private static final Timestamp CREATION_DATE = Timestamp.valueOf("2020-02-02 10:03:20");
+    private static final LocalDateTime CREATION_DATE = LocalDateTime.of(2020, Month.JULY, 9, 11, 6, 22);
     private static final int TEST_MAX_POINTS = 20;
     private static final int CREATOR_ID = 2;
     private static final int GROUP_ID = 1;
     private static final boolean IS_NECESSARY = Boolean.TRUE;
     private static final int MAX_ATTEMPTS = 2;
-    private static final Timestamp DEADLINE = Timestamp.valueOf("2020-03-03 20:03:20");
+    private static final LocalDateTime DEADLINE = LocalDateTime.of(2021, Month.JULY, 1, 12, 6, 22);
     private static final int TIME_LIMIT = 30;
     private static final String TEST_TITLE_UPDATE = "Update test";
     private static final String TEST_DESCRIPTION_UPDATE = "OLOLOLOLO";
     private static final int SUBJECT_ID_UPDATE = 3;
     private static final boolean IS_RANDOM_UPDATE = Boolean.TRUE;
-    private static final Timestamp CREATION_DATE_UPDATE = Timestamp.valueOf("2022-02-02 10:03:20");
+    private static final LocalDateTime CREATION_DATE_UPDATE = LocalDateTime.of(2020, Month.JULY, 4, 14, 6, 22);
     private static final int TEST_MAX_POINTS_UPDATE = 10;
     private static final int CREATOR_ID_UPDATE = 3;
     private static final boolean IS_NECESSARY_UPDATE = Boolean.FALSE;
     private static final int MAX_ATTEMPTS_UPDATE = 2;
-    private static final Timestamp DEADLINE_UPDATE = Timestamp.valueOf("2021-04-01 20:03:20");
+    private static final LocalDateTime DEADLINE_UPDATE = LocalDateTime.of(2022, Month.JULY, 2, 12, 6, 22);
     private static final int TIME_LIMIT_UPDATE = 30;
     private static final int GROUP_ID_UPDATE = 4;
 

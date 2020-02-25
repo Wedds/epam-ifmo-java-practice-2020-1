@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -128,7 +129,7 @@ public class UsersDAO implements DAO<Users> {
         ps.setString(7, user.getMiddleName());
         ps.setDate(8, user.getBirthDate());
         ps.setString(9, user.getWorkTitle());
-        ps.setTimestamp(10, user.getCreatedAt());
+        ps.setObject(10, user.getCreatedAt());
         ps.setString(avatarPosition, user.getAvatar());
         ps.setInt(groupIdPosition, user.getGroupId());
 
@@ -169,7 +170,7 @@ public class UsersDAO implements DAO<Users> {
         user.setMiddleName(rs.getString("middle_name"));
         user.setBirthDate(rs.getDate("birth_date"));
         user.setWorkTitle(rs.getString("work_title"));
-        user.setCreatedAt(rs.getTimestamp("created_at"));
+        user.setCreatedAt(rs.getObject("created_at", LocalDateTime.class));
         user.setAvatar(rs.getString("avatar"));
         user.setGroupId(rs.getInt("group_id"));
 

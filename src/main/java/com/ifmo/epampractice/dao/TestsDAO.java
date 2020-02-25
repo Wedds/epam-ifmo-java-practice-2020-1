@@ -3,6 +3,7 @@ package com.ifmo.epampractice.dao;
 import com.ifmo.epampractice.entity.Tests;
 import com.ifmo.epampractice.service.DatabaseSource;
 
+import java.time.LocalDateTime;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -216,7 +217,7 @@ public class TestsDAO implements DAO<Tests> {
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_GROUPS_TESTS_QUERY)) {
             preparedStatement.setBoolean(1, test.getIsNecessary());
             preparedStatement.setInt(2, test.getMaxAttempts());
-            preparedStatement.setTimestamp(3, test.getDeadline());
+            preparedStatement.setObject(3, test.getDeadline());
             preparedStatement.setInt(4, test.getTimeLimit());
             preparedStatement.setInt(5, test.getId());
             preparedStatement.setInt(6, test.getGroupId());
@@ -282,7 +283,7 @@ public class TestsDAO implements DAO<Tests> {
             test.setDescription(resultSet.getString("description"));
             test.setSubjectId(resultSet.getInt("subject_id"));
             test.setIsRandom(resultSet.getBoolean("is_random"));
-            test.setCreatedAt(resultSet.getTimestamp("created_at"));
+            test.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
             test.setMaxPoints(resultSet.getInt("max_points"));
             test.setCreatorId(resultSet.getInt("creator_id"));
         } catch (SQLException e) {
@@ -297,7 +298,7 @@ public class TestsDAO implements DAO<Tests> {
             test.setGroupId(resultSet.getInt("group_id"));
             test.setIsNecessary(resultSet.getBoolean("is_necessary"));
             test.setMaxAttempts(resultSet.getInt("max_attempts"));
-            test.setDeadline(resultSet.getTimestamp("deadline"));
+            test.setDeadline(resultSet.getObject("deadline", LocalDateTime.class));
             test.setTimeLimit(resultSet.getInt("time_limit"));
         } catch (SQLException e) {
             System.err.println("Error with fill test for groups object from result set");
@@ -311,7 +312,7 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatement.setString(2, test.getDescription());
             preparedStatement.setInt(3, test.getSubjectId());
             preparedStatement.setBoolean(4, test.getIsRandom());
-            preparedStatement.setTimestamp(5, test.getCreatedAt());
+            preparedStatement.setObject(5, test.getCreatedAt());
             preparedStatement.setInt(6, test.getMaxPoints());
             preparedStatement.setInt(7, test.getCreatorId());
         } catch (SQLException e) {
@@ -326,7 +327,7 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatement.setInt(2, test.getGroupId());
             preparedStatement.setBoolean(3, test.getIsNecessary());
             preparedStatement.setInt(4, test.getMaxAttempts());
-            preparedStatement.setTimestamp(5, test.getDeadline());
+            preparedStatement.setObject(5, test.getDeadline());
             preparedStatement.setInt(6, test.getTimeLimit());
         } catch (SQLException e) {
             System.err.println("Error with filling groups tests query");
