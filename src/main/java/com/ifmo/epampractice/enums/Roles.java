@@ -1,27 +1,18 @@
 package com.ifmo.epampractice.enums;
 
 public enum Roles {
-    ADMIN,
-    MODERATOR,
-    TEACHER,
-    STUDENT;
+    ADMIN("admin"),
+    MODERATOR("moderator"),
+    TEACHER("teacher"),
+    STUDENT("student");
 
-    public static Roles getRoleFromString(final String roleString) {
-        switch (roleString) {
-            case "admin": {
-                return (Roles.ADMIN);
-            }
-            case "moderator": {
-                return (Roles.MODERATOR);
-            }
-            case "teacher": {
-                return (Roles.TEACHER);
-            }
-            case "student": {
-                return (Roles.STUDENT);
-            }
-            default:
-                return (Roles.STUDENT);
-        }
+    private String value;
+
+    Roles(final String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

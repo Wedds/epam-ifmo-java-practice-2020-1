@@ -118,11 +118,10 @@ public class UsersDAO implements DAO<Users> {
 
 
     private void convertObjectToFields(final Users user, final PreparedStatement ps) throws SQLException {
-        String roleName = user.getRoleType().name().toLowerCase();
         final int avatarPosition = 11;
         final int groupIdPosition = 12;
         final int idPosition = 13;
-        ps.setString(1, roleName);
+        ps.setString(1, user.getRoleType().getValue());
         ps.setString(2, user.getEmail());
         ps.setString(3, user.getHash());
         ps.setString(4, user.getSalt());
@@ -143,7 +142,7 @@ public class UsersDAO implements DAO<Users> {
     private Users convertFieldsToObject(final ResultSet rs) throws SQLException {
         Users user = new Users();
         user.setId(rs.getInt("id"));
-        user.setRoleType(Roles.getRoleFromString(rs.getString("role_type")));
+        user.setRoleType(Roles.valueOf(rs.getString("role_type").toUpperCase()));
         user.setEmail(rs.getString("email"));
         user.setHash(rs.getString("hash"));
         user.setSalt(rs.getString("salt"));

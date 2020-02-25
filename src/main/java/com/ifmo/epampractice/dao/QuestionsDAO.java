@@ -135,7 +135,7 @@ public class QuestionsDAO implements DAO<Questions> {
     private void fillQuestionObjectFromResultSet(final Questions question, final ResultSet resultSet) {
         try {
             question.setId(resultSet.getInt("id"));
-            question.setQuestionType(QuestionType.getQuestionTypeFromString(resultSet.getString("question_type")));
+            question.setQuestionType(QuestionType.valueOf(resultSet.getString("question_type").toUpperCase()));
             question.setTestId(resultSet.getInt("test_id"));
             question.setTitle(resultSet.getString("title"));
             question.setImage(resultSet.getString("image"));
@@ -148,7 +148,7 @@ public class QuestionsDAO implements DAO<Questions> {
 
     private void fillQueryFromObject(final Questions question, final PreparedStatement preparedStatement) {
         try {
-            preparedStatement.setString(1, question.getQuestionType().name().toLowerCase());
+            preparedStatement.setString(1, question.getQuestionType().getValue());
             preparedStatement.setInt(2, question.getTestId());
             preparedStatement.setString(3, question.getTitle());
             preparedStatement.setString(4, question.getImage());
