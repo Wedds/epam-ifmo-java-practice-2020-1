@@ -23,8 +23,7 @@ public class GroupsDAOTest {
     @BeforeClass
     public static void initTestDb() {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-             Statement statement = connection.createStatement()
-        ) {
+                Statement statement = connection.createStatement()) {
             TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Database_script_test.sql"), statement);
             TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Insert_test_script_H2.sql"), statement);
         } catch (SQLException e) {
@@ -69,6 +68,13 @@ public class GroupsDAOTest {
         /*Checking getAll */
         listGroups = groupDao.getAll();
         Assert.assertEquals(7, listGroups.size());
+        for (Groups group: listGroups) {
+            if (group.getId() == 1) {
+                realGroup1 = group;
+            } else if (group.getId() == 7) {
+                realGroup2 = group;
+            }
+        }
         Assert.assertEquals(expectedGroup1, listGroups.get(0));
         Assert.assertEquals(expectedGroup2, listGroups.get(6));
 
