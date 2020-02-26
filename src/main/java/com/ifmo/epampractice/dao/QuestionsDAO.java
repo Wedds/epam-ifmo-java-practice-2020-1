@@ -44,7 +44,7 @@ public class QuestionsDAO implements DAO<Questions> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return question;
     }
@@ -62,7 +62,7 @@ public class QuestionsDAO implements DAO<Questions> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return questionsList;
     }
@@ -80,7 +80,7 @@ public class QuestionsDAO implements DAO<Questions> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return questionsList;
     }
@@ -98,7 +98,7 @@ public class QuestionsDAO implements DAO<Questions> {
                 fillQuestionObjectFromResultSet(question, resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(question);
     }
@@ -114,7 +114,7 @@ public class QuestionsDAO implements DAO<Questions> {
                 throw new IllegalArgumentException("Update question failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -128,7 +128,7 @@ public class QuestionsDAO implements DAO<Questions> {
                 throw new IllegalArgumentException("Remove question failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 

@@ -40,7 +40,7 @@ public class GroupsDAO implements DAO<Groups> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return group;
     }
@@ -63,7 +63,7 @@ public class GroupsDAO implements DAO<Groups> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return groupsList;
     }
@@ -84,7 +84,7 @@ public class GroupsDAO implements DAO<Groups> {
                 group.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(group);
     }
@@ -98,7 +98,7 @@ public class GroupsDAO implements DAO<Groups> {
             preparedStatement.setInt(3, group.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -109,7 +109,7 @@ public class GroupsDAO implements DAO<Groups> {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 }

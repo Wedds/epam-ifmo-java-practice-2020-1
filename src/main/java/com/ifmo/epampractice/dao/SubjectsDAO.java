@@ -37,7 +37,7 @@ public class SubjectsDAO implements DAO<Subjects> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return subject;
     }
@@ -76,7 +76,7 @@ public class SubjectsDAO implements DAO<Subjects> {
                 subject.setName(resultSet.getString("name"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(subject);
     }
@@ -94,7 +94,7 @@ public class SubjectsDAO implements DAO<Subjects> {
                 throw new IllegalArgumentException("Update subject failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -108,7 +108,7 @@ public class SubjectsDAO implements DAO<Subjects> {
                 throw new IllegalArgumentException("Remove subject failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 }
