@@ -9,6 +9,7 @@ import java.util.Optional;
 public class TestsService {
     private static final TestsDAO TESTS_DAO = new TestsDAO();
     private static final QuestionsService QUESTIONS_SERVICE = new QuestionsService();
+    private static final AttemptsService ATTEMPTS_SERVICE = new AttemptsService();
 
     public Tests addObject(final Tests test) {
         // ПРВЕРИТЬ НА ЮЗЕРА И САБДЖЕКТ
@@ -124,6 +125,7 @@ public class TestsService {
 
     public Tests getTestForGroupWithQuestions(final int testId, final int groupId) {
         Tests test;
+        // CHECK GROUP
         if (!ifTestObjectExist(testId)) {
             System.err.println("Test doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
@@ -132,6 +134,31 @@ public class TestsService {
         test.setQuestionsList(QUESTIONS_SERVICE.getQuestionsWithAnswersListByTestId(testId));
         return test;
     }
+
+    public Tests getTestWithAttemptsByTestId(final int testId) {
+        Tests test;
+        if (!ifTestObjectExist(testId)) {
+            System.err.println("Test doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
+        }
+        test = getById(testId);
+        test.setAttemptsList(ATTEMPTS_SERVICE.getAttemptsListByTestId(testId));
+        return test;
+    }
+
+    public Tests getTestForGroupWithAttempts(final int testId, final int groupId) {
+        Tests test;
+        // CHECK GROUP
+        if (!ifTestObjectExist(testId)) {
+            System.err.println("Test doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
+        }
+        test = getObjectByTestAndGroupId(testId, groupId);
+        test.setAttemptsList(ATTEMPTS_SERVICE.getAttemptsListByTestId(testId));
+        return test;
+    }
+
+    //public Tests getTestForUserWithAttempts(final int testId, final int userId) {
 
     public Boolean ifTestObjectExist(final int id) {
         if (TESTS_DAO.getById(id).isPresent()) {
