@@ -6,11 +6,19 @@
 
     <servlet>
         <servlet-name>mainServlet</servlet-name>
-        <servlet-class>com.ifmo.epampractice.servlets.MainServlet</servlet-class>
+        <servlet-class>com.ifmo.epampractice.controllers.MainServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>usersServlet</servlet-name>
+        <servlet-class>com.ifmo.epampractice.controllers.UsersServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>mainServlet</servlet-name>
-        <url-pattern>/hello</url-pattern>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>usersServlet</servlet-name>
+        <url-pattern>/users</url-pattern>
     </servlet-mapping>
 </web-app>
