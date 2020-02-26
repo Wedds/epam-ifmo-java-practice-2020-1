@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 public class GroupsDAO implements DAO<Groups> {
-    private static final String ADD_QUERY = "INSERT INTO groups(name, created_at) VALUES(?,?) RETURNING id";
+    private static final String ADD_QUERY = "INSERT INTO groups(name, created_at) VALUES(?,?)";
     private static final String GET_ALL_QUERY = "SELECT id, name, created_at FROM groups";
     private static final String GET_BY_ID_QUERY = "SELECT name, created_at FROM groups WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE groups SET name=?, created_at=? WHERE id=?";

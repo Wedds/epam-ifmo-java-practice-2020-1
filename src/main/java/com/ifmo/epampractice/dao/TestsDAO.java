@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class TestsDAO implements DAO<Tests> {
     private static final String INSERT_TESTS_QUERY = "INSERT INTO TESTS(title, description," +
-            "subject_id, is_random, created_at, max_points, creator_id) VALUES(?,?,?,?,?,?,?) RETURNING id";
+            "subject_id, is_random, created_at, max_points, creator_id) VALUES(?,?,?,?,?,?,?)";
     private static final String INSERT_GROUPS_TESTS_QUERY = "INSERT INTO GROUPS_TESTS(test_id, group_id," +
             "is_necessary, max_attempts, deadline, time_limit) VALUES(?,?,?,?,?,?)";
     private static final String SELECT_ALL_QUERY = "SELECT id, title, description," +

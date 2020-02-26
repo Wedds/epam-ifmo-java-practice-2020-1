@@ -2,9 +2,16 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Tests;
 
+import com.ifmo.epampractice.service.DatabaseSource;
+import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
@@ -36,6 +43,19 @@ public class TestsDAOTest {
     private static final LocalDateTime DEADLINE_UPDATE = LocalDateTime.of(2022, Month.JULY, 2, 12, 6, 22);
     private static final int TIME_LIMIT_UPDATE = 30;
     private static final int GROUP_ID_UPDATE = 4;
+
+    @BeforeClass
+    public static void initTestDb() {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement()
+        ) {
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Insert_test_script_H2.sql"), statement);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Unable to create a test database.", e);
+        }
+    }
+
 
     @Test
     public void testAddObject() {
@@ -85,7 +105,7 @@ public class TestsDAOTest {
         int wasElements = TEST_DAO.getAll().size();
         Tests test = createTestsObject();
         test = TEST_DAO.addObject(test);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAll().size());
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAll().size());
         TEST_DAO.removeById(test.getId());
     }
 
@@ -94,7 +114,7 @@ public class TestsDAOTest {
         int wasElements = TEST_DAO.getAllTestsForGroupsByGroupId(1).size();
         Tests test = createTestForGroupObject();
         test = TEST_DAO.addTestsWithGroupsTests(test);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAllTestsForGroupsByGroupId(1).size());
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAllTestsForGroupsByGroupId(1).size());
         TEST_DAO.removeById(test.getId());
     }
 
@@ -105,7 +125,7 @@ public class TestsDAOTest {
         Tests groupsTests = fillTestsForGroup(test);
         int wasElements = TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size();
         TEST_DAO.addGroupsTests(groupsTests);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size());
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size());
         TEST_DAO.removeById(test.getId());
     }
 
@@ -152,7 +172,7 @@ public class TestsDAOTest {
         Assert.assertEquals(Boolean.TRUE, controlTest.equals(testForCheck));
     }
 
-    public Tests createTestsObject() {
+    private Tests createTestsObject() {
         Tests test = new Tests();
         test.setTitle(TEST_TITLE);
         test.setDescription(TEST_DESCRIPTION);
@@ -164,7 +184,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests createTestForGroupObject() {
+    private Tests createTestForGroupObject() {
         Tests test = createTestsObject();
         test.setGroupId(GROUP_ID);
         test.setIsNecessary(IS_NECESSARY);
@@ -174,7 +194,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests fillTestsForGroup(final Tests test) {
+    private Tests fillTestsForGroup(final Tests test) {
         test.setGroupId(GROUP_ID_UPDATE);
         test.setIsNecessary(IS_NECESSARY);
         test.setMaxAttempts(MAX_ATTEMPTS);
@@ -183,7 +203,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests createGroupsTestsObjectForUpdate() {
+    private Tests createGroupsTestsObjectForUpdate() {
         Tests test = new Tests();
         test.setTitle(TEST_TITLE_UPDATE);
         test.setDescription(TEST_DESCRIPTION_UPDATE);

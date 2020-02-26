@@ -2,9 +2,16 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Answers;
 
+import com.ifmo.epampractice.service.DatabaseSource;
+import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
 
@@ -18,6 +25,18 @@ public class AnswersDAOTest {
     private static final int QUESTION_ID_UPDATE = 3;
     private static final boolean IS_CORRECT_UPDATE = Boolean.FALSE;
     private static final int POINTS_UPDATE = -2;
+
+    @BeforeClass
+    public static void initTestDb() {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement()
+        ) {
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Insert_test_script_H2.sql"), statement);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Unable to create a test database.", e);
+        }
+    }
 
     @Test
     public void testAddObject() {

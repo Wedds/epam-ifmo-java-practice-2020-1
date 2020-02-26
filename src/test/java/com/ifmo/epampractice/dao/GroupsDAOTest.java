@@ -2,18 +2,39 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Groups;
 
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
+import com.ifmo.epampractice.service.DatabaseSource;
+import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+
 public class GroupsDAOTest {
+
+    @BeforeClass
+    public static void initTestDb() {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement()
+        ) {
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Insert_test_script_H2.sql"), statement);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Unable to create a test database.", e);
+        }
+    }
+
+
     @Test
-    public void testCRUD() throws Exception {
-        /* Initialization & Setting expected values*/
+    public void testCRUD() {
         final int year2017 = 2017;
         final int year2020 = 2020;
         final int day19 = 19;
