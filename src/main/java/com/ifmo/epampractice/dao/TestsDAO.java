@@ -100,7 +100,6 @@ public class TestsDAO implements DAO<Tests> {
     }
 
     public List<Tests> getAllTestsForGroupsByTestId(final int testId) {
-        //CHECK
         List<Tests> groupsTestsList = new ArrayList<>();
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement =
@@ -201,8 +200,9 @@ public class TestsDAO implements DAO<Tests> {
             preparedStatement.setInt(1, test.getId());
             preparedStatement.setInt(2, groupId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                resultSet.next();
-                fillTestForGroupObjectFromResultSet(test, resultSet);
+                if (resultSet.next()) {
+                    fillTestForGroupObjectFromResultSet(test, resultSet);
+                }
             }
         } catch (SQLException e) {
             throw new IllegalArgumentException("Error connecting to database");

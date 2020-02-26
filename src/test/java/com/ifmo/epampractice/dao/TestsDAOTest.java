@@ -143,9 +143,6 @@ public class TestsDAOTest {
         TEST_DAO.updateByObject(testForUpdate);
         TEST_DAO.updateGroupsTests(testForUpdate);
         Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(testId, testBeforeUpdate.getGroupId());
-
-        Tests newr = new Tests();
-
         Tests controlTest = new Tests();
         if (testOptional.isPresent()) {
             controlTest = testOptional.get();

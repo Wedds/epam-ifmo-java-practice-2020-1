@@ -18,7 +18,6 @@ public final class TestUtilities {
                     continue;
                 }
                 try {
-                    //System.out.println(query);
                     statement.execute(query);
                 } catch (SQLException e) {
                     throw new IllegalArgumentException("Cannot to create H2 database.", e);

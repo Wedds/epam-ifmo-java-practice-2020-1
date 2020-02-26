@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS tests
     is_random   boolean NOT NULL,
     created_at  timestamp NOT NULL,
     max_points  int NOT NULL,
-    creator_id  int NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+    creator_id  int NOT NULL REFERENCES users (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS groups_tests
