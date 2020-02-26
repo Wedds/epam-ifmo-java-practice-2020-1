@@ -108,7 +108,7 @@ public class QuestionsDAOTest {
         Assert.assertEquals(Boolean.FALSE, controlSum);
     }
 
-    public Questions createQuestionsObject() {
+    private Questions createQuestionsObject() {
         Questions question = new Questions();
         question.setQuestionType(QUESTION_TYPE);
         question.setTitle(QUESTION_TITLE);
@@ -117,7 +117,7 @@ public class QuestionsDAOTest {
         return question;
     }
 
-    public Questions createQuestionsObjectForUpdate() {
+    private Questions createQuestionsObjectForUpdate() {
         Questions question = new Questions();
         question.setQuestionType(QUESTION_TYPE_UPDATE);
         question.setTitle(QUESTION_TITLE_UPDATE);

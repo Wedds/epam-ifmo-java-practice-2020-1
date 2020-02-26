@@ -118,7 +118,7 @@ public class AttemptsDAOTest {
         Assert.assertEquals(Boolean.FALSE, controlSum);
     }
 
-    public Attempts createAttemptsObject() {
+    private Attempts createAttemptsObject() {
         Attempts attempt = new Attempts();
         attempt.setTestId(TEST_ID);
         attempt.setUserId(USER_ID);
@@ -127,7 +127,7 @@ public class AttemptsDAOTest {
         return attempt;
     }
 
-    public Attempts createAttemptsObjectForUpdate() {
+    private Attempts createAttemptsObjectForUpdate() {
         Attempts attempt = new Attempts();
         attempt.setTestId(TEST_ID_UPDATE);
         attempt.setUserId(USER_ID_UPDATE);

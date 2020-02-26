@@ -172,7 +172,7 @@ public class TestsDAOTest {
         Assert.assertEquals(Boolean.TRUE, controlTest.equals(testForCheck));
     }
 
-    public Tests createTestsObject() {
+    private Tests createTestsObject() {
         Tests test = new Tests();
         test.setTitle(TEST_TITLE);
         test.setDescription(TEST_DESCRIPTION);
@@ -184,7 +184,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests createTestForGroupObject() {
+    private Tests createTestForGroupObject() {
         Tests test = createTestsObject();
         test.setGroupId(GROUP_ID);
         test.setIsNecessary(IS_NECESSARY);
@@ -194,7 +194,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests fillTestsForGroup(final Tests test) {
+    private Tests fillTestsForGroup(final Tests test) {
         test.setGroupId(GROUP_ID_UPDATE);
         test.setIsNecessary(IS_NECESSARY);
         test.setMaxAttempts(MAX_ATTEMPTS);
@@ -203,7 +203,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests createGroupsTestsObjectForUpdate() {
+    private Tests createGroupsTestsObjectForUpdate() {
         Tests test = new Tests();
         test.setTitle(TEST_TITLE_UPDATE);
         test.setDescription(TEST_DESCRIPTION_UPDATE);

@@ -32,18 +32,6 @@ public class SubjectsDAOTest {
         }
     }
 
-    private Subjects createSubjectsObject() {
-        Subjects subject = new Subjects();
-        subject.setName(NAME);
-        return subject;
-    }
-
-    private Subjects createSubjectsObjectForUpdate() {
-        Subjects subject = new Subjects();
-        subject.setName(NAME_UPDATE);
-        return subject;
-    }
-
     @Test
     public void testAddObject() {
         boolean controlSum;
@@ -90,7 +78,6 @@ public class SubjectsDAOTest {
 
     @Test
     public void testGetById() {
-        boolean controlSum;
         Subjects subject = createSubjectsObject();
         subject = SUBJECTS_DAO.addObject(subject);
         Optional<Subjects> subjectOptional = SUBJECTS_DAO.getById(subject.getId());
@@ -109,5 +96,18 @@ public class SubjectsDAOTest {
         subject = SUBJECTS_DAO.addObject(subject);
         Assert.assertEquals(wasElements + 1, SUBJECTS_DAO.getAll().size());
         SUBJECTS_DAO.removeById(subject.getId());
+    }
+
+
+    private Subjects createSubjectsObject() {
+        Subjects subject = new Subjects();
+        subject.setName(NAME);
+        return subject;
+    }
+
+    private Subjects createSubjectsObjectForUpdate() {
+        Subjects subject = new Subjects();
+        subject.setName(NAME_UPDATE);
+        return subject;
     }
 }
