@@ -31,8 +31,8 @@ public class AnswersDAOTest {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()
         ) {
-            TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Database_script_test.sql"), statement);
-            TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Insert_test_script_H2.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Insert_test_script_H2.sql"), statement);
         } catch (SQLException e) {
             throw new IllegalArgumentException("Unable to create a test database.", e);
         }

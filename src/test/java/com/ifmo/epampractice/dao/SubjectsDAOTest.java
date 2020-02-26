@@ -26,7 +26,7 @@ public class SubjectsDAOTest {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              Statement statement = connection.createStatement()
         ) {
-            TestUtilities.executeSqlFile(Paths.get("src", "main", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Database_script_test.sql"), statement);
         } catch (SQLException e) {
             throw new IllegalArgumentException("Unable to create a test database.", e);
         }
