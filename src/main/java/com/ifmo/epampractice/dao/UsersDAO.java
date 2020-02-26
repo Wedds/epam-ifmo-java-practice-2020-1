@@ -36,8 +36,7 @@ public class UsersDAO implements DAO<Users> {
     public Users addObject(final Users user) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)
-        ) {
+                     INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             this.convertObjectToFields(user, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -51,7 +50,7 @@ public class UsersDAO implements DAO<Users> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Creating user failed,no rows affected.", e);
         }
         return user;
     }
@@ -75,8 +74,7 @@ public class UsersDAO implements DAO<Users> {
 
     @Override
     public Optional<Users> getById(final int id) {
-        Users user = new Users();
-        user.setId(id);
+        Users user;
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -136,7 +134,7 @@ public class UsersDAO implements DAO<Users> {
                 throw new IllegalArgumentException("Update user failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Update user failed, no rows affected.", e);
         }
     }
 
@@ -150,7 +148,7 @@ public class UsersDAO implements DAO<Users> {
                 throw new IllegalArgumentException("Remove user failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Remove user failed, no rows affected.", e);
         }
     }
 
