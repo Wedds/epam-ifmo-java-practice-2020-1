@@ -47,7 +47,7 @@ public class UsersDAO implements DAO<Users> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return user;
     }
@@ -83,7 +83,7 @@ public class UsersDAO implements DAO<Users> {
                 user = this.convertFieldsToObject(rs);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(user);
     }
@@ -98,7 +98,7 @@ public class UsersDAO implements DAO<Users> {
                 throw new IllegalArgumentException("Update user failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -112,7 +112,7 @@ public class UsersDAO implements DAO<Users> {
                 throw new IllegalArgumentException("Remove user failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
