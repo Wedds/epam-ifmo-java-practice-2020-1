@@ -45,6 +45,11 @@ public class UsersService {
         return USERS_DAO.getAll();
     }
 
+    public List<Users> getAllByGroupId(final int id) {
+        return USERS_DAO.getAllByGroupId(id);
+    }
+
+
     public Users createUser(final String email, final String password) {
         Users user = new Users();
         String salt = SecurityUtilities.generateSalt();

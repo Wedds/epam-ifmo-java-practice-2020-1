@@ -24,6 +24,8 @@ public class UsersDAO implements DAO<Users> {
             " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE id=?";
     private static final String SELECT_BY_EMAIL_QUERY = "SELECT id, role_type, email, hash, salt, first_name," +
             " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE email=?";
+    private static final String SELECT_BY_GROUP_ID_QUERY = "SELECT id, role_type, email, hash, salt, first_name," +
+            " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE group_id=?";
     private static final String UPDATE_QUERY = "UPDATE users SET role_type=?::roles, email=?, hash=?, salt=?," +
             " first_name=?, last_name=?, middle_name=?, birth_date=?, work_title=?, created_at=?, avatar=?," +
             " group_id=? WHERE id=?";
@@ -105,6 +107,23 @@ public class UsersDAO implements DAO<Users> {
             throw new IllegalArgumentException("Cannot to get a user from database.", e);
         }
         return Optional.of(user);
+    }
+
+    public List<Users> getAllByGroupId(final int id) {
+        ArrayList<Users> usersArrayList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_BY_GROUP_ID_QUERY)) {
+            statement.setInt(1, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    usersArrayList.add(this.convertFieldsToObject(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Getting all users failed. Users are not presented.");
+        }
+        return usersArrayList;
     }
 
     @Override
