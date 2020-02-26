@@ -2,9 +2,16 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Tests;
 
+import com.ifmo.epampractice.service.DatabaseSource;
+import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
@@ -37,6 +44,19 @@ public class TestsDAOTest {
     private static final int TIME_LIMIT_UPDATE = 30;
     private static final int GROUP_ID_UPDATE = 4;
 
+    @BeforeClass
+    public static void initTestDb() {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement()
+        ) {
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Insert_test_script_H2.sql"), statement);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Unable to create a test database.", e);
+        }
+    }
+
+
     @Test
     public void testAddObject() {
         boolean controlSum;
@@ -50,7 +70,8 @@ public class TestsDAOTest {
     @Test
     public void testAddTestsWithGroupsTests() {
         Tests test = createTestForGroupObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addTestForGroup(test);
         Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(test.getId(), test.getGroupId());
         Assert.assertEquals(Boolean.TRUE, testOptional.isPresent());
         TEST_DAO.removeById(test.getId());
@@ -61,7 +82,7 @@ public class TestsDAOTest {
         boolean controlSum;
         Tests test = createTestForGroupObject();
         test = TEST_DAO.addObject(test);
-        test = TEST_DAO.addGroupsTests(test);
+        test = TEST_DAO.addTestForGroup(test);
         controlSum = TEST_DAO.getObjectByTestAndGroupId(test.getId(), test.getGroupId()).isPresent();
         Assert.assertEquals(Boolean.TRUE, controlSum);
         TEST_DAO.removeById(test.getId());
@@ -85,7 +106,7 @@ public class TestsDAOTest {
         int wasElements = TEST_DAO.getAll().size();
         Tests test = createTestsObject();
         test = TEST_DAO.addObject(test);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAll().size());
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAll().size());
         TEST_DAO.removeById(test.getId());
     }
 
@@ -93,30 +114,34 @@ public class TestsDAOTest {
     public void testGetAllTestsForGroupsByGroupId() {
         int wasElements = TEST_DAO.getAllTestsForGroupsByGroupId(1).size();
         Tests test = createTestForGroupObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAllTestsForGroupsByGroupId(1).size());
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addTestForGroup(test);
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAllTestsForGroupsByGroupId(1).size());
         TEST_DAO.removeById(test.getId());
     }
 
     @Test
     public void testGetAllTestsForGroupsByTestId() {
         Tests test = createTestForGroupObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addTestForGroup(test);
         Tests groupsTests = fillTestsForGroup(test);
         int wasElements = TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size();
-        TEST_DAO.addGroupsTests(groupsTests);
-        Assert.assertEquals(wasElements+1, TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size());
+        TEST_DAO.addTestForGroup(groupsTests);
+        Assert.assertEquals(wasElements + 1, TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size());
         TEST_DAO.removeById(test.getId());
     }
 
     @Test
     public void testUpdateByObject() {
         Tests testBeforeUpdate = createTestForGroupObject();
-        testBeforeUpdate = TEST_DAO.addTestsWithGroupsTests(testBeforeUpdate);
+        testBeforeUpdate = TEST_DAO.addObject(testBeforeUpdate);
+        testBeforeUpdate = TEST_DAO.addTestForGroup(testBeforeUpdate);
         int testId = testBeforeUpdate.getId();
         Tests testForUpdate = createGroupsTestsObjectForUpdate();
         testForUpdate.setId(testId);
         TEST_DAO.updateByObject(testForUpdate);
+        TEST_DAO.updateGroupsTests(testForUpdate);
         Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(testId, testBeforeUpdate.getGroupId());
         Tests controlTest = new Tests();
         if (testOptional.isPresent()) {
@@ -130,7 +155,8 @@ public class TestsDAOTest {
     public void testRemoveById() {
         boolean controlSum;
         Tests test = createTestForGroupObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addTestForGroup(test);
         int id = test.getId();
         TEST_DAO.removeById(id);
         controlSum = TEST_DAO.getById(id).isPresent() | !(TEST_DAO.getAllTestsForGroupsByTestId(id).isEmpty());
@@ -140,7 +166,8 @@ public class TestsDAOTest {
     @Test
     public void testFillObjectByGroupId() {
         Tests testForInsert = createGroupsTestsObjectForUpdate();
-        Tests testForCheck = TEST_DAO.addTestsWithGroupsTests(testForInsert);
+        Tests testForCheck = TEST_DAO.addObject(testForInsert);
+        testForCheck = TEST_DAO.addTestForGroup(testForCheck);
         testForCheck = TEST_DAO.fillObjectByGroupId(testForCheck, testForInsert.getGroupId());
 
         Optional<Tests> controlTestOptional =
@@ -152,7 +179,7 @@ public class TestsDAOTest {
         Assert.assertEquals(Boolean.TRUE, controlTest.equals(testForCheck));
     }
 
-    public Tests createTestsObject() {
+    private Tests createTestsObject() {
         Tests test = new Tests();
         test.setTitle(TEST_TITLE);
         test.setDescription(TEST_DESCRIPTION);
@@ -164,7 +191,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests createTestForGroupObject() {
+    private Tests createTestForGroupObject() {
         Tests test = createTestsObject();
         test.setGroupId(GROUP_ID);
         test.setIsNecessary(IS_NECESSARY);
@@ -174,7 +201,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests fillTestsForGroup(final Tests test) {
+    private Tests fillTestsForGroup(final Tests test) {
         test.setGroupId(GROUP_ID_UPDATE);
         test.setIsNecessary(IS_NECESSARY);
         test.setMaxAttempts(MAX_ATTEMPTS);
@@ -183,7 +210,7 @@ public class TestsDAOTest {
         return test;
     }
 
-    public Tests createGroupsTestsObjectForUpdate() {
+    private Tests createGroupsTestsObjectForUpdate() {
         Tests test = new Tests();
         test.setTitle(TEST_TITLE_UPDATE);
         test.setDescription(TEST_DESCRIPTION_UPDATE);

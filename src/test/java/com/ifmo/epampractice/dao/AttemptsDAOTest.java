@@ -2,12 +2,20 @@ package com.ifmo.epampractice.dao;
 
 import com.ifmo.epampractice.entity.Attempts;
 
+import com.ifmo.epampractice.service.DatabaseSource;
+import com.ifmo.epampractice.utilities.TestUtilities;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
+
 
 public class AttemptsDAOTest {
     private static final AttemptsDAO ATTEMPTS_DAO = new AttemptsDAO();
@@ -20,11 +28,22 @@ public class AttemptsDAOTest {
     private static final int SCORE_UPDATE = 5;
     private static final LocalDateTime PASSING_DATE_UPDATE = LocalDateTime.of(2020, Month.JANUARY, 10, 11, 3, 22);
 
+    @BeforeClass
+    public static void initTestDb() {
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             Statement statement = connection.createStatement()
+        ) {
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Database_script_test.sql"), statement);
+            TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Insert_test_script_H2.sql"), statement);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Unable to create a test database.", e);
+        }
+    }
+
     @Test
     public void testAddObject() {
         boolean controlSum;
         Attempts attempt = createAttemptsObject();
-        System.out.println(attempt.getPassingDate());
         attempt = ATTEMPTS_DAO.addObject(attempt);
         controlSum = ATTEMPTS_DAO.getById(attempt.getId()).isPresent();
         Assert.assertEquals(Boolean.TRUE, controlSum);
@@ -99,7 +118,7 @@ public class AttemptsDAOTest {
         Assert.assertEquals(Boolean.FALSE, controlSum);
     }
 
-    public Attempts createAttemptsObject() {
+    private Attempts createAttemptsObject() {
         Attempts attempt = new Attempts();
         attempt.setTestId(TEST_ID);
         attempt.setUserId(USER_ID);
@@ -108,7 +127,7 @@ public class AttemptsDAOTest {
         return attempt;
     }
 
-    public Attempts createAttemptsObjectForUpdate() {
+    private Attempts createAttemptsObjectForUpdate() {
         Attempts attempt = new Attempts();
         attempt.setTestId(TEST_ID_UPDATE);
         attempt.setUserId(USER_ID_UPDATE);

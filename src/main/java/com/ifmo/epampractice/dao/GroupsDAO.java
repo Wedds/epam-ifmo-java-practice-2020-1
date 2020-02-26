@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 public class GroupsDAO implements DAO<Groups> {
-    private static final String ADD_QUERY = "INSERT INTO groups(name, created_at) VALUES(?,?) RETURNING id";
+    private static final String ADD_QUERY = "INSERT INTO groups(name, created_at) VALUES(?,?)";
     private static final String GET_ALL_QUERY = "SELECT id, name, created_at FROM groups";
     private static final String GET_BY_ID_QUERY = "SELECT name, created_at FROM groups WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE groups SET name=?, created_at=? WHERE id=?";
@@ -40,7 +40,7 @@ public class GroupsDAO implements DAO<Groups> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return group;
     }
@@ -63,7 +63,7 @@ public class GroupsDAO implements DAO<Groups> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return groupsList;
     }
@@ -84,7 +84,7 @@ public class GroupsDAO implements DAO<Groups> {
                 group.setCreatedAt(resultSet.getObject("created_at", LocalDateTime.class));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(group);
     }
@@ -98,7 +98,7 @@ public class GroupsDAO implements DAO<Groups> {
             preparedStatement.setInt(3, group.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -109,7 +109,7 @@ public class GroupsDAO implements DAO<Groups> {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class SubjectsDAO implements DAO<Subjects> {
-    private static final String INSERT_QUERY = "INSERT INTO SUBJECTS(name) VALUES(?) RETURNING id";
+    private static final String INSERT_QUERY = "INSERT INTO SUBJECTS(name) VALUES(?)";
     private static final String SELECT_ALL_QUERY = "SELECT id, name FROM SUBJECTS";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, name FROM SUBJECTS WHERE id=?";
     private static final String UPDATE_QUERY = "UPDATE SUBJECTS SET name=? WHERE id=?";
@@ -37,7 +37,7 @@ public class SubjectsDAO implements DAO<Subjects> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return subject;
     }
@@ -76,7 +76,7 @@ public class SubjectsDAO implements DAO<Subjects> {
                 subject.setName(resultSet.getString("name"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(subject);
     }
@@ -94,7 +94,7 @@ public class SubjectsDAO implements DAO<Subjects> {
                 throw new IllegalArgumentException("Update subject failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -108,7 +108,7 @@ public class SubjectsDAO implements DAO<Subjects> {
                 throw new IllegalArgumentException("Remove subject failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 }

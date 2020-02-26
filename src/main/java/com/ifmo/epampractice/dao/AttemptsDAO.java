@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class AttemptsDAO implements DAO<Attempts> {
     private static final String INSERT_QUERY = "INSERT INTO ATTEMPTS(user_id, " +
-            "test_id, score, passing_date) VALUES(?,?,?,?) RETURNING id";
+            "test_id, score, passing_date) VALUES(?,?,?,?)";
     private static final String SELECT_ALL_QUERY = "SELECT id, user_id, test_id, " +
             "score, passing_date FROM ATTEMPTS";
     private static final String SELECT_ALL_BY_TEST_ID_QUERY = "SELECT id, user_id, test_id, " +
@@ -47,7 +47,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return attempt;
     }
@@ -65,7 +65,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return testAttemptsList;
     }
@@ -83,7 +83,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return testAttemptsList;
     }
@@ -102,7 +102,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return testAttemptsList;
     }
@@ -120,7 +120,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 fillAttemptObjectFromResultSet(attempt, resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(attempt);
     }
@@ -136,7 +136,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 throw new IllegalArgumentException("Update attempt failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -150,7 +150,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 throw new IllegalArgumentException("Remove attempt failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
