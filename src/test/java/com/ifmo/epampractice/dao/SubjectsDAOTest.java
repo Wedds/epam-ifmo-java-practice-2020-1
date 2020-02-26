@@ -32,13 +32,13 @@ public class SubjectsDAOTest {
         }
     }
 
-    public Subjects createSubjectsObject() {
+    private Subjects createSubjectsObject() {
         Subjects subject = new Subjects();
         subject.setName(NAME);
         return subject;
     }
 
-    public Subjects createSubjectsObjectForUpdate() {
+    private Subjects createSubjectsObjectForUpdate() {
         Subjects subject = new Subjects();
         subject.setName(NAME_UPDATE);
         return subject;
