@@ -47,7 +47,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return attempt;
     }
@@ -65,7 +65,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return testAttemptsList;
     }
@@ -83,7 +83,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return testAttemptsList;
     }
@@ -102,7 +102,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return testAttemptsList;
     }
@@ -120,7 +120,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 fillAttemptObjectFromResultSet(attempt, resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(attempt);
     }
@@ -136,7 +136,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 throw new IllegalArgumentException("Update attempt failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -150,7 +150,7 @@ public class AttemptsDAO implements DAO<Attempts> {
                 throw new IllegalArgumentException("Remove attempt failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
