@@ -70,7 +70,8 @@ public class TestsDAOTest {
     @Test
     public void testAddTestsWithGroupsTests() {
         Tests test = createTestForGroupObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addTestForGroup(test);
         Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(test.getId(), test.getGroupId());
         Assert.assertEquals(Boolean.TRUE, testOptional.isPresent());
         TEST_DAO.removeById(test.getId());
@@ -81,7 +82,7 @@ public class TestsDAOTest {
         boolean controlSum;
         Tests test = createTestForGroupObject();
         test = TEST_DAO.addObject(test);
-        test = TEST_DAO.addGroupsTests(test);
+        test = TEST_DAO.addTestForGroup(test);
         controlSum = TEST_DAO.getObjectByTestAndGroupId(test.getId(), test.getGroupId()).isPresent();
         Assert.assertEquals(Boolean.TRUE, controlSum);
         TEST_DAO.removeById(test.getId());
@@ -113,7 +114,8 @@ public class TestsDAOTest {
     public void testGetAllTestsForGroupsByGroupId() {
         int wasElements = TEST_DAO.getAllTestsForGroupsByGroupId(1).size();
         Tests test = createTestForGroupObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addTestForGroup(test);
         Assert.assertEquals(wasElements + 1, TEST_DAO.getAllTestsForGroupsByGroupId(1).size());
         TEST_DAO.removeById(test.getId());
     }
@@ -121,10 +123,11 @@ public class TestsDAOTest {
     @Test
     public void testGetAllTestsForGroupsByTestId() {
         Tests test = createTestForGroupObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addTestForGroup(test);
         Tests groupsTests = fillTestsForGroup(test);
         int wasElements = TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size();
-        TEST_DAO.addGroupsTests(groupsTests);
+        TEST_DAO.addTestForGroup(groupsTests);
         Assert.assertEquals(wasElements + 1, TEST_DAO.getAllTestsForGroupsByTestId(test.getId()).size());
         TEST_DAO.removeById(test.getId());
     }
@@ -132,11 +135,13 @@ public class TestsDAOTest {
     @Test
     public void testUpdateByObject() {
         Tests testBeforeUpdate = createTestForGroupObject();
-        testBeforeUpdate = TEST_DAO.addTestsWithGroupsTests(testBeforeUpdate);
+        testBeforeUpdate = TEST_DAO.addObject(testBeforeUpdate);
+        testBeforeUpdate = TEST_DAO.addTestForGroup(testBeforeUpdate);
         int testId = testBeforeUpdate.getId();
         Tests testForUpdate = createGroupsTestsObjectForUpdate();
         testForUpdate.setId(testId);
         TEST_DAO.updateByObject(testForUpdate);
+        TEST_DAO.updateGroupsTests(testForUpdate);
         Optional<Tests> testOptional = TEST_DAO.getObjectByTestAndGroupId(testId, testBeforeUpdate.getGroupId());
         Tests controlTest = new Tests();
         if (testOptional.isPresent()) {
@@ -150,7 +155,8 @@ public class TestsDAOTest {
     public void testRemoveById() {
         boolean controlSum;
         Tests test = createTestForGroupObject();
-        test = TEST_DAO.addTestsWithGroupsTests(test);
+        test = TEST_DAO.addObject(test);
+        test = TEST_DAO.addTestForGroup(test);
         int id = test.getId();
         TEST_DAO.removeById(id);
         controlSum = TEST_DAO.getById(id).isPresent() | !(TEST_DAO.getAllTestsForGroupsByTestId(id).isEmpty());
@@ -160,7 +166,8 @@ public class TestsDAOTest {
     @Test
     public void testFillObjectByGroupId() {
         Tests testForInsert = createGroupsTestsObjectForUpdate();
-        Tests testForCheck = TEST_DAO.addTestsWithGroupsTests(testForInsert);
+        Tests testForCheck = TEST_DAO.addObject(testForInsert);
+        testForCheck = TEST_DAO.addTestForGroup(testForCheck);
         testForCheck = TEST_DAO.fillObjectByGroupId(testForCheck, testForInsert.getGroupId());
 
         Optional<Tests> controlTestOptional =

@@ -38,7 +38,6 @@ $$
     END
 $$;
 
-
 CREATE TABLE IF NOT EXISTS "subjects"
 (
     "id"   SERIAL PRIMARY KEY,
@@ -66,27 +65,25 @@ CREATE TABLE IF NOT EXISTS "users"
     "work_title"  varchar,
     "created_at"  timestamp NOT NULL ,
     "avatar"      varchar,
-    "group_id"    int REFERENCES "groups" ("id")
+    "group_id"    int REFERENCES "groups" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
-
-
 
 CREATE TABLE IF NOT EXISTS "tests"
 (
     "id"          SERIAL PRIMARY KEY,
     "title"       varchar NOT NULL ,
     "description" varchar,
-    "subject_id"  int REFERENCES "subjects" ("id") NOT NULL ,
+    "subject_id"  int NOT NULL REFERENCES "subjects" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     "is_random"   boolean NOT NULL ,
     "created_at"  timestamp NOT NULL ,
     "max_points"  int NOT NULL ,
-    "creator_id"  int NOT NULL
+    "creator_id"  int NOT NULL REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "groups_tests"
 (
-    "test_id"      int REFERENCES "tests" ("id") NOT NULL ,
-    "group_id"     int REFERENCES "groups" ("id") NOT NULL ,
+    "test_id"      int NOT NULL REFERENCES "tests" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    "group_id"     int NOT NULL REFERENCES "groups" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     "is_necessary" boolean NOT NULL ,
     "max_attempts" int,
     "deadline"     timestamp,
@@ -101,7 +98,7 @@ CREATE TABLE IF NOT EXISTS "questions"
     "title"         varchar,
     "image"         varchar,
     "question_text" varchar NOT NULL ,
-    "test_id"       int REFERENCES "tests" ("id") NOT NULL
+    "test_id"       int NOT NULL REFERENCES "tests" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "answers"
@@ -109,7 +106,7 @@ CREATE TABLE IF NOT EXISTS "answers"
     "id"          SERIAL PRIMARY KEY,
     "image"       varchar,
     "answer_text" varchar NOT NULL ,
-    "question_id" int REFERENCES "questions" ("id") NOT NULL ,
+    "question_id" int NOT NULL REFERENCES "questions" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     "is_correct"  boolean NOT NULL ,
     "points"      int NOT NULL
 );
@@ -117,8 +114,8 @@ CREATE TABLE IF NOT EXISTS "answers"
 CREATE TABLE IF NOT EXISTS "attempts"
 (
     "id"           SERIAL PRIMARY KEY,
-    "test_id"      int REFERENCES "tests" ("id") NOT NULL ,
-    "user_id"      int REFERENCES "users" ("id") NOT NULL ,
+    "test_id"      int NOT NULL REFERENCES "tests" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    "user_id"      int NOT NULL REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     "score"        int NOT NULL ,
     "passing_date" timestamp NOT NULL
 );

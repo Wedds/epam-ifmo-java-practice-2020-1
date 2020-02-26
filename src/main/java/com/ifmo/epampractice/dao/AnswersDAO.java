@@ -3,6 +3,7 @@ package com.ifmo.epampractice.dao;
 import com.ifmo.epampractice.entity.Answers;
 import com.ifmo.epampractice.service.DatabaseSource;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -44,7 +45,7 @@ public class AnswersDAO implements DAO<Answers> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return answer;
     }
@@ -62,7 +63,7 @@ public class AnswersDAO implements DAO<Answers> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return answersList;
     }
@@ -80,7 +81,7 @@ public class AnswersDAO implements DAO<Answers> {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return answersList;
     }
@@ -98,7 +99,7 @@ public class AnswersDAO implements DAO<Answers> {
                 fillAnswerObjectFromResultSet(answer, resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
         return Optional.of(answer);
     }
@@ -114,7 +115,7 @@ public class AnswersDAO implements DAO<Answers> {
                 throw new IllegalArgumentException("Update answer failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
@@ -128,7 +129,7 @@ public class AnswersDAO implements DAO<Answers> {
                 throw new IllegalArgumentException("Remove answer failed, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error connecting to database");
         }
     }
 
