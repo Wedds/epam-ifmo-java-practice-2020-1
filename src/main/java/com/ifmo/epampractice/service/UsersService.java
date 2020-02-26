@@ -13,21 +13,18 @@ import java.util.Optional;
 public class UsersService {
     private static final UsersDAO USERS_DAO = new UsersDAO();
     private static final int DEFAULT_GROUP = 1;
-    private static final String DEFAULT_LAST_NAME = "Фамилия";
-    private static final String DEFAULT_FIRST_NAME = "Имя";
-    private static final String DEFAULT_BIRTH_DATE = "1900-01-01";
 
     public Users getById(final int id) {
         Optional<Users> userOptional = USERS_DAO.getById(id);
-        if (!userOptional.isPresent()){
+        if (!userOptional.isPresent()) {
             throw new IllegalStateException("User not found!");
         }
         return userOptional.get();
     }
 
-    public Users getByEmail(final String email){
+    public Users getByEmail(final String email) {
         Optional<Users> userOptional = USERS_DAO.getByEmail(email);
-        if (!userOptional.isPresent()){
+        if (!userOptional.isPresent()) {
             throw new IllegalStateException("User not found!");
         }
         return userOptional.get();
@@ -50,20 +47,31 @@ public class UsersService {
     }
 
 
-    public Users createUser(final String email, final String password) {
+    public Users createUser(final Users user, final String password) {
+        if (user.getBirthDate() == null
+                || user.getEmail() == null
+                || user.getFirstName() == null
+                || user.getLastName() == null
+                || password == null
+        ) {
+            throw new IllegalArgumentException("The required fields are not filled in");
+        }
+        setDefaultValues(password, user);
+        return USERS_DAO.addObject(user);
+    }
+
+    public Users signUp(
+            final String email,
+            final String password,
+            final String firstName,
+            final String lastName,
+            final Date birthDate) {
         Users user = new Users();
-        String salt = SecurityUtilities.generateSalt();
-
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setEmail(email);
-        user.setSalt(salt);
-        user.setHash(SecurityUtilities.generateHash(password, salt));
-        user.setRoleType(Roles.STUDENT);
-        user.setFirstName(DEFAULT_FIRST_NAME);
-        user.setLastName(DEFAULT_LAST_NAME);
-        user.setGroupId(DEFAULT_GROUP);
-        user.setCreatedAt(LocalDateTime.now());
-        user.setBirthDate(Date.valueOf(DEFAULT_BIRTH_DATE));
-
+        user.setBirthDate(birthDate);
+        setDefaultValues(password, user);
         return addObject(user);
     }
 
@@ -71,6 +79,15 @@ public class UsersService {
         Users user = getByEmail(email);
         String md5Password = SecurityUtilities.generateHash(password, user.getSalt());
         return user.getHash().equals(md5Password);
+    }
+
+    private static void setDefaultValues(final String password, final Users user) {
+        String salt = SecurityUtilities.generateSalt();
+        user.setSalt(salt);
+        user.setHash(SecurityUtilities.generateHash(password, salt));
+        user.setRoleType(Roles.STUDENT);
+        user.setGroupId(DEFAULT_GROUP);
+        user.setCreatedAt(LocalDateTime.now());
     }
 
 }
