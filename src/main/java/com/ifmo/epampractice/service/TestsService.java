@@ -76,9 +76,9 @@ public class TestsService {
         TESTS_DAO.updateByObject(test);
     }
 
-    public void updateTestForGroupByObject(final Tests test) {
+    public void updateGroupsTests(final Tests test) {
         // ПРВЕРИТЬ НА ЮЗЕРА И САБДЖЕКТ;
-        TESTS_DAO.updateByObject(test);
+        TESTS_DAO.updateGroupsTests(test);
     }
 
     public void removeTestById(final int testId) {
@@ -87,20 +87,6 @@ public class TestsService {
             throw new IllegalArgumentException("This object doesn't exist");
         }
         TESTS_DAO.removeById(testId);
-    }
-
-    public void removeGroupsTestsByTestId(final int testId) {
-        //Проверяем на группу и тест
-        if (!ifTestObjectExist(testId)) {
-            System.err.println("Test doesn't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
-        TESTS_DAO.removeGroupsTestsByTestId(testId);
-    }
-
-    public void removeGroupsTestsByGroupId(final int groupId) {
-        //Проверяем на группу
-        TESTS_DAO.removeGroupsTestsByTestId(groupId);
     }
 
     public void removeGroupsTestsByTestAndGroupId(final int testId, final int groupId) {
