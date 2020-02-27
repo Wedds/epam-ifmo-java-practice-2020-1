@@ -35,7 +35,16 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <form><select class="form-control"><option value="" selected="">Выберите тест</option><optgroup label="Биология"><option value="" selected="">Эукариоты</option><option value="13">Прокариоты</option><option value="14">Хорда</option></optgroup></select></form>
+                    <form>
+                        <select class="form-control">
+                            <option value="noGroup" selected="">Тест без группы</option>
+                                <optgroup label="Биология">
+                                    <option value="">Эукариоты</option>
+                                    <option value="13">Прокариоты</option>
+                                    <option value="14">Хорда</option>
+                            </optgroup>
+                    </select>
+                    </form>
                 </div>
                 <div class="col">
                     <form><select class="form-control"><option value="" selected="">Выберите группу</option><optgroup label="Группы K"><option value="12" selected="">K6844</option><option value="13">K6847</option><option value="14">K8484</option></optgroup></select></form>
@@ -155,7 +164,8 @@
                             <li class="page-item"><a class="page-link" href="#">5</a></li>
                             <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
                         </ul>
-                    </nav><a class="btn btn-primary" href="test_group_edit.html" style="background-color: #f4476b;">Добавить соответствие тест - группа</a></div>
+                    </nav><a class="btn btn-primary" href="test_group_edit.html" style="background-color: #f4476b;">Добавить тест</a>
+                    <a class="btn btn-primary" href="test_group_edit.html" style="background-color: #f4476b; margin-left: 16px">Добавить соответствие тест - группа</a></div>
             </div>
         </div>
     </div>

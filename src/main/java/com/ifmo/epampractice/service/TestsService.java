@@ -1,14 +1,17 @@
 package com.ifmo.epampractice.service;
 
 import com.ifmo.epampractice.dao.TestsDAO;
+import com.ifmo.epampractice.entity.Attempts;
 import com.ifmo.epampractice.entity.Tests;
 
-import java.util.List;
+import java.util.*;
 
 public class TestsService {
     private  static final TestsDAO TESTS_DAO = new TestsDAO();
     private static final QuestionsService QUESTIONS_SERVICE = new QuestionsService();
     private static final AttemptsService ATTEMPTS_SERVICE = new AttemptsService();
+    private static final SubjectsService SUBJECTS_SERVICE = new SubjectsService();
+    private static final UsersService USERS_SERVICE = new UsersService();
     private static TestsService instance;
 
     public static TestsService getInstance() {
@@ -55,6 +58,14 @@ public class TestsService {
         List<Tests> testsList;
         testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
         return testsList;
+    }
+
+    public List<Tests> getAllTestsByCreatorId(final int creatorId) {
+        if (!USERS_SERVICE.ifUserObjectExist(creatorId)) {
+            System.err.println("Test doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
+        }
+        return TESTS_DAO.getAllTestsByCreatorId(creatorId);
     }
 
     public Tests getById(final int testId) {
@@ -141,10 +152,46 @@ public class TestsService {
         return test;
     }
 
-    public Boolean ifTestObjectExist(final int id) {
-        if (TESTS_DAO.getById(id).isPresent()) {
-            return Boolean.TRUE;
+    public Map<Integer, String> getDictionaryWithSubjectTitleAndSubjectIdByGroupId
+            (final int groupId){
+        //TODO Check on group
+        Map <Integer, String> subjectDict = new HashMap<>();
+        List<Tests> testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
+        for (Tests test:testsList){
+            subjectDict.put(test.getSubjectId(), SUBJECTS_SERVICE.getById(test.getSubjectId()).getName());
         }
-        return Boolean.FALSE;
+
+        return subjectDict;
+    }
+
+    public Map<Integer, Integer> getDictionaryWithTestIdAndMaxScoreByUserId
+            (final int userId) {
+        //TODO Check on group
+        Map<Integer, Integer> userMaxScoreDict = new HashMap<>();
+        int groupId = USERS_SERVICE.getById(userId).getGroupId();
+        List<Tests> testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
+
+        for (Tests test:testsList){
+            int maxScore = ATTEMPTS_SERVICE.getMaximumScoreTestIdAndByUserId(test.getId(), userId);
+            userMaxScoreDict.put(test.getId(), maxScore);
+        }
+        return userMaxScoreDict;
+    }
+
+    public Map<Integer, Integer> getDictionaryWithTestIdAndAttemptsLeftCountByUserId
+            (final int userId) {
+        Map<Integer, Integer> attemptsCountDict = new HashMap<>();
+        int groupId = USERS_SERVICE.getById(userId).getGroupId();
+        List<Tests> testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
+
+        for (Tests test:testsList){
+            int passedAttempts = ATTEMPTS_SERVICE.getAttemptsListByTestAndUserId(test.getId(), userId).size();
+            attemptsCountDict.put(test.getId(), test.getMaxAttempts()-passedAttempts);
+        }
+        return attemptsCountDict;
+    }
+
+    public Boolean ifTestObjectExist(final int id) {
+        return (TESTS_DAO.getById(id).isPresent());
     }
 }

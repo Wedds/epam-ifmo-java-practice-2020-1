@@ -11,7 +11,7 @@ ALTER SEQUENCE groups_id_seq RESTART WITH 7;
 
 INSERT INTO users (id, role_type, email, hash, salt, first_name, last_name, middle_name, birth_date, work_title, created_at) values (1, 'admin', 'admin@pochta.ru', '45ec4bb100f5da97a4b939afbc1b6af2', '40a8903753c7d0780fa70ef3febd5f11', 'Donald', 'Tramp', 'Genadievich', '2000-01-20', 'programmer', '2020-02-11 06:38:40');
 INSERT INTO users (id, role_type, email, hash, salt, first_name, last_name, birth_date, work_title, created_at) values (2, 'teacher', 'teacher@pochta.ru', 'd46ffd73c3b76220f7ce65bc4ff26e30', 'e1cab46cgsdfshsfh9904a8a3b6743c', 'Абрикосик', 'Спелый', '1998-02-20', 'ЛУЧШИЙ УЧИТЕЛЬ ЕЕЕ', '2020-02-07 15:38:40');
-INSERT INTO users (id, role_type, email, hash, salt, first_name, last_name, middle_name, birth_date, work_title, created_at, group_id) values (3, 'student', 'student2@pochta.ru', 'd3267ce7e3247320c6194e7a5a16e18d', '2h32gho4u89fdsaghf0d6sad6t565ga8dyg', 'Светлана', 'Клавиатуровна', 'Константиновна','2003-02-20', 'Студент', '2020-01-23 20:38:40', 3);
+INSERT INTO users (id, role_type, email, hash, salt, first_name, last_name, middle_name, birth_date, work_title, created_at, group_id) values (3, 'student', 'student2@pochta.ru', 'd3267ce7e3247320c6194e7a5a16e18d', '2h32gho4u89fdsaghf0d6sad6t565ga8dyg', 'Светлана', 'Клавиатуровна', 'Константиновна','2003-02-20', 'Студент', '2020-01-23 20:38:40', 2);
 INSERT INTO users (id, role_type, email, hash, salt, first_name, last_name, birth_date, work_title, created_at) values (4, 'moderator', 'moder@pochta.ru', '4c6c76265940889d0392a6e48e57b6eb', '76dsgf7d676gdfs89gsd6s78h6f987h6df78gh', 'Лучший', 'Модер', '1920-02-20', 'Модератор', '2020-02-03 19:38:40');
 INSERT INTO users (id, role_type, email, hash, salt, first_name, last_name, middle_name, birth_date, work_title, created_at, group_id) values (5, 'student', 'student2@pochta.ru', 'd3267ce7e3247320c6194e7a5a16e18d', '2h32gho4u89fdsaghf0d6sad6t565ga8dyg', 'Светлана', 'Клавиатуровна', 'Константиновна','2003-02-20', 'Студент', '2020-01-23 20:38:40', 1);
 INSERT INTO users (id, role_type, email, hash, salt, first_name, last_name, birth_date, work_title, created_at) values (6, 'teacher', 'teacher2@pochta.ru', '4c6c76265940889d0392a6e48e57b6eb', 'jhgjg43jg23k1g423h5g1iu645264', 'Персик', 'Красный', '1998-02-20', 'Такой себе учитель', '2020-02-07 20:35:40');
@@ -33,7 +33,7 @@ INSERT INTO tests (id, title, subject_id, is_random, creator_id, description, ma
 
 ALTER SEQUENCE tests_id_seq RESTART WITH 6;
 
-INSERT INTO groups_tests (group_id, test_id, is_necessary, max_attempts, time_limit, deadline) values (1, 3, FALSE, 10, 30, '2030-01-08 20:38:40');
+INSERT INTO groups_tests (group_id, test_id, is_necessary, max_attempts, time_limit, deadline) values (2, 3, FALSE, 10, 30, '2030-01-08 20:38:40');
 INSERT INTO groups_tests (group_id, test_id, is_necessary, max_attempts, time_limit, deadline) values (2, 1, TRUE, 1, 30, '2020-02-15 20:38:40');
 INSERT INTO groups_tests (group_id, test_id, is_necessary) values (3, 4, FALSE);
 INSERT INTO groups_tests (group_id, test_id, is_necessary, time_limit, deadline) values (4, 1, TRUE, 20, '2020-02-11 20:38:40');
