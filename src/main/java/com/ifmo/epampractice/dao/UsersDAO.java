@@ -22,6 +22,10 @@ public class UsersDAO implements DAO<Users> {
             "last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users";
     private static final String SELECT_BY_ID_QUERY = "SELECT id, role_type, email, hash, salt, first_name," +
             " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE id=?";
+    private static final String SELECT_BY_EMAIL_QUERY = "SELECT id, role_type, email, hash, salt, first_name," +
+            " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE email=?";
+    private static final String SELECT_BY_GROUP_ID_QUERY = "SELECT id, role_type, email, hash, salt, first_name," +
+            " last_name, middle_name, birth_date, work_title, created_at, avatar, group_id FROM users WHERE group_id=?";
     private static final String UPDATE_QUERY = "UPDATE users SET role_type=?::roles, email=?, hash=?, salt=?," +
             " first_name=?, last_name=?, middle_name=?, birth_date=?, work_title=?, created_at=?, avatar=?," +
             " group_id=? WHERE id=?";
@@ -32,8 +36,7 @@ public class UsersDAO implements DAO<Users> {
     public Users addObject(final Users user) {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)
-        ) {
+                     INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
             this.convertObjectToFields(user, preparedStatement);
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -47,7 +50,7 @@ public class UsersDAO implements DAO<Users> {
                 }
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error connecting to database");
+            throw new IllegalArgumentException("Creating user failed,no rows affected.", e);
         }
         return user;
     }
@@ -71,8 +74,7 @@ public class UsersDAO implements DAO<Users> {
 
     @Override
     public Optional<Users> getById(final int id) {
-        Users user = new Users();
-        user.setId(id);
+        Users user;
         try (Connection connection = DatabaseSource.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID_QUERY)) {
             preparedStatement.setInt(1, id);
@@ -83,9 +85,43 @@ public class UsersDAO implements DAO<Users> {
                 user = this.convertFieldsToObject(rs);
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error connecting to database");
+            throw new IllegalArgumentException("Cannot to get a user from database.", e);
         }
         return Optional.of(user);
+    }
+
+    public Optional<Users> getByEmail(final String email) {
+        Users user;
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_EMAIL_QUERY)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (!rs.next()) {
+                    return Optional.empty();
+                }
+                user = this.convertFieldsToObject(rs);
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Cannot to get a user from database.", e);
+        }
+        return Optional.of(user);
+    }
+
+    public List<Users> getAllByGroupId(final int id) {
+        ArrayList<Users> usersArrayList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_BY_GROUP_ID_QUERY)) {
+            statement.setInt(1, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    usersArrayList.add(this.convertFieldsToObject(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Getting all users failed. Users are not presented.");
+        }
+        return usersArrayList;
     }
 
     @Override
@@ -98,7 +134,7 @@ public class UsersDAO implements DAO<Users> {
                 throw new IllegalArgumentException("Update user failed, no rows affected.");
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error connecting to database");
+            throw new IllegalArgumentException("Update user failed, no rows affected.", e);
         }
     }
 
@@ -112,7 +148,7 @@ public class UsersDAO implements DAO<Users> {
                 throw new IllegalArgumentException("Remove user failed, no rows affected.");
             }
         } catch (SQLException e) {
-            throw new IllegalArgumentException("Error connecting to database");
+            throw new IllegalArgumentException("Remove user failed, no rows affected.", e);
         }
     }
 
