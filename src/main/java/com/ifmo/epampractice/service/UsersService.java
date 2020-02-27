@@ -81,7 +81,7 @@ public class UsersService {
         return user.getHash().equals(md5Password);
     }
 
-    private static void setDefaultValues(final String password, final Users user) {
+    private void setDefaultValues(final String password, final Users user) {
         String salt = SecurityUtilities.generateSalt();
         user.setSalt(salt);
         user.setHash(SecurityUtilities.generateHash(password, salt));
