@@ -41,9 +41,6 @@ public class SubjectsService {
     }
 
     public Boolean ifSubjectObjectExist(final int id) {
-        if (SUBJECTS_DAO.getById((id)).isPresent()) {
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
+        return SUBJECTS_DAO.getById((id)).isPresent();
     }
 }
