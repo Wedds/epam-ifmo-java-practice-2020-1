@@ -11,8 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class UsersService {
+    private static UsersService instance;
     private static final UsersDAO USERS_DAO = new UsersDAO();
     private static final int DEFAULT_GROUP = 1;
+
+    public static UsersService getInstance() {
+        if (instance != null) {
+            return instance;
+        } else {
+            instance = new UsersService();
+        }
+        return instance;
+    }
 
     public Users getById(final int id) {
         Optional<Users> userOptional = USERS_DAO.getById(id);
@@ -89,5 +99,4 @@ public class UsersService {
         user.setGroupId(DEFAULT_GROUP);
         user.setCreatedAt(LocalDateTime.now());
     }
-
 }
