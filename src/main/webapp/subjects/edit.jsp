@@ -38,7 +38,7 @@
                     <div class="col"><label style="color: #505e6c;">Название дисциплины</label><input class="form-control" type="email"></div>
                 </div>
                 <div class="form-row">
-                    <div class="col"><button class="btn btn-primary" type="button" style="background-color: #f4476b;">Добавить (изменить) дисциплину</button></div>
+                    <div class="col"><button class="btn btn-primary border-white" type="button" style="background-color: #f4476b;">Добавить (изменить) дисциплину</button></div>
                 </div>
             </form>
         </div>

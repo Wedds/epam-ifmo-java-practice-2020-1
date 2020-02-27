@@ -1,3 +1,5 @@
+<%@ page import="com.ifmo.epampractice.entity.Subjects" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -20,7 +22,7 @@
                             <li class="nav-item" role="presentation"></li>
                         </ul>
                         <form class="form-inline mr-auto" target="_self">
-                            <div class="form-group"><label for="search-field"></label></div>
+                            <div class="form-group"><label></label></div>
                         </form><span class="navbar-text"><i class="fa fa-user-o" style="color: #ffffff;"></i> <a class="login" href="../profile/profile.html" style="margin-right: 16px;color: #ffffff;">Профиль</a></span></div>
         </div>
         </nav>
@@ -45,16 +47,17 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            <% for( Subjects subject : (List<Subjects>) request.getAttribute("subjectList")) {
+                                final int id = subject.getId();
+                                final String name = subject.getName();
+
+                            %>
                                 <tr>
-                                    <td>Математика</td>
-                                    <td>23</td>
+                                    <td><%= id %></td>
+                                    <td><%= name %></td>
                                     <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
                                 </tr>
-                                <tr>
-                                    <td>Физика</td>
-                                    <td>9844</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
+                            <% } %>
                             </tbody>
                         </table>
                     </div>

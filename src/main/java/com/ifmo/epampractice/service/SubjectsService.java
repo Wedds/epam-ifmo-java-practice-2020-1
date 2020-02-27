@@ -7,8 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class SubjectsService {
+    private static final SubjectsService subjectService = new SubjectsService();
     private static final SubjectsDAO SUBJECTS_DAO = new SubjectsDAO();
 
+    private SubjectsService() {}
+
+    public static SubjectsService getInstance() {
+        return subjectService;
+    }
     public Subjects addObject(final Subjects subject) {
         return SUBJECTS_DAO.addObject(subject);
     }
