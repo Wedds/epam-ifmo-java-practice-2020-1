@@ -4,7 +4,6 @@ import com.ifmo.epampractice.dao.QuestionsDAO;
 import com.ifmo.epampractice.entity.Questions;
 
 import java.util.List;
-import java.util.Optional;
 
 public class QuestionsService {
     private static final QuestionsDAO QUESTIONS_DAO = new QuestionsDAO();
@@ -34,14 +33,8 @@ public class QuestionsService {
     }
 
     public Questions getById(final int questionId) {
-        Questions question;
-        Optional<Questions> questionsOptional = QUESTIONS_DAO.getById(questionId);
-        if (!questionsOptional.isPresent()) {
-            System.err.println("This question doesn't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
-        question = questionsOptional.get();
-        return question;
+        return QUESTIONS_DAO.getById(questionId).orElseThrow(() ->
+                new IllegalArgumentException("This object doesn't exist"));
     }
 
     public void updateByObject(final Questions question) {
@@ -53,10 +46,8 @@ public class QuestionsService {
     }
 
     public void removeById(final int questionId) {
-        if (!QUESTIONS_DAO.getById(questionId).isPresent()) {
-            System.err.println("This question doesn't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
+        QUESTIONS_DAO.getById(questionId).orElseThrow(() ->
+                new IllegalArgumentException("This object doesn't exist"));
         QUESTIONS_DAO.removeById(questionId);
     }
 
@@ -68,7 +59,6 @@ public class QuestionsService {
             throw new IllegalArgumentException("This object doesn't exist");
         }
         questionsList = QUESTIONS_DAO.getQuestionsListByTestId(testId);
-        // ?????
         for (Questions quest : questionsList) {
             quest.setAnswersList(ANSWERS_SERVICE.getAnswersListByQuestionId(quest.getTestId()));
         }

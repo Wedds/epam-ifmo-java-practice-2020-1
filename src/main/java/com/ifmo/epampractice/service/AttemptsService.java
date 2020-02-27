@@ -4,7 +4,6 @@ import com.ifmo.epampractice.dao.AttemptsDAO;
 import com.ifmo.epampractice.entity.Attempts;
 
 import java.util.List;
-import java.util.Optional;
 
 public class AttemptsService {
     private static final AttemptsDAO ATTEMPTS_DAO = new AttemptsDAO();
@@ -45,14 +44,8 @@ public class AttemptsService {
     }
 
     public Attempts getById(final int attemptId) {
-        Attempts attempt;
-        Optional<Attempts> attemptsOptional = ATTEMPTS_DAO.getById(attemptId);
-        if (!attemptsOptional.isPresent()) {
-            System.err.println("This attempt doesn't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
-        attempt = attemptsOptional.get();
-        return attempt;
+        return ATTEMPTS_DAO.getById(attemptId).orElseThrow(() ->
+                new IllegalArgumentException("This object doesn't exist"));
     }
 
     public void updateByObject(final Attempts attempt) {
@@ -65,10 +58,8 @@ public class AttemptsService {
     }
 
     public void removeById(final int attemptId) {
-        if (!ATTEMPTS_DAO.getById(attemptId).isPresent()) {
-            System.err.println("This test attempt't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
+        ATTEMPTS_DAO.getById(attemptId).orElseThrow(() ->
+                new IllegalArgumentException("This object doesn't exist"));
         ATTEMPTS_DAO.removeById(attemptId);
     }
 

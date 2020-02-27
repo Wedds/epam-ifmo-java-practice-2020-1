@@ -4,7 +4,6 @@ import com.ifmo.epampractice.dao.TestsDAO;
 import com.ifmo.epampractice.entity.Tests;
 
 import java.util.List;
-import java.util.Optional;
 
 public class TestsService {
     private  static final TestsDAO TESTS_DAO = new TestsDAO();
@@ -12,13 +11,13 @@ public class TestsService {
     private static final AttemptsService ATTEMPTS_SERVICE = new AttemptsService();
 
     public Tests addObject(final Tests test) {
-        // ПРВЕРИТЬ НА ЮЗЕРА И САБДЖЕКТ
+        // TODO Check on user and subjects
         return TESTS_DAO.addObject(test);
 
     }
 
     public Tests addTestForGroup(final Tests test) {
-        // ПРОВЕРИТЬ НА ГРУППУ
+        // TODO Check on group
         if (ifTestObjectExist(test.getId())) {
             System.err.println("This test doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
@@ -42,42 +41,30 @@ public class TestsService {
     }
 
     public List<Tests> getAllTestsForGroupsByGroupId(final int groupId) {
-        // ПРОВЕРЯЕМ ПО ГРУППЕ
+        // TODO Check on group
         List<Tests> testsList;
         testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
         return testsList;
     }
 
     public Tests getById(final int testId) {
-        Tests test;
-        Optional<Tests> testsOptional = TESTS_DAO.getById(testId);
-        if (!testsOptional.isPresent()) {
-            System.err.println("Test doesn't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
-        test = testsOptional.get();
-        return test;
+        return TESTS_DAO.getById(testId).orElseThrow(() ->
+                new IllegalArgumentException("This object doesn't exist"));
     }
 
     public Tests getObjectByTestAndGroupId(final int testId, final int groupId) {
-        Tests test;
-        Optional<Tests> testsOptional = TESTS_DAO.getObjectByTestAndGroupId(testId, groupId);
-        // Пороверяем по тесту и по группе
-        if (!testsOptional.isPresent()) {
-            System.err.println("Test doesn't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
-        test = testsOptional.get();
-        return test;
+        //TODO Check on group
+        return TESTS_DAO.getObjectByTestAndGroupId(testId, groupId).orElseThrow(() ->
+                new IllegalArgumentException("This object doesn't exist"));
     }
 
     public void updateTestByObject(final Tests test) {
-        // ПРВЕРИТЬ НА ЮЗЕРА И САБДЖЕКТ;
+        //TODO Check on user and subject
         TESTS_DAO.updateByObject(test);
     }
 
     public void updateGroupsTests(final Tests test) {
-        // ПРВЕРИТЬ НА ЮЗЕРА И САБДЖЕКТ;
+        //TODO Check on user and subject
         TESTS_DAO.updateGroupsTests(test);
     }
 
@@ -90,7 +77,7 @@ public class TestsService {
     }
 
     public void removeGroupsTestsByTestAndGroupId(final int testId, final int groupId) {
-        //Проверяем на группу и тест
+        //TODO Check on group
         if (!ifTestObjectExist(testId)) {
             System.err.println("Test doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
@@ -134,7 +121,7 @@ public class TestsService {
 
     public Tests getTestForGroupWithAttempts(final int testId, final int groupId) {
         Tests test;
-        // CHECK GROUP
+        //TODO Check on group
         if (!ifTestObjectExist(testId)) {
             System.err.println("Test doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
@@ -143,8 +130,6 @@ public class TestsService {
         test.setAttemptsList(ATTEMPTS_SERVICE.getAttemptsListByTestId(testId));
         return test;
     }
-
-    //public Tests getTestForUserWithAttempts(final int testId, final int userId) {
 
     public Boolean ifTestObjectExist(final int id) {
         if (TESTS_DAO.getById(id).isPresent()) {

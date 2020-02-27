@@ -4,7 +4,6 @@ import com.ifmo.epampractice.dao.AnswersDAO;
 import com.ifmo.epampractice.entity.Answers;
 
 import java.util.List;
-import java.util.Optional;
 
 public class AnswersService {
     private static final AnswersDAO ANSWERS_DAO = new AnswersDAO();
@@ -33,15 +32,8 @@ public class AnswersService {
     }
 
     public Answers getById(final int answerId) {
-        Answers answer;
-        Optional<Answers> answersOptional = ANSWERS_DAO.getById(answerId);
-        if (!answersOptional.isPresent()) {
-            System.err.println("Answer doesn't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
-        answer = answersOptional.get();
-
-        return answer;
+        return ANSWERS_DAO.getById(answerId).orElseThrow(() ->
+                new IllegalArgumentException("This object doesn't exist"));
     }
 
     public void updateByObject(final Answers answer) {
@@ -53,10 +45,8 @@ public class AnswersService {
     }
 
     public void removeById(final int answerId) {
-        if (!ANSWERS_DAO.getById(answerId).isPresent()) {
-            System.err.println("Answer doesn't exist");
-            throw new IllegalArgumentException("This object doesn't exist");
-        }
+        ANSWERS_DAO.getById(answerId).orElseThrow(() ->
+                new IllegalArgumentException("This object doesn't exist"));
         ANSWERS_DAO.removeById(answerId);
     }
 
