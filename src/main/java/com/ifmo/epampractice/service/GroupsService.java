@@ -13,8 +13,8 @@ public class GroupsService {
     private static final int MAX_LENGTH = 25;
     private static final String APPROVED_CHARS = " _-";
     private static final GroupsDAO GROUPS_DAO = new GroupsDAO();
-    private static final TestsService TESTS_SERVICE;
-    private static final UsersService USERS_SERVICE;
+    //private static final TestsService TESTS_SERVICE;
+    //private static final UsersService USERS_SERVICE;
 
     public Groups addObject(final Groups group) {
         checkFields(group);
@@ -56,7 +56,7 @@ public class GroupsService {
             throw new IllegalArgumentException("No group with such id has been found");
         }
         group = getById(id);
-        group.setTestsList(TESTS_SERVICE.getAllTestsForGroupsByGroupId(id));
+        //group.setTestsList(TESTS_SERVICE.getAllTestsForGroupsByGroupId(id));
         return group;
     }
 
@@ -67,7 +67,7 @@ public class GroupsService {
             throw new IllegalArgumentException("No group with such id has been found");
         }
         group = getById(id);
-        group.setUsersList(USERS_SERVICE.getAllByGroupId(id));
+        //group.setUsersList(USERS_SERVICE.getAllByGroupId(id));
         return group;
     }
 
