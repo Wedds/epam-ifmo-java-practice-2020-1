@@ -23,8 +23,7 @@ public class GroupsDAOTest {
     @BeforeClass
     public static void initTestDb() {
         try (Connection connection = DatabaseSource.getInstance().getConnection();
-             Statement statement = connection.createStatement()
-        ) {
+                Statement statement = connection.createStatement()) {
             TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Database_script_test.sql"), statement);
             TestUtilities.executeSqlFile(Paths.get("src", "test", "resources", "Insert_test_script_H2.sql"), statement);
         } catch (SQLException e) {
@@ -34,7 +33,8 @@ public class GroupsDAOTest {
 
 
     @Test
-    public void testCRUD() {
+    public void testCRUD() throws Exception {
+        /* Initialization & Setting expected values*/
         final int year2017 = 2017;
         final int year2020 = 2020;
         final int day19 = 19;
@@ -68,8 +68,15 @@ public class GroupsDAOTest {
         /*Checking getAll */
         listGroups = groupDao.getAll();
         Assert.assertEquals(7, listGroups.size());
-        Assert.assertEquals(expectedGroup1, listGroups.get(0));
-        Assert.assertEquals(expectedGroup2, listGroups.get(6));
+        for (Groups group: listGroups) {
+            if (group.getId() == 1) {
+                realGroup1 = group;
+            } else if (group.getId() == 7) {
+                realGroup2 = group;
+            }
+        }
+        Assert.assertEquals(expectedGroup1, realGroup1);
+        Assert.assertEquals(expectedGroup2, realGroup2);
 
         /*Checking removeById */
         groupDao.removeById(7);
