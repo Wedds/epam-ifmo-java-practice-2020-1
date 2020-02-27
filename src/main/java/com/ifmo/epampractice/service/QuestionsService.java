@@ -66,9 +66,6 @@ public class QuestionsService {
     }
 
     public Boolean ifQuestionObjectExist(final int id) {
-        if (QUESTIONS_DAO.getById(id).isPresent()) {
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
+        return (QUESTIONS_DAO.getById(id).isPresent());
     }
 }
