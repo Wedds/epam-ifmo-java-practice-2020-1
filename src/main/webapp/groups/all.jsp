@@ -1,3 +1,5 @@
+<%@ page import="com.ifmo.epampractice.entity.Groups" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -46,17 +48,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <% for (Groups group: (List<Groups>) request.getAttribute("groupsList")) { %>
                                 <tr>
-                                    <td>K3265</td>
-                                    <td>15</td>
-                                    <td>2002-15-51</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>K4897</td>
-                                    <td>1581</td>
-                                    <td>2002-15-51</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
+                                    <td><% group.getName(); %></td>
+                                    <td><% group.getUsersList().size(); %></td>
+                                    <td><% group.getCreatedAt(); %></td>
+                                    <td><button class="btn btn-primary border-white" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -64,7 +61,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col"><a class="btn btn-primary" href="edit.html" style="background-color: #f4476b;">Добавить группу</a></div>
+                <div class="col"><a class="btn btn-primary border-white" href="edit.html" style="background-color: #f4476b;">Добавить группу</a></div>
             </div>
         </div>
     </div>
