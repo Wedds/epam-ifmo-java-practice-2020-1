@@ -6,14 +6,14 @@ import com.ifmo.epampractice.entity.Subjects;
 import java.util.List;
 import java.util.Optional;
 
-public class SubjectsService {
-    private static final SubjectsService subjectService = new SubjectsService();
+public final class  SubjectsService {
+    private static final SubjectsService SUBJECTS_SERVICE = new SubjectsService();
     private static final SubjectsDAO SUBJECTS_DAO = new SubjectsDAO();
 
     private SubjectsService() {}
 
     public static SubjectsService getInstance() {
-        return subjectService;
+        return SUBJECTS_SERVICE;
     }
     public Subjects addObject(final Subjects subject) {
         return SUBJECTS_DAO.addObject(subject);
