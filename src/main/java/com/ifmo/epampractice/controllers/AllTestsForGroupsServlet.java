@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class AllTestsForGroupsServlet extends HttpServlet {
     private static final TestsService TESTS_SERVICE = new TestsService();
@@ -20,7 +19,7 @@ public class AllTestsForGroupsServlet extends HttpServlet {
         RequestDispatcher view = req.getRequestDispatcher("tests/test_group_all.jsp");
         try {
             int userId = 2;
-            List <Tests> testsList = TESTS_SERVICE.getAllTestsByCreatorId(userId);
+            List<Tests> testsList = TESTS_SERVICE.getAllTestsByCreatorId(userId);
             view.forward(req, resp);
 
         } catch (IOException e) {

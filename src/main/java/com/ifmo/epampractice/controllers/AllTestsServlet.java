@@ -26,7 +26,8 @@ public class AllTestsServlet extends HttpServlet {
             int userId = 2;
             List<Tests> testsList = TESTS_SERVICE.getAllTestsByCreatorId(userId);
             Map<Integer, String> subjectDict = SUBJECTS_SERVICE.getDictionaryWithSubjectTitleAndSubjectId();
-            Map<Integer, Integer> groupsCountDict = TESTS_SERVICE.getDictionaryWithTestIdAndGroupsCountByCreatorId(userId);
+            Map<Integer, Integer> groupsCountDict =
+                    TESTS_SERVICE.getDictionaryWithTestIdAndGroupsCountByCreatorId(userId);
             req.setAttribute("subjectDict", subjectDict);
             req.setAttribute("groupsCountDict", groupsCountDict);
             req.setAttribute("testsList", testsList);

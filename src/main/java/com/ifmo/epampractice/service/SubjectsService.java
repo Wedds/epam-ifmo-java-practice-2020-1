@@ -2,7 +2,6 @@ package com.ifmo.epampractice.service;
 
 import com.ifmo.epampractice.dao.SubjectsDAO;
 import com.ifmo.epampractice.entity.Subjects;
-import com.ifmo.epampractice.entity.Tests;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +21,7 @@ public class SubjectsService {
 
     public Subjects getById(final int subjectId) {
         Subjects subject;
-        Optional <Subjects> subjectsOptional = SUBJECTS_DAO.getById(subjectId);
+        Optional<Subjects> subjectsOptional = SUBJECTS_DAO.getById(subjectId);
         if (!subjectsOptional.isPresent()) {
             System.err.println("This subject doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
@@ -44,10 +43,10 @@ public class SubjectsService {
     }
 
 
-    public Map<Integer, String> getDictionaryWithSubjectTitleAndSubjectId (){
-        Map <Integer, String> subjectDict = new HashMap<>();
+    public Map<Integer, String> getDictionaryWithSubjectTitleAndSubjectId() {
+        Map<Integer, String> subjectDict = new HashMap<>();
         List<Subjects> subjectsList = getAll();
-        for (Subjects subjects:subjectsList){
+        for (Subjects subjects : subjectsList) {
             subjectDict.put(subjects.getId(), subjects.getName());
         }
         return subjectDict;

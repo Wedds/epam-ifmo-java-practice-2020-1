@@ -1,13 +1,15 @@
 package com.ifmo.epampractice.service;
 
 import com.ifmo.epampractice.dao.TestsDAO;
-import com.ifmo.epampractice.entity.Attempts;
 import com.ifmo.epampractice.entity.Tests;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class TestsService {
-    private  static final TestsDAO TESTS_DAO = new TestsDAO();
+    private static final TestsDAO TESTS_DAO = new TestsDAO();
     private static final QuestionsService QUESTIONS_SERVICE = new QuestionsService();
     private static final AttemptsService ATTEMPTS_SERVICE = new AttemptsService();
     private static final SubjectsService SUBJECTS_SERVICE = new SubjectsService();
@@ -152,41 +154,38 @@ public class TestsService {
         return test;
     }
 
-    public Map<Integer, Integer> getDictionaryWithTestIdAndMaxScoreByUserId
-            (final int userId) {
+    public Map<Integer, Integer> getDictionaryWithTestIdAndMaxScoreByUserId(final int userId) {
         //TODO Check on group
         Map<Integer, Integer> userMaxScoreDict = new HashMap<>();
         int groupId = USERS_SERVICE.getById(userId).getGroupId();
         List<Tests> testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
 
-        for (Tests test:testsList){
+        for (Tests test : testsList) {
             int maxScore = ATTEMPTS_SERVICE.getMaximumScoreTestIdAndByUserId(test.getId(), userId);
             userMaxScoreDict.put(test.getId(), maxScore);
         }
         return userMaxScoreDict;
     }
 
-    public Map<Integer, Integer> getDictionaryWithTestIdAndAttemptsLeftCountByUserId
-            (final int userId) {
+    public Map<Integer, Integer> getDictionaryWithTestIdAndAttemptsLeftCountByUserId(final int userId) {
         Map<Integer, Integer> attemptsCountDict = new HashMap<>();
         int groupId = USERS_SERVICE.getById(userId).getGroupId();
         List<Tests> testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
 
-        for (Tests test:testsList){
+        for (Tests test : testsList) {
             int passedAttempts = ATTEMPTS_SERVICE.getAttemptsListByTestAndUserId(test.getId(), userId).size();
 
-            attemptsCountDict.put(test.getId(), test.getMaxAttempts()-passedAttempts);
+            attemptsCountDict.put(test.getId(), test.getMaxAttempts() - passedAttempts);
         }
         return attemptsCountDict;
     }
 
-    public Map<Integer, Integer> getDictionaryWithTestIdAndGroupsCountByCreatorId
-            (final int userId) {
+    public Map<Integer, Integer> getDictionaryWithTestIdAndGroupsCountByCreatorId(final int userId) {
         Map<Integer, Integer> groupsCountDict = new HashMap<>();
         List<Tests> testsList = getAllTestsByCreatorId(userId);
-        for (Tests test:testsList){
+        for (Tests test : testsList) {
             int groupsCount = getAllTestsForGroupsByTestId(test.getId()).size();
-            if (groupsCount!=0){
+            if (groupsCount != 0) {
                 groupsCountDict.put(test.getId(), groupsCount);
             }
         }

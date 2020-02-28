@@ -28,7 +28,8 @@ public class TestsResultsServlet extends HttpServlet {
             List<Tests> testsList = TESTS_SERVICE.getAllTestsForGroupsByGroupId(groupId);
             Map<Integer, String> subjectDict = SUBJECTS_SERVICE.getDictionaryWithSubjectTitleAndSubjectId();
             Map<Integer, Integer> userMaxScoreDict = TESTS_SERVICE.getDictionaryWithTestIdAndMaxScoreByUserId(userId);
-            Map<Integer, Integer> attemptsCountDict = TESTS_SERVICE.getDictionaryWithTestIdAndAttemptsLeftCountByUserId(userId);
+            Map<Integer, Integer> attemptsCountDict =
+                    TESTS_SERVICE.getDictionaryWithTestIdAndAttemptsLeftCountByUserId(userId);
             req.setAttribute("subjectDict", subjectDict);
             req.setAttribute("attemptsCountDict", attemptsCountDict);
             req.setAttribute("maxScoreDict", userMaxScoreDict);

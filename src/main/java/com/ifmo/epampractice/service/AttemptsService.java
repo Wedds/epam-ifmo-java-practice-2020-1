@@ -3,7 +3,6 @@ package com.ifmo.epampractice.service;
 import com.ifmo.epampractice.dao.AttemptsDAO;
 import com.ifmo.epampractice.entity.Attempts;
 
-import javax.servlet.http.HttpServlet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,10 +48,10 @@ public class AttemptsService {
     public int getMaximumScoreTestIdAndByUserId(final int testId, final int userId) {
         List<Integer> userScoreList = new ArrayList<>();
         List<Attempts> attemptsList = getAttemptsListByTestAndUserId(testId, userId);
-        for (Attempts attempts: attemptsList){
+        for (Attempts attempts : attemptsList) {
             userScoreList.add(attempts.getScore());
         }
-        if (userScoreList.size() == 0){
+        if (userScoreList.size() == 0) {
             return 0;
         }
         return Collections.max(userScoreList);
