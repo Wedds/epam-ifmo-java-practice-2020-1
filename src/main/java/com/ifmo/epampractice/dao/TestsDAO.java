@@ -24,6 +24,12 @@ public class TestsDAO implements DAO<Tests> {
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE subject_id = ?";
     private static final String SELECT_ALL_TESTS_BY_CREATOR_ID_QUERY = "SELECT id, title, description," +
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE creator_id = ?";
+    private static final String SELECT_ALL_TESTS_FOR_GROUPS_BY_CREATOR_ID_QUERY = "SELECT tests.id AS id, " +
+            "tests.title AS title, tests.description AS description, tests.subject_id AS subject_id, tests.is_random " +
+            "AS is_random, tests.created_at AS created_at, tests.max_points AS max_points, tests.creator_id AS " +
+            "creator_id, groups_tests.test_id AS test_id, groups_tests.group_id, groups_tests.is_necessary, " +
+            "groups_tests.max_attempts, groups_tests.deadline, groups_tests.time_limit FROM TESTS INNER JOIN " +
+            "GROUPS_TESTS ON tests.id = groups_tests.test_id WHERE creator_id = ?";
     private static final String SELECT_TEST_BY_TEST_ID_QUERY = "SELECT id, title, description," +
             "subject_id, is_random, created_at, max_points, creator_id FROM TESTS WHERE id=?";
     private static final String SELECT_GROUPS_TESTS_BY_TEST_AND_GROUP_ID_QUERY = "SELECT test_id, group_id, " +
@@ -100,23 +106,7 @@ public class TestsDAO implements DAO<Tests> {
     }
 
     public List<Tests> getAllTestsForGroupsByTestId(final int testId) {
-        List<Tests> groupsTestsList = new ArrayList<>();
-        try (Connection connection = DatabaseSource.getInstance().getConnection();
-             PreparedStatement preparedStatement =
-                     connection.prepareStatement(SELECT_ALL_TESTS_FOR_GROUPS_BY_TEST_ID_QUERY)) {
-            preparedStatement.setInt(1, testId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Tests test = new Tests();
-                    fillGeneralTestObjectFromResultSet(test, resultSet);
-                    fillTestForGroupObjectFromResultSet(test, resultSet);
-                    groupsTestsList.add(test);
-                }
-            }
-        } catch (SQLException e) {
-            throw new IllegalArgumentException("Error connecting to database");
-        }
-        return groupsTestsList;
+        return getAllTestsForGroupsById(testId, SELECT_ALL_TESTS_FOR_GROUPS_BY_TEST_ID_QUERY);
     }
 
     public List<Tests> getAllTestsForGroupsByGroupId(final int groupId) {
@@ -161,6 +151,31 @@ public class TestsDAO implements DAO<Tests> {
                 while (resultSet.next()) {
                     Tests test = new Tests();
                     fillGeneralTestObjectFromResultSet(test, resultSet);
+                    testsList.add(test);
+                }
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Error connecting to database");
+        }
+        return testsList;
+    }
+
+
+    public List<Tests> getAllTestsForGroupsByCreatorId(final int creatorId) {
+        return getAllTestsForGroupsById(creatorId, SELECT_ALL_TESTS_FOR_GROUPS_BY_CREATOR_ID_QUERY);
+    }
+
+    private List<Tests> getAllTestsForGroupsById(final int id, final String query) {
+        List<Tests> testsList = new ArrayList<>();
+        try (Connection connection = DatabaseSource.getInstance().getConnection();
+             PreparedStatement preparedStatement
+                     = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Tests test = new Tests();
+                    fillGeneralTestObjectFromResultSet(test, resultSet);
+                    fillTestForGroupObjectFromResultSet(test, resultSet);
                     testsList.add(test);
                 }
             }

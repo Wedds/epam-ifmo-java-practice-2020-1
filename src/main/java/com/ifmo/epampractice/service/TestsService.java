@@ -64,10 +64,18 @@ public class TestsService {
 
     public List<Tests> getAllTestsByCreatorId(final int creatorId) {
         if (!USERS_SERVICE.ifUserObjectExist(creatorId)) {
-            System.err.println("Test doesn't exist");
+            System.err.println("User doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
         }
         return TESTS_DAO.getAllTestsByCreatorId(creatorId);
+    }
+
+    public List<Tests> getAllTestsForGroupByCreatorId(final int creatorId) {
+        if (!USERS_SERVICE.ifUserObjectExist(creatorId)) {
+            System.err.println("User doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
+        }
+        return TESTS_DAO.getAllTestsForGroupsByCreatorId(creatorId);
     }
 
     public Tests getById(final int testId) {

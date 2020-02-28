@@ -1,3 +1,9 @@
+<%@ page import="com.ifmo.epampractice.entity.Tests" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Collection" %>
+<%@ page import="com.ifmo.epampractice.entity.Groups" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -37,17 +43,51 @@
                 <div class="col">
                     <form>
                         <select class="form-control">
-                            <option value="noGroup" selected="">Тест без группы</option>
-                                <optgroup label="Биология">
-                                    <option value="">Эукариоты</option>
-                                    <option value="13">Прокариоты</option>
-                                    <option value="14">Хорда</option>
+                            <%
+                                Map<Integer, String> subjectDict = (Map<Integer, String>) request.getAttribute("subjectDict");
+                                List<Integer> subjectIdList = (List<Integer>) request.getAttribute("subjectIdList");
+                                for (Integer subjectId:subjectIdList){
+                                    String subjectTitle = subjectDict.get(subjectId);
+
+                                    %>
+
+                                <optgroup label="<%= subjectTitle %>">
+
+                            <%
+                                for (Tests test:(List<Tests>) request.getAttribute("testsList")){
+                                    if (test.getSubjectId() == subjectId) {
+                                        String testTitle = test.getTitle();
+                                        int testId = test.getId();
+                                        %>
+                                    <option value="<%= testId %>"><%= testTitle %></option>
+                                    <%
+                                    }
+
+                            %>
+
                             </optgroup>
+                            <% }
+                            }
+                            %>
                     </select>
                     </form>
                 </div>
                 <div class="col">
-                    <form><select class="form-control"><option value="" selected="">Выберите группу</option><optgroup label="Группы K"><option value="12" selected="">K6844</option><option value="13">K6847</option><option value="14">K8484</option></optgroup></select></form>
+                    <form>
+                        <select class="form-control">
+                            <option value="" selected="">Выберите группу</option>
+
+                            <%
+                                Map<Integer, String> groupsDict = (Map<Integer, String>) request.getAttribute("groupsDict");
+                                Collection<String> groupsList = groupsDict.values();
+                                for (String groupTitle:groupsList){
+                            %>
+                            <!--<optgroup label="Группы K"> -->
+                                <option value="<%= groupTitle %>>"><%= groupTitle %></option>
+                            <!-- </optgroup> -->
+                            <% } %>
+                        </select>
+                    </form>
                 </div>
             </div>
             <div class="row">
@@ -56,8 +96,8 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Тест</th>
-                                    <th>Группа</th>
+                                    <th>Тест (Id)</th>
+                                    <th>Группа (Id)</th>
                                     <th>Обязательный</th>
                                     <th>Дедлайн</th>
                                     <th>Попытки</th>
@@ -66,87 +106,36 @@
                                 </tr>
                             </thead>
                             <tbody>
+
+                            <%
+                                for (Tests test: (List<Tests>) request.getAttribute("testsForGroupsList")) {
+                                int testId = test.getId();
+                                String testTitle = test.getTitle();
+                                int groupId = test.getGroupId();
+                                String groupTitle = groupsDict.get(groupId);
+                                String isNecessary = "Нет";
+                                if (test.getIsNecessary()){
+                                    isNecessary = "Да";
+                                }
+                                LocalDateTime deadline = test.getDeadline();
+                                int maxAttempts = test.getMaxAttempts();
+                                int timeLimit = test.getTimeLimit();
+
+
+                            %>
+
                                 <tr>
-                                    <td>ID 1 (Пирамиды)</td>
-                                    <td>ID 2 (K5489)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
+                                    <td><%= testTitle %> (<%=testId %>)</td>
+                                    <td><%= groupTitle %> (<%=groupId %>)</td>
+                                    <td><%= isNecessary %></td>
+                                    <td><%= deadline %></td>
+                                    <td><%= maxAttempts %></td>
+                                    <td><%= timeLimit %> минут</td>
+                                    <td>
+                                        <a class="btn text-white border-white" style="background-color: #00adb5;" href="#">Изменить тест</a>
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <td>ID 1 (Что-то там еще)</td>
-                                    <td>ID 2 (Л5684)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>ID 1 (Пирамиды)</td>
-                                    <td>ID 2 (K5489)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>ID 1 (Пирамиды)</td>
-                                    <td>ID 2 (K5489)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>ID 1 (Пирамиды)</td>
-                                    <td>ID 2 (K5489)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>ID 1 (Пирамиды)</td>
-                                    <td>ID 2 (K5489)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>ID 1 (Пирамиды)</td>
-                                    <td>ID 2 (K5489)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>ID 1 (Пирамиды)</td>
-                                    <td>ID 2 (K5489)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>ID 1 (Пирамиды)</td>
-                                    <td>ID 2 (K5489)</td>
-                                    <td>Да</td>
-                                    <td>2002-15-65</td>
-                                    <td>3</td>
-                                    <td>60 минут</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
+                            <% } %>
                             </tbody>
                         </table>
                     </div>

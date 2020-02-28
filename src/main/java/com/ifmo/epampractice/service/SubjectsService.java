@@ -42,7 +42,6 @@ public class SubjectsService {
         SUBJECTS_DAO.removeById(subjectId);
     }
 
-
     public Map<Integer, String> getDictionaryWithSubjectTitleAndSubjectId() {
         Map<Integer, String> subjectDict = new HashMap<>();
         List<Subjects> subjectsList = getAll();
