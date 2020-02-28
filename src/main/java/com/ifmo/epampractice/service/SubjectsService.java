@@ -2,8 +2,11 @@ package com.ifmo.epampractice.service;
 
 import com.ifmo.epampractice.dao.SubjectsDAO;
 import com.ifmo.epampractice.entity.Subjects;
+import com.ifmo.epampractice.entity.Tests;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class SubjectsService {
@@ -38,6 +41,16 @@ public class SubjectsService {
             throw new IllegalArgumentException("This object doesn't exist");
         }
         SUBJECTS_DAO.removeById(subjectId);
+    }
+
+
+    public Map<Integer, String> getDictionaryWithSubjectTitleAndSubjectId (){
+        Map <Integer, String> subjectDict = new HashMap<>();
+        List<Subjects> subjectsList = getAll();
+        for (Subjects subjects:subjectsList){
+            subjectDict.put(subjects.getId(), subjects.getName());
+        }
+        return subjectDict;
     }
 
     public Boolean ifSubjectObjectExist(final int id) {

@@ -44,33 +44,32 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>Код теста</th>
                                     <th>Название</th>
                                     <th>Предмет</th>
-                                    <th>Дедлайн</th>
-                                    <th>Результат</th>
-                                    <th>Попытки</th>
+                                    <th>Количество групп</th>
                                     <th>Действие</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                              <%  Map<Integer, String> subjectDict = (Map<Integer, String>) request.getAttribute("subjectDict");
-                                 Map<Integer, Integer> attemptsCountDict = (Map<Integer, Integer>) request.getAttribute("attemptsCountDict");
-                                 Map<Integer, Integer> userMaxScoreDict = (Map<Integer, Integer>) request.getAttribute("maxScoreDict");
-
+                                 Map<Integer, Integer> groupsCountDict = (Map<Integer, Integer>) request.getAttribute("groupsCountDict");
                                  for (Tests test: (List<Tests>) request.getAttribute("testsList")) {
+                                     int testId = test.getId();
+                                     int groupsCount = 0;
+                                     if (groupsCountDict.containsKey(testId))  {
+                                         groupsCount = groupsCountDict.get(testId);
+                                     }
                                      String testTitle = test.getTitle();
                                      String subjectTitle = subjectDict.get(test.getSubjectId());
-                                     LocalDateTime deadline = test.getDeadline();
-                                     int attemptsCount = attemptsCountDict.get(test.getId());
-                                     int userMaxScore = userMaxScoreDict.get(test.getId());
+
                              %>
                                 <tr>
+                                    <td><%= testId %></td>
                                     <td><%= testTitle %></td>
                                     <td><%= subjectTitle %></td>
-                                    <td><%= deadline %></td>
-                                    <td><%= userMaxScore  %></td>
-                                    <td><%= attemptsCount %></td>
+                                    <td><%= groupsCount  %></td>
                                     <td>
                                         <a class="btn text-white border-white" style="background-color: #00adb5;" href="#">Пройти тест</a>
                                      </td>

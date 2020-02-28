@@ -17,6 +17,10 @@
         <servlet-class>com.ifmo.epampractice.controllers.TestsResultsServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>allTestsServlet</servlet-name>
+        <servlet-class>com.ifmo.epampractice.controllers.AllTestsServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>allTestsForGroupsServlet</servlet-name>
         <servlet-class>com.ifmo.epampractice.controllers.AllTestsForGroupsServlet</servlet-class>
     </servlet>
@@ -32,6 +36,10 @@
     <servlet-mapping>
         <servlet-name>testsResultsServlet</servlet-name>
         <url-pattern>/tests_results</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>allTestsServlet</servlet-name>
+        <url-pattern>/all_tests</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>allTestsForGroupsServlet</servlet-name>

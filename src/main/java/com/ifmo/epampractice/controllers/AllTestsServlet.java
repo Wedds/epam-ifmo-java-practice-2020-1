@@ -14,24 +14,21 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class TestsResultsServlet extends HttpServlet {
+public class AllTestsServlet extends HttpServlet {
     private static final TestsService TESTS_SERVICE = new TestsService();
     private static final UsersService USERS_SERVICE = new UsersService();
     private static final SubjectsService SUBJECTS_SERVICE = new SubjectsService();
 
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException {
-        RequestDispatcher view = req.getRequestDispatcher("tests/tests_results.jsp");
+        RequestDispatcher view = req.getRequestDispatcher("tests/all_tests.jsp");
         try {
-            int userId = 3;
-            int groupId = USERS_SERVICE.getById(3).getGroupId();
-            List<Tests> testsList = TESTS_SERVICE.getAllTestsForGroupsByGroupId(groupId);
+            int userId = 2;
+            List<Tests> testsList = TESTS_SERVICE.getAllTestsByCreatorId(userId);
             Map<Integer, String> subjectDict = SUBJECTS_SERVICE.getDictionaryWithSubjectTitleAndSubjectId();
-            Map<Integer, Integer> userMaxScoreDict = TESTS_SERVICE.getDictionaryWithTestIdAndMaxScoreByUserId(userId);
-            Map<Integer, Integer> attemptsCountDict = TESTS_SERVICE.getDictionaryWithTestIdAndAttemptsLeftCountByUserId(userId);
+            Map<Integer, Integer> groupsCountDict = TESTS_SERVICE.getDictionaryWithTestIdAndGroupsCountByCreatorId(userId);
             req.setAttribute("subjectDict", subjectDict);
-            req.setAttribute("attemptsCountDict", attemptsCountDict);
-            req.setAttribute("maxScoreDict", userMaxScoreDict);
+            req.setAttribute("groupsCountDict", groupsCountDict);
             req.setAttribute("testsList", testsList);
             view.forward(req, resp);
 

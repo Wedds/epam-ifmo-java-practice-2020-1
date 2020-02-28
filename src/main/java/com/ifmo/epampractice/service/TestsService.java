@@ -152,18 +152,6 @@ public class TestsService {
         return test;
     }
 
-    public Map<Integer, String> getDictionaryWithSubjectTitleAndSubjectIdByGroupId
-            (final int groupId){
-        //TODO Check on group
-        Map <Integer, String> subjectDict = new HashMap<>();
-        List<Tests> testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
-        for (Tests test:testsList){
-            subjectDict.put(test.getSubjectId(), SUBJECTS_SERVICE.getById(test.getSubjectId()).getName());
-        }
-
-        return subjectDict;
-    }
-
     public Map<Integer, Integer> getDictionaryWithTestIdAndMaxScoreByUserId
             (final int userId) {
         //TODO Check on group
@@ -186,9 +174,23 @@ public class TestsService {
 
         for (Tests test:testsList){
             int passedAttempts = ATTEMPTS_SERVICE.getAttemptsListByTestAndUserId(test.getId(), userId).size();
+
             attemptsCountDict.put(test.getId(), test.getMaxAttempts()-passedAttempts);
         }
         return attemptsCountDict;
+    }
+
+    public Map<Integer, Integer> getDictionaryWithTestIdAndGroupsCountByCreatorId
+            (final int userId) {
+        Map<Integer, Integer> groupsCountDict = new HashMap<>();
+        List<Tests> testsList = getAllTestsByCreatorId(userId);
+        for (Tests test:testsList){
+            int groupsCount = getAllTestsForGroupsByTestId(test.getId()).size();
+            if (groupsCount!=0){
+                groupsCountDict.put(test.getId(), groupsCount);
+            }
+        }
+        return groupsCountDict;
     }
 
     public Boolean ifTestObjectExist(final int id) {
