@@ -13,14 +13,16 @@ import java.util.List;
 public class SubjectsServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest  request, final HttpServletResponse response)
+            throws ServletException, IOException {
         SubjectsService subjects = SubjectsService.getInstance();
         List<Subjects> subjectList = subjects.getAll();
         request.setAttribute("subjectList", subjectList);
         request.getRequestDispatcher("/subjects/all.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request, response);
     }
 }
