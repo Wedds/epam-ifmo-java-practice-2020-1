@@ -1,5 +1,6 @@
 <%@ page import="com.ifmo.epampractice.entity.Subjects" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.ifmo.epampractice.service.SubjectsService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -47,14 +48,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <% for( Subjects subject : (List<Subjects>) request.getAttribute("subjectList")) {
+                            <%  SubjectsService subjects = SubjectsService.getInstance();
+                                for( Subjects subject : (List<Subjects>) request.getAttribute("subjectList")) {
                                 final int id = subject.getId();
                                 final String name = subject.getName();
 
                             %>
                                 <tr>
-                                    <td><%= id %></td>
                                     <td><%= name %></td>
+                                    <td><%=subjects.getQuantityTestsBySubjectId(id)  %></td>
                                     <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
                                 </tr>
                             <% } %>

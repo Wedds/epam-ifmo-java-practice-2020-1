@@ -9,6 +9,7 @@ import java.util.Optional;
 public final class  SubjectsService {
     private static final SubjectsService SUBJECTS_SERVICE = new SubjectsService();
     private static final SubjectsDAO SUBJECTS_DAO = new SubjectsDAO();
+    private static final TestsService TESTS_SERVICE = new TestsService();
 
     private SubjectsService() {}
 
@@ -44,6 +45,10 @@ public final class  SubjectsService {
             throw new IllegalArgumentException("This object doesn't exist");
         }
         SUBJECTS_DAO.removeById(subjectId);
+    }
+
+    public int getQuantityTestsBySubjectId(final int subjectId) {
+        return TESTS_SERVICE.getAllTestsBySubjectId(subjectId).size();
     }
 
     public Boolean ifSubjectObjectExist(final int id) {

@@ -50,6 +50,10 @@ public class TestsService {
         return testsList;
     }
 
+    public List<Tests> getAllTestsBySubjectId(final int subjectId) {
+        return  TESTS_DAO.getAllTestsBySubjectId(subjectId);
+    }
+
     public List<Tests> getAllTestsForGroupsByGroupId(final int groupId) {
         // TODO Check on group
         List<Tests> testsList;
