@@ -5,11 +5,13 @@ import com.ifmo.epampractice.entity.Tests;
 
 import java.util.List;
 
-public class TestsService {
+public final class TestsService {
     private  static final TestsDAO TESTS_DAO = new TestsDAO();
     private static final QuestionsService QUESTIONS_SERVICE = new QuestionsService();
     private static final AttemptsService ATTEMPTS_SERVICE = new AttemptsService();
     private static TestsService instance;
+
+    private TestsService() {}
 
     public static TestsService getInstance() {
         if (instance != null) {

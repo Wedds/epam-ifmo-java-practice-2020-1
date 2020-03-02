@@ -5,9 +5,9 @@ import com.ifmo.epampractice.entity.Attempts;
 
 import java.util.List;
 
-public class AttemptsService {
+public final class AttemptsService {
     private static final AttemptsDAO ATTEMPTS_DAO = new AttemptsDAO();
-    private static final TestsService TESTS_SERVICE = new TestsService();
+    private static final TestsService TESTS_SERVICE = TestsService.getInstance();
 
     public Attempts addObject(final Attempts attempt) {
         // ПРОВЕРИТЬ НА ЮЗЕРА
