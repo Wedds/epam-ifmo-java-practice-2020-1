@@ -10,9 +10,13 @@ import java.util.List;
 public class AttemptsService {
     private static final AttemptsDAO ATTEMPTS_DAO = new AttemptsDAO();
     private static final TestsService TESTS_SERVICE = new TestsService();
+    private static final UsersService USERS_SERVICE = new UsersService();
 
     public Attempts addObject(final Attempts attempt) {
-        // ПРОВЕРИТЬ НА ЮЗЕРА
+        if (!USERS_SERVICE.ifUserObjectExist(attempt.getUserId())) {
+            System.err.println("User doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
+        }
         if (!TESTS_SERVICE.ifTestObjectExist(attempt.getTestId())) {
             System.err.println("This test doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");

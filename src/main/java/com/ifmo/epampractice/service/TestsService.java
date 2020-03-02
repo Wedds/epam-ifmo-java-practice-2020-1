@@ -1,6 +1,8 @@
 package com.ifmo.epampractice.service;
 
 import com.ifmo.epampractice.dao.TestsDAO;
+import com.ifmo.epampractice.entity.Answers;
+import com.ifmo.epampractice.entity.Questions;
 import com.ifmo.epampractice.entity.Tests;
 
 import java.util.HashMap;
@@ -198,6 +200,20 @@ public class TestsService {
             }
         }
         return groupsCountDict;
+    }
+
+    public int getMaxScoreFromAnswersByTestId(final int testId){
+        List<Questions> questionsList =
+                QUESTIONS_SERVICE.getQuestionsWithAnswersListByTestId(testId);
+        int maxScore = 0;
+        for (Questions question: questionsList){
+            for (Answers answers: question.getAnswersList()){
+                if (answers.getIsCorrect()) {
+                    maxScore += answers.getPoints();
+                }
+            }
+        }
+        return maxScore;
     }
 
     public Boolean ifTestObjectExist(final int id) {

@@ -1,3 +1,6 @@
+<%@ page import="com.ifmo.epampractice.entity.Tests" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="com.sun.net.httpserver.Authenticator" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -28,32 +31,52 @@
     </div>
     <div>
         <div class="container shadow-lg p-3 mb-5 rounded" style="margin-top: 40px;background-color: #ffffff;">
-            <form>
+            <%  Tests test = (Tests) request.getAttribute("test");
+                boolean isExist = Boolean.TRUE;
+                if (test.getId()==0){
+                    isExist = Boolean.FALSE;
+                }
+                String title = test.getTitle();
+                String description = test.getDescription();
+                int subjectId = test.getSubjectId();
+                boolean isRandom = test.getIsRandom();
+            %>
+            <form method = "post" action="/edit_test?id=<%= test.getId() %>">
                 <div class="form-row">
                     <div class="col">
-                        <h3 style="color: #505e6c;font-family: 'Source Sans Pro', sans-serif;">Новый тест</h3><label style="color: #505e6c;">Название теста</label><input class="form-control" type="email"><label style="color: #505e6c;">Описание</label><textarea class="form-control"></textarea><label style="color: #505e6c;">Дисциплина</label>
-                        <select
-                            class="form-control">
-                            <option value="12" selected="">Математика</option>
-                            <option value="13">Русский язык</option>
-                            <option value="14">Экология</option>
-                            </select><label style="color: #505e6c;">Порядок</label><select class="form-control"><option value="12" selected="">Случайный</option><option value="13">Как в тесте</option></select></div>
+                        <h3 style="color: #505e6c;font-family: 'Source Sans Pro', sans-serif;"><% if (isExist){%> Изменение теста <% } else { out.print("Создание теста");}%></h3>
+                        <label style="color: #505e6c;">Название теста</label><input class="form-control" type="text" name="title" required <% if (isExist){%> value="<%= title %>" <% } %>>
+                        <label style="color: #505e6c;">Описание</label><textarea name="description" class="form-control"><% if (isExist){ out.print(description); } %></textarea>
+                        </div>
                     <div class="col">
-                        <h3 style="color: #505e6c;font-family: 'Source Sans Pro', sans-serif;">Вопросы в тесте</h3>
-                        <ul class="list-group" style="color: #00adb5;margin-bottom: 20px;">
-                            <li class="list-group-item" style="background-color: #505e6c;"><span style="color: #ffffff;">Вопрос 1</span></li>
-                            <li class="list-group-item" style="background-color: #505e6c;"><span style="color: #ffffff;">Вопрос 2</span></li>
-                            <li class="list-group-item" style="background-color: #505e6c;"><span style="color: #ffffff;">Вопрос 3</span></li>
-                        </ul>
-                        <div class="form-row">
-                            <div class="col"><select class="form-control"><option value="">Кто проживает на дне океана?</option><option value="">Как закрыть практику?</option><option value="">Как работать с гитом?</option><option value="">Куда платить, чтобы конфликты сами мержились?</option></select></div>
-                            <div
-                                class="col-1"><button class="btn btn-primary" type="button" style="background-color: #00adb5;"><i class="fa fa-plus"></i></button></div>
-                    </div>
+                        <h3 style="color: #505e6c;font-family: 'Source Sans Pro', sans-serif;">&ensp;</h3>
+                        <label style="color: #505e6c;">Дисциплина</label>
+                        <select
+                                class="form-control" name="subject">
+                            <%
+                            Map<Integer, String> subjectDict = (Map<Integer, String>) request.getAttribute("subjectDict");
+                            for (int subjId:subjectDict.keySet()){
+                            String subjectTitle = subjectDict.get(subjId);
+                            %>
+                            <option value="<%= subjId %>" <% if (isExist && subjectId==subjId){%> selected="" <% } %>><%= subjectTitle %></option>
+                            <% } %>
+                        </select>
+                        <br><label style="color: #505e6c;">Порядок</label>
+                        <select class="form-control" name="isRandom">
+                            <option value="12" selected="">Случайный</option>
+                            <option value="13" <% if (isExist && !isRandom){%> selected="" <% } %>>Как при создании</option>
+                        </select>
                 </div>
-        </div>
+
+
+                </div>
+                <div class="form-row">
+                <% if ((Boolean) request.getAttribute("success")){%>
+                <br><h4 style="color: #505e6c;font-family: 'Source Sans Pro', sans-serif;">Тест успешно добавлен/изменен</h4>
+                <% } %>
+                </div>
         <div class="form-row">
-            <div class="col"><button class="btn btn-primary" type="button" style="background-color: #f4476b;margin-top: 40px;">Добавить (изменить) тест</button><a class="btn btn-primary" href="edit-quest.html" style="margin-top: 40px;margin-left: 16px;background-color: #f4476b;">Добавить вопрос</a></div>
+            <div class="col"><button type="submit" class="btn btn-primary" style="background-color: #f4476b;margin-top: 40px;">Подтвердить</button><a class="btn btn-primary" href="edit-quest.html" style="margin-top: 40px;margin-left: 16px;background-color: #f4476b;">Добавить вопрос</a></div>
         </div>
         </form>
     </div>

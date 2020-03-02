@@ -12,7 +12,7 @@ public class AnswersService {
     public Answers addObject(final Answers answer) {
         if (!QUESTIONS_SERVICE.ifQuestionObjectExist(answer.getQuestionId())) {
             System.err.println("Question doesn't exist");
-            throw new IllegalArgumentException("This question doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
         }
         return ANSWERS_DAO.addObject(answer);
     }

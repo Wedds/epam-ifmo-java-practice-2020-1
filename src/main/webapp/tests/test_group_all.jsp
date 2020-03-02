@@ -79,11 +79,10 @@
 
                             <%
                                 Map<Integer, String> groupsDict = (Map<Integer, String>) request.getAttribute("groupsDict");
-                                Collection<String> groupsList = groupsDict.values();
-                                for (String groupTitle:groupsList){
+                                for (int groupId:groupsDict.keySet()){
                             %>
                             <!--<optgroup label="Группы K"> -->
-                                <option value="<%= groupTitle %>>"><%= groupTitle %></option>
+                                <option value="<%= groupId %>>"><%= groupsDict.get(groupId) %></option>
                             <!-- </optgroup> -->
                             <% } %>
                         </select>
@@ -132,7 +131,7 @@
                                     <td><%= maxAttempts %></td>
                                     <td><%= timeLimit %> минут</td>
                                     <td>
-                                        <a class="btn text-white border-white" style="background-color: #00adb5;" href="#">Изменить тест</a>
+                                        <a class="btn text-white border-white" style="background-color: #00adb5;" href="${pageContext.request.contextPath}/edit_test?id=<%= testId %>">Изменить тест</a>
                                     </td>
                                 </tr>
                             <% } %>
@@ -153,7 +152,7 @@
                             <li class="page-item"><a class="page-link" href="#">5</a></li>
                             <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
                         </ul>
-                    </nav><a class="btn btn-primary" href="test_group_edit.html" style="background-color: #f4476b;">Добавить тест</a>
+                    </nav><a class="btn btn-primary" href="${pageContext.request.contextPath}/edit_test" style="background-color: #f4476b;">Добавить тест</a>
                     <a class="btn btn-primary" href="test_group_edit.html" style="background-color: #f4476b; margin-left: 16px">Добавить соответствие тест - группа</a></div>
             </div>
         </div>

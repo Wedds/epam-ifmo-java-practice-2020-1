@@ -71,13 +71,18 @@
                                     <td><%= subjectTitle %></td>
                                     <td><%= groupsCount  %></td>
                                     <td>
-                                        <a class="btn text-white border-white" style="background-color: #00adb5;" href="#">Пройти тест</a>
+                                        <a class="btn text-white border-white" style="background-color: #00adb5;" href="${pageContext.request.contextPath}/edit_test?id=<%= testId %>">Изменить тест</a>
                                      </td>
                                 </tr>
                             <% } %>
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/edit_test" style="background-color: #f4476b;">Добавить тест</a>
                 </div>
             </div>
         </div>
