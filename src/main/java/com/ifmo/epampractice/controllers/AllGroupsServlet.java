@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GroupsServlet extends HttpServlet {
-    private static final GroupsService groupsService = GroupsService.getInstance();
+public class AllGroupsServlet extends HttpServlet {
+    private static final GroupsService GROUPS_SERVICE = GroupsService.getInstance();
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
-        List<Groups> groupsList = groupsService.getAll();
+        List<Groups> groupsList = GROUPS_SERVICE.getAll();
         request.setAttribute("groupsList", groupsList);
-        request.getRequestDispatcher("groups/all.jsp").forward(request, response);
+        request.getRequestDispatcher("all.jsp").forward(request, response);
     }
 }
+

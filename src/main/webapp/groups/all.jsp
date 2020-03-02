@@ -1,7 +1,10 @@
+<%@ page import="com.ifmo.epampractice.entity.Groups" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.time.LocalDateTime" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>STSS - Пользователи</title>
+    <title>STSS - Группы</title>
     <%@include file="../blocks/head.jsp"%>
 </head>
 
@@ -46,25 +49,27 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <% List<Groups> groupsList = (List<Groups>) request.getAttribute("groupsList");
+                                for (Groups group: groupsList) {
+                                    final String name = group.getName();
+                                    final int usersNumber = group.getUsersList().size();
+                                    final LocalDateTime createdAt = group.getCreatedAt();
+                                %>
                                 <tr>
-                                    <td>K3265</td>
-                                    <td>15</td>
-                                    <td>2002-15-51</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
+                                    <td><%= name %></td>
+                                    <td><%= usersNumber %></td>
+                                    <td><%= createdAt.getDayOfMonth() + "/" + createdAt.getMonthValue() + "/" + createdAt.getYear()
+                                    + " в " + createdAt.getHour() + ":" + createdAt.getMinute()%></td>
+                                    <td><a href="view?id=<%= group.getId()%>"><button class="btn btn-primary border-white" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button></a><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
                                 </tr>
-                                <tr>
-                                    <td>K4897</td>
-                                    <td>1581</td>
-                                    <td>2002-15-51</td>
-                                    <td><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
-                                </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col"><a class="btn btn-primary" href="edit.html" style="background-color: #f4476b;">Добавить группу</a></div>
+                <div class="col"><a class="btn btn-primary border-white" href="edit.html" style="background-color: #f4476b;">Добавить группу</a></div>
             </div>
         </div>
     </div>
