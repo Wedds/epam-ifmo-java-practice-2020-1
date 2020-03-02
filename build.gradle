@@ -17,4 +17,5 @@ dependencies {
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.10'
     compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
+    providedCompile group: 'javax.servlet.jsp', name: 'javax.servlet.jsp-api', version: '2.3.3'
 }

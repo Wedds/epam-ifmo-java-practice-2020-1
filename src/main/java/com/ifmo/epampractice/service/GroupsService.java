@@ -3,7 +3,9 @@ package com.ifmo.epampractice.service;
 import com.ifmo.epampractice.dao.GroupsDAO;
 import com.ifmo.epampractice.entity.Groups;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.time.LocalDateTime;
 
@@ -79,6 +81,15 @@ public class GroupsService {
         group = getById(id);
         group.setUsersList(USERS_SERVICE.getAllByGroupId(id));
         return group;
+    }
+
+    public Map<Integer, String> getDictionaryWithGroupTitleAndGroupId() {
+        Map<Integer, String> subjectDict = new HashMap<>();
+        List<Groups> groupsList = getAll();
+        for (Groups group : groupsList) {
+            subjectDict.put(group.getId(), group.getName());
+        }
+        return subjectDict;
     }
 
     public Boolean ifGroupsObjectExists(final int id) {

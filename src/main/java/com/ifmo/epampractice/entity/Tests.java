@@ -10,7 +10,7 @@ public class Tests {
     private int subjectId;
     private String title;
     private String description;
-    private Boolean isRandom;
+    private boolean isRandom;
     private LocalDateTime createdAt;
     private int maxPoints;
     private int creatorId;
@@ -18,7 +18,7 @@ public class Tests {
     private List<Questions> questionsList;
     private List<Groups> groupsList;
     private int groupId;
-    private Boolean isNecessary;
+    private boolean isNecessary;
     private int maxAttempts;
     private LocalDateTime deadline;
     private int timeLimit;

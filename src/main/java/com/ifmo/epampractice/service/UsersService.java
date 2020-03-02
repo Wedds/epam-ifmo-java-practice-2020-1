@@ -99,4 +99,8 @@ public class UsersService {
         user.setGroupId(DEFAULT_GROUP);
         user.setCreatedAt(LocalDateTime.now());
     }
+
+    public Boolean ifUserObjectExist(final int id) {
+        return (USERS_DAO.getById(id).isPresent());
+    }
 }

@@ -1,14 +1,21 @@
 package com.ifmo.epampractice.service;
 
 import com.ifmo.epampractice.dao.TestsDAO;
+import com.ifmo.epampractice.entity.Answers;
+import com.ifmo.epampractice.entity.Questions;
 import com.ifmo.epampractice.entity.Tests;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 public class TestsService {
-    private  static final TestsDAO TESTS_DAO = new TestsDAO();
+    private static final TestsDAO TESTS_DAO = new TestsDAO();
     private static final QuestionsService QUESTIONS_SERVICE = new QuestionsService();
     private static final AttemptsService ATTEMPTS_SERVICE = new AttemptsService();
+    private static final SubjectsService SUBJECTS_SERVICE = new SubjectsService();
+    private static final UsersService USERS_SERVICE = new UsersService();
     private static TestsService instance;
 
     public static TestsService getInstance() {
@@ -55,6 +62,22 @@ public class TestsService {
         List<Tests> testsList;
         testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
         return testsList;
+    }
+
+    public List<Tests> getAllTestsByCreatorId(final int creatorId) {
+        if (!USERS_SERVICE.ifUserObjectExist(creatorId)) {
+            System.err.println("User doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
+        }
+        return TESTS_DAO.getAllTestsByCreatorId(creatorId);
+    }
+
+    public List<Tests> getAllTestsForGroupByCreatorId(final int creatorId) {
+        if (!USERS_SERVICE.ifUserObjectExist(creatorId)) {
+            System.err.println("User doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
+        }
+        return TESTS_DAO.getAllTestsForGroupsByCreatorId(creatorId);
     }
 
     public Tests getById(final int testId) {
@@ -141,10 +164,59 @@ public class TestsService {
         return test;
     }
 
-    public Boolean ifTestObjectExist(final int id) {
-        if (TESTS_DAO.getById(id).isPresent()) {
-            return Boolean.TRUE;
+    public Map<Integer, Integer> getDictionaryWithTestIdAndMaxScoreByUserId(final int userId) {
+        //TODO Check on group
+        Map<Integer, Integer> userMaxScoreDict = new HashMap<>();
+        int groupId = USERS_SERVICE.getById(userId).getGroupId();
+        List<Tests> testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
+
+        for (Tests test : testsList) {
+            int maxScore = ATTEMPTS_SERVICE.getMaximumScoreTestIdAndByUserId(test.getId(), userId);
+            userMaxScoreDict.put(test.getId(), maxScore);
         }
-        return Boolean.FALSE;
+        return userMaxScoreDict;
+    }
+
+    public Map<Integer, Integer> getDictionaryWithTestIdAndAttemptsLeftCountByUserId(final int userId) {
+        Map<Integer, Integer> attemptsCountDict = new HashMap<>();
+        int groupId = USERS_SERVICE.getById(userId).getGroupId();
+        List<Tests> testsList = TESTS_DAO.getAllTestsForGroupsByGroupId(groupId);
+
+        for (Tests test : testsList) {
+            int passedAttempts = ATTEMPTS_SERVICE.getAttemptsListByTestAndUserId(test.getId(), userId).size();
+
+            attemptsCountDict.put(test.getId(), test.getMaxAttempts() - passedAttempts);
+        }
+        return attemptsCountDict;
+    }
+
+    public Map<Integer, Integer> getDictionaryWithTestIdAndGroupsCountByCreatorId(final int userId) {
+        Map<Integer, Integer> groupsCountDict = new HashMap<>();
+        List<Tests> testsList = getAllTestsByCreatorId(userId);
+        for (Tests test : testsList) {
+            int groupsCount = getAllTestsForGroupsByTestId(test.getId()).size();
+            if (groupsCount != 0) {
+                groupsCountDict.put(test.getId(), groupsCount);
+            }
+        }
+        return groupsCountDict;
+    }
+
+    public int getMaxScoreFromAnswersByTestId(final int testId){
+        List<Questions> questionsList =
+                QUESTIONS_SERVICE.getQuestionsWithAnswersListByTestId(testId);
+        int maxScore = 0;
+        for (Questions question: questionsList){
+            for (Answers answers: question.getAnswersList()){
+                if (answers.getIsCorrect()) {
+                    maxScore += answers.getPoints();
+                }
+            }
+        }
+        return maxScore;
+    }
+
+    public Boolean ifTestObjectExist(final int id) {
+        return (TESTS_DAO.getById(id).isPresent());
     }
 }

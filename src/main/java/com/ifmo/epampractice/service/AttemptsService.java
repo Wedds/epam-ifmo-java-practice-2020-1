@@ -3,15 +3,21 @@ package com.ifmo.epampractice.service;
 import com.ifmo.epampractice.dao.AttemptsDAO;
 import com.ifmo.epampractice.entity.Attempts;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AttemptsService {
     private static final AttemptsDAO ATTEMPTS_DAO = new AttemptsDAO();
     private static final TestsService TESTS_SERVICE = new TestsService();
+    private static final UsersService USERS_SERVICE = new UsersService();
 
     public Attempts addObject(final Attempts attempt) {
-        // ПРОВЕРИТЬ НА ЮЗЕРА
-        if (TESTS_SERVICE.ifTestObjectExist(attempt.getTestId())) {
+        if (!USERS_SERVICE.ifUserObjectExist(attempt.getUserId())) {
+            System.err.println("User doesn't exist");
+            throw new IllegalArgumentException("This object doesn't exist");
+        }
+        if (!TESTS_SERVICE.ifTestObjectExist(attempt.getTestId())) {
             System.err.println("This test doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
         }
@@ -24,7 +30,7 @@ public class AttemptsService {
 
     public List<Attempts> getAttemptsListByTestId(final int testId) {
         List<Attempts> attemptsList;
-        if (TESTS_SERVICE.ifTestObjectExist(testId)) {
+        if (!TESTS_SERVICE.ifTestObjectExist(testId)) {
             System.err.println("This test doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
         }
@@ -35,12 +41,24 @@ public class AttemptsService {
 
     public List<Attempts> getAttemptsListByTestAndUserId(final int testId, final int userId) {
         List<Attempts> attemptsList;
-        if (TESTS_SERVICE.ifTestObjectExist(testId)) {
+        if (!TESTS_SERVICE.ifTestObjectExist(testId)) {
             System.err.println("This test doesn't exist");
             throw new IllegalArgumentException("This object doesn't exist");
         }
         attemptsList = ATTEMPTS_DAO.getAttemptsListByTestAndUserId(testId, userId);
         return attemptsList;
+    }
+
+    public int getMaximumScoreTestIdAndByUserId(final int testId, final int userId) {
+        List<Integer> userScoreList = new ArrayList<>();
+        List<Attempts> attemptsList = getAttemptsListByTestAndUserId(testId, userId);
+        for (Attempts attempts : attemptsList) {
+            userScoreList.add(attempts.getScore());
+        }
+        if (userScoreList.size() == 0) {
+            return 0;
+        }
+        return Collections.max(userScoreList);
     }
 
     public Attempts getById(final int attemptId) {
@@ -64,9 +82,6 @@ public class AttemptsService {
     }
 
     public Boolean ifAttemptObjectExist(final int id) {
-        if (ATTEMPTS_DAO.getById(id).isPresent()) {
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
+        return (ATTEMPTS_DAO.getById(id).isPresent());
     }
 }
