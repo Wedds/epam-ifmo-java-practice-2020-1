@@ -1,9 +1,13 @@
 <%@ page import="com.ifmo.epampractice.entity.Groups" %>
 <%@ page import="java.util.List" %>
+<<<<<<< HEAD
+=======
+<%@ page import="java.time.LocalDateTime" %>
+>>>>>>> issue_98_lost-changes
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>STSS - Пользователи</title>
+    <title>STSS - Группы</title>
     <%@include file="../blocks/head.jsp"%>
 </head>
 
@@ -48,13 +52,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% for (Groups group: (List<Groups>) request.getAttribute("groupsList")) { %>
+                                <% List<Groups> groupsList = (List<Groups>) request.getAttribute("groupsList");
+                                for (Groups group: groupsList) {
+                                    final String name = group.getName();
+                                    final int usersNumber = group.getUsersList().size();
+                                    final LocalDateTime createdAt = group.getCreatedAt();
+                                %>
                                 <tr>
-                                    <td><% group.getName(); %></td>
-                                    <td><% group.getUsersList().size(); %></td>
-                                    <td><% group.getCreatedAt(); %></td>
-                                    <td><button class="btn btn-primary border-white" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
+                                    <td><%= name %></td>
+                                    <td><%= usersNumber %></td>
+                                    <td><%= createdAt.getDayOfMonth() + "/" + createdAt.getMonthValue() + "/" + createdAt.getYear()
+                                    + " в " + createdAt.getHour() + ":" + createdAt.getMinute()%></td>
+                                    <td><a href="view?id=<%= group.getId()%>"><button class="btn btn-primary border-white" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-eye"></i></button></a><button class="btn btn-primary" type="button" style="background-color: #00adb5;padding: 3px 7px;margin-right: 16px;"><i class="fa fa-edit"></i></button></td>
                                 </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>

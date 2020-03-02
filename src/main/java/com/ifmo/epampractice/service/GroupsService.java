@@ -8,17 +8,14 @@ import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class GroupsService {
+public final class GroupsService {
     private static final int MAX_LENGTH = 25;
     private static GroupsService instance;
     private static final GroupsDAO GROUPS_DAO = new GroupsDAO();
     private static final TestsService TESTS_SERVICE = TestsService.getInstance();
     private static final UsersService USERS_SERVICE = UsersService.getInstance();
+
+    private GroupsService() {}
 
     public static GroupsService getInstance() {
         if (instance != null) {
@@ -38,17 +35,21 @@ public class GroupsService {
     }
 
     public List<Groups> getAll() {
-        return GROUPS_DAO.getAll();
+        List<Groups> groupsList = GROUPS_DAO.getAll();
+        for (Groups group: groupsList) {
+            group.setTestsList(TESTS_SERVICE.getAllTestsForGroupsByGroupId(group.getId()));
+            group.setUsersList(USERS_SERVICE.getAllByGroupId(group.getId()));
+        }
+        return groupsList;
     }
 
     public Groups getById(final int id) {
         Groups group;
         Optional<Groups> groupsOptional = GROUPS_DAO.getById(id);
-        if (!groupsOptional.isPresent()) {
-            System.err.println("No such group has been found");
-            throw new IllegalArgumentException("No group with such id (" + id + ") has been found");
-        }
-        group = groupsOptional.get();
+        group = groupsOptional.orElseThrow(() -> new IllegalArgumentException("No group with such id (" + id
+                + ") has been found"));
+        group.setTestsList(TESTS_SERVICE.getAllTestsForGroupsByGroupId(id));
+        group.setUsersList(USERS_SERVICE.getAllByGroupId(id));
         return group;
     }
 
@@ -63,28 +64,6 @@ public class GroupsService {
             throw new IllegalArgumentException("No group with such id (" + id + ") has been found");
         }
         GROUPS_DAO.removeById(id);
-    }
-
-    public Groups getGroupWithTestsById(final int id) {
-        Groups group;
-        if (!ifGroupsObjectExists(id)) {
-            System.err.println("No such group has been found");
-            throw new IllegalArgumentException("No group with such id (" + id + ") has been found");
-        }
-        group = getById(id);
-        group.setTestsList(TESTS_SERVICE.getAllTestsForGroupsByGroupId(id));
-        return group;
-    }
-
-    public Groups getGroupWithUsersById(final int id) {
-        Groups group;
-        if (!ifGroupsObjectExists(id)) {
-            System.err.println("No such group has been found");
-            throw new IllegalArgumentException("No group with such id (" + id + ") has been found");
-        }
-        group = getById(id);
-        group.setUsersList(USERS_SERVICE.getAllByGroupId(id));
-        return group;
     }
 
     public Boolean ifGroupsObjectExists(final int id) {

@@ -12,6 +12,14 @@
         <servlet-name>usersServlet</servlet-name>
         <servlet-class>com.ifmo.epampractice.controllers.UsersServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AllGroupsServlet</servlet-name>
+        <servlet-class>com.ifmo.epampractice.controllers.AllGroupsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewGroupServlet</servlet-name>
+        <servlet-class>com.ifmo.epampractice.controllers.ViewGroupServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>mainServlet</servlet-name>
@@ -20,5 +28,13 @@
     <servlet-mapping>
         <servlet-name>usersServlet</servlet-name>
         <url-pattern>/users</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AllGroupsServlet</servlet-name>
+        <url-pattern>/groups/all</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewGroupServlet</servlet-name>
+        <url-pattern>/groups/view</url-pattern>
     </servlet-mapping>
 </web-app>

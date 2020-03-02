@@ -7,7 +7,7 @@ import java.util.List;
 
 public class QuestionsService {
     private static final QuestionsDAO QUESTIONS_DAO = new QuestionsDAO();
-    private static final TestsService TESTS_SERVICE = new TestsService();
+    private static final TestsService TESTS_SERVICE = TestsService.getInstance();
     private static final AnswersService ANSWERS_SERVICE = new AnswersService();
 
     public Questions addObject(final Questions question) {

@@ -10,10 +10,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public class UsersService {
+public final class UsersService {
     private static UsersService instance;
     private static final UsersDAO USERS_DAO = new UsersDAO();
     private static final int DEFAULT_GROUP = 1;
+
+    private UsersService() {}
 
     public static UsersService getInstance() {
         if (instance != null) {
